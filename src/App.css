@@ -1,38 +1,311 @@
-.App {
-  text-align: center;
+html {
+  background: #676767;
+  min-height: 700px;
+  min-width: 320px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+html,
+body {
+  height: 100%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+#root {
   align-items: center;
+  display: flex;
+  height: 100%;
+  width: 100%;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  background: rgba(219, 222, 223, 0.651);
 }
 
-.App-link {
-  color: #61dafb;
+.App {
+  background: rgb(255, 255, 255);
+  border-radius: 4px;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
+  max-width: 612px;
+  padding-bottom: 66px;
+  padding-top: 46px;
+  text-align: center;
+  width: 90%;
+}
+.App > .logo {
+  max-width: 90%;
+}
+.App > .form {
+  margin-bottom: 41px;
+  margin-top: 41px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.input-group {
+  margin-bottom: 26px;
+  margin-left: 15%;
+}
+.input-group:nth-last-child(-n + 2) {
+  margin-bottom: 50px;
+}
+.input-group > label,
+.input-group > input {
+  font-family: "Roboto", sans-serif;
+  max-width: 420px;
+  text-align: left;
+  width: 80%;
+}
+.input-group > label {
+  color: #676767;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+.input-group > input {
+  background: #f2f2f5;
+  border-radius: 4px;
+  border: 1px solid #e5e5e5;
+  color: #676767;
+  font-size: 16px;
+  height: 40px;
+  outline: 0;
+  padding: 0 15px;
+  transition: all 0.3s;
+}
+.input-group > input:focus {
+  background: #fff;
+  border-color: #c4c4c4;
+}
+.input-group > input::placeholder {
+  color: #c4c4c4;
+  font-size: 16px;
+}
+
+button {
+  border-radius: 5px;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-family: "Open Sans", sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  max-width: 420px;
+  outline: 0;
+  padding: 10px 0;
+  transition: background 0.3s;
+  width: 40%;
+}
+button.primary {
+  background: #cc4282;
+}
+button.primary:hover {
+  background: #ea0b95c7;
+}
+button.secondary {
+  background: #6b757ec0;
+}
+button.secondary:hover {
+  background: #8e9799c0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: all 0.4s;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.container {
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+/* Navbar section */
+
+.nav {
+  top: 0px;
+  width: 100%;
+  height: 65px;
+  position: fixed;
+  line-height: 65px;
+  text-align: center;
+  /*background-color: rgba(255, 0, 200, 0.397);*/
+  background-color: #cc4282;
+}
+
+.nav div.logo {
+  width: 180px;
+  height: 10px;
+  position: absolute;
+}
+
+.nav div.logo a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 1.8em;
+}
+
+.nav div.logo a:hover {
+  color: #c0c0c0;
+}
+
+.nav div.main_list {
+  width: 600px;
+  height: 65px;
+  float: right;
+}
+
+.nav div.main_list ul {
+  width: 100%;
+  height: 65px;
+  display: flex;
+  list-style: none;
+}
+
+.nav div.main_list ul li {
+  margin-left: 75px;
+  width: 120px;
+  height: 65px;
+}
+
+.nav div.main_list ul li a {
+  text-decoration: none;
+  color: #fff;
+  line-height: 65px;
+}
+
+.nav div.main_list ul li a:hover {
+  color: #c0c0c0;
+}
+
+.nav div.media_button {
+  width: 40px;
+  height: 40px;
+  background-color: transparent;
+  position: absolute;
+  right: 15px;
+  top: 12px;
+  display: none;
+}
+
+.nav div.media_button button.main_media_button {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  outline: 0;
+  border: none;
+  cursor: pointer;
+}
+
+.nav div.media_button button.main_media_button span {
+  width: 98%;
+  height: 1px;
+  display: block;
+  background-color: #fff;
+  margin-top: 9px;
+  margin-bottom: 10px;
+}
+
+.nav div.media_button button.main_media_button:hover span:nth-of-type(1) {
+  transform: rotateY(180deg);
+  transition: all 0.5s;
+  background-color: #c0c0c0;
+}
+
+.nav div.media_button button.main_media_button:hover span:nth-of-type(2) {
+  transform: rotateY(180deg);
+  transition: all 0.4s;
+  background-color: #c0c0c0;
+}
+
+.nav div.media_button button.main_media_button:hover span:nth-of-type(3) {
+  transform: rotateY(180deg);
+  transition: all 0.3s;
+  background-color: #c0c0c0;
+}
+
+.nav div.media_button button.active span:nth-of-type(1) {
+  transform: rotate3d(0, 0, 1, 45deg);
+  position: absolute;
+  margin: 0;
+}
+
+.nav div.media_button button.active span:nth-of-type(2) {
+  display: none;
+}
+
+.nav div.media_button button.active span:nth-of-type(3) {
+  transform: rotate3d(0, 0, 1, -45deg);
+  position: absolute;
+  margin: 0;
+}
+
+.nav div.media_button button.active:hover span:nth-of-type(1) {
+  transform: rotate3d(0, 0, 1, 20deg);
+}
+
+.nav div.media_button button.active:hover span:nth-of-type(3) {
+  transform: rotate3d(0, 0, 1, -20deg);
+}
+
+/* Home section */
+
+.home {
+  width: 100%;
+  height: 100vh;
+  background-color: #ddd;
+}
+
+/* Medai qurey section */
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .container {
+    margin: 0;
   }
-  to {
-    transform: rotate(360deg);
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    margin: 0;
+  }
+
+  .nav div.logo {
+    margin-left: 15px;
+  }
+
+  .nav div.main_list {
+    width: 100%;
+    margin-top: 65px;
+    height: 0px;
+    overflow: hidden;
+  }
+
+  .nav div.show_list {
+    height: 100px;
+  }
+
+  .nav div.main_list ul {
+    flex-direction: column;
+    width: 100%;
+    height: 200px;
+    top: 80px;
+    right: 0;
+    left: 0;
+  }
+
+  .nav div.main_list ul li {
+    width: 100%;
+    height: 40px;
+    /*background-color: rgba(255, 0, 200, 0.397);*/
+    background-color: #cc4282;
+  }
+
+  .nav div.main_list ul li a {
+    text-align: center;
+    line-height: 40px;
+    width: 100%;
+    height: 40px;
+    display: table;
+  }
+
+  .nav div.media_button {
+    display: block;
   }
 }
