@@ -37,8 +37,8 @@ function SingUp(props) {
    setEmail("");
    setPassword("");
    setName("");
-
-    event.preventDefault()
+    history.push("/sign-in");
+    event.preventDefault();
   }
 
   const handleValidation = () => {

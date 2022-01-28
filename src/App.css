@@ -113,6 +113,7 @@ button.secondary:hover {
 }
 
 .container {
+  top: 0px;
   margin-left: 5%;
   margin-right: 5%;
 }
@@ -129,7 +130,19 @@ button.secondary:hover {
   /*background-color: rgba(255, 0, 200, 0.397);*/
   background-color: #cc4282;
 }
+.nav div.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 5%;
+  background-color: rgb(235, 225, 233);
+  color: white;
+  text-align: center;
 
+  font-size: 50%;
+}
 .nav div.logo {
   width: 180px;
   height: 10px;
@@ -160,7 +173,6 @@ button.secondary:hover {
 }
 
 .nav div.main_list ul li {
-  margin-left: 75px;
   width: 120px;
   height: 65px;
 }
@@ -257,12 +269,14 @@ button.secondary:hover {
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
   .container {
+    top: 0px;
     margin: 0;
   }
 }
 
 @media screen and (max-width: 768px) {
   .container {
+    top: 0px;
     margin: 0;
   }
 
@@ -308,4 +322,24 @@ button.secondary:hover {
   .nav div.media_button {
     display: block;
   }
+}
+
+.button1 {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-color: #cc4282;
+}
+
+#note {
+  position: absolute;
+  z-index: 101;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #fde073;
+  text-align: center;
+  line-height: 2.5;
+  overflow: hidden;
+  -webkit-box-shadow: 0 0 5px black;
+  -moz-box-shadow: 0 0 5px black;
+  box-shadow: 0 0 5px black;
 }

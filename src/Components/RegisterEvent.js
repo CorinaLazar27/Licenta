@@ -7,31 +7,36 @@ import { NavLink } from "react-router-dom";
 
 import axios from "axios";
 
-function HomePage() {
-
-
+function RegisterEventPage() {
+   
   const history = useHistory();
   const email=window.localStorage.getItem('email');
-  var mainListDiv = document.getElementById("mainListDiv");
-  var mediaButton = document.getElementById("mediaButton");
-  var note = document.getElementById("note");
- setTimeout(()=>{
-    note.style.display="none";
-  }, 100);
+  
+  
+  //populating input data
+  function getInputData() {
+    let dataToPost = new FormData(); //formdata API
+  
+    //fill name attributes to corresponding values
+    dataToPost.append("entry.294341084", document.querySelector("#inp1").value);
+  
+    return dataToPost;
+  }
 
-/*ediaButton.onclick = function () {
+ /* var mainListDiv = document.getElementById("mainListDiv"),
+  mediaButton = document.getElementById("mediaButton");
+
+mediaButton.onclick = function () {
   
   "use strict";
   
   mainListDiv.classList.toggle("show_list");
   mediaButton.classList.toggle("active");
-  
+
 };*/
   return (
 
-<nav class="nav">
-  
-
+    <nav class="nav">
     <div class="container">
         <div class="logo">
             <a href="#">Wedding</a>
@@ -39,7 +44,7 @@ function HomePage() {
         <div class="main_list" id="mainListDiv">
             <ul>
                 <li><a href="/homepage">Home</a></li>
-                <li><a href="/registerevent">Register event</a></li>
+                <li><a href="#">Register event</a></li>
                 <li><a href="#">My events</a></li>
                 <li><a href="#">Profile</a></li>
                 <li><a href="#">Settings</a></li>
@@ -57,26 +62,17 @@ function HomePage() {
     </div>
    
     <div class="home">
-      <br></br>
-      <h3>Welcome, {email}!</h3>
-      <br></br>
-      <div>
-       <button className="button1" onClick={()=>history.push('/registerevent')}>Register Event</button>
-       </div>
-      <br></br>
-      <div>
-      <button className="button1"  onClick={()=>history.push('/registerevent')}>My events</button>
+    <br></br>
+    <form>
+    <h2>Register your event</h2>
+    </form>
+   
       </div>
-      <div className="footer">
-      <footer></footer>
-      </div>
-      </div>
-    
+   
 </nav>
 
-
-
+  
 
   );
 }
-export default HomePage;
+export default RegisterEventPage;
