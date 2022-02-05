@@ -3,10 +3,28 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../Image/logo.png"
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import $ from 'jquery';
 
 function SingIn() {
 
+  $(document).ready(function() {
 
+    // Hide the div
+    $("#note").hide();
+
+   
+
+});
+function notificare() {
+
+
+  // Show the div in 5s
+  $("#note").show();
+  setTimeout(function() {
+    $('#note').fadeOut('fast');
+}, 4000); // <-- time in milliseconds
+
+}
   const history = useHistory();
  
   const [password, setPassword] = useState("");
@@ -32,7 +50,7 @@ function SingIn() {
     }).catch((error) => {
       if (error.response) {
         console.log("Utilizator sau parola gresita");
-        alert("Utilizator sau parola gresita!");
+        notificare();
        // console.log(error.response)
        // console.log(error.response.status)
        // console.log(error.response.headers)
@@ -91,6 +109,7 @@ function SingIn() {
 
   return (
     <div className="App">
+      <div id="note">Utilizator sau parola gresita!</div>
          <img src={logo} className="logo" alt="logo" />
             <form className="form" onSubmit={loginSubmit}>
               <div className="input-group">

@@ -8,11 +8,35 @@ import Dropdown from 'react-dropdown';
 
 import 'react-dropdown/style.css';
 import axios from "axios";
+import $ from 'jquery';
 
 function MyEventPage() {
     const history = useHistory();
-
- 
+    const [data, setData] = useState([]);
+   
+    function GetElements(event) {
+    
+      axios({
+        method: "GET",
+        url:"/elements",
+       
+      })
+      .then((response) => {
+      //console.log(response.data.results);
+      setData(response.data.results);
+      console.log(data);
+      }).catch((error) => {
+        if (error.response) {
+        
+         console.log(error.response)
+         console.log(error.response.status)
+         console.log(error.response.headers)
+          }
+      }) 
+   
+       event.preventDefault()
+    }
+  
 
  /* var mainListDiv = document.getElementById("mainListDiv"),
   mediaButton = document.getElementById("mediaButton");
@@ -56,19 +80,30 @@ mediaButton.onclick = function () {
         <h3>My Events</h3>
         <br></br>
      <table id="myeventstable">
+     <thead>
      <tr>
     <th>Event ID</th>
     <th>Event Name</th>
     </tr>
-    <tr>
-    <td></td>
-    <td></td>
-    
-  </tr>
-  
+    </thead>
+    <tbody>
+    {
+                        data.map((item) => (
+                            <tr >
+                                <td>{item.RowKey}</td>
+                                <td>{item.PartitionKey}</td>
+          
+                            </tr>
+                        ))
+                    }
+    </tbody>
+
      </table>
+
+     
      <br></br>
      <button className="table"  onClick={()=> history.push('/registerevent')} >Add an event</button>
+     <button className="table"  onClick={()=> GetElements()} >Get elements</button>
 </div>
 </div>
   );

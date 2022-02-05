@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import $ from 'jquery';
 
 function SingUp(props) {
   const history = useHistory();
@@ -11,8 +12,28 @@ function SingUp(props) {
   const [passwordError, setpasswordError] = useState("");
   const [emailError, setemailError] = useState("");
 
-  
+  $(document).ready(function() {
 
+    // Hide the div
+    $("#note").hide();
+
+   
+
+});
+function notificare() {
+
+
+  // Show the div in 5s
+  $("#note").show();
+  setTimeout(function() {
+    $('#note').fadeOut('fast');
+}, 4000); // <-- time in milliseconds
+}
+
+function trytoLogin()
+{
+  history.push('./sign-in');
+}
   function logMeIn(event) {
     axios({
       method: "POST",
@@ -25,9 +46,12 @@ function SingUp(props) {
     })
     .then((response) => {
     props.setToken(response.data.access_token)
-    console.log(response);
+    const res =response.data;
+    if(res=="Done")
+     history.push("/sign-in");
     }).catch((error) => {
       if (error.response) {
+        notificare();
         console.log(error.response)
         console.log(error.response.status)
         console.log(error.response.headers)
@@ -37,7 +61,6 @@ function SingUp(props) {
    setEmail("");
    setPassword("");
    setName("");
-    history.push("/sign-in");
     event.preventDefault();
   }
 
@@ -81,6 +104,7 @@ function SingUp(props) {
 
   return (
     <div className="App">
+      <div id="note">Contul exista deja!</div>
         <h1>Register</h1>
             <form className="form" onSubmit={loginSubmit}>
             <div className="input-group">

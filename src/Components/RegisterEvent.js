@@ -5,24 +5,44 @@ import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import Dropdown from 'react-dropdown';
-
+ import {CircleArrow as ScrollUpButton} from "react-scroll-up-button"; 
 import 'react-dropdown/style.css';
 import axios from "axios";
 
 function RegisterEventPage() {
    
-  
-  const optionsBar = [
-    'At the table', 'Bar with bartender'
-  ];
-  const optionsRingDance= [
-    'Dominant', 'Restricted'
-  ];
-  const optionsEvent= [
-    'Wedding', 'Christening','Birthday'
-  ];
+  const [event, setEvent] = useState("");
+  const [nrguests, setNrGuests] = useState("");
+  const [location, setLocation] = useState("");
+  const [budget, setBudget] = useState("");
+  const [liveBand, setLiveBand] = useState("");
+  const [artisticMoment, setArtisticMoment] = useState("");
+  const [photographer, setPhotographer] = useState("");
+  const [videoRecording, setVideoRecording] = useState("");
+  const [candyBar, setCandyBar] = useState("");
+  const [fruitsBar, setfruitsBar] = useState("");
+  const [drinks, setDrinks] = useState("");
+  const [ringDance, setRingDance] = useState("");
+
  
 
+  function ShowFormValues()
+  {
+   console.log("----------------------------");
+    console.log("Eveniment:"+event);
+    console.log("Numar invitati:"+nrguests);
+    console.log("Locatie:"+location);
+    console.log("Buget:"+budget);
+    console.log("Band Live:"+liveBand);
+    console.log("Moment artistic:"+artisticMoment);
+    console.log("Fotograf:"+photographer);
+    console.log("Video:"+videoRecording);
+    console.log("Candy Bar:"+candyBar);
+    console.log("Bar fructe:"+fruitsBar);
+    console.log("Bauturi:"+drinks);
+    console.log("Ring dans:"+ringDance);
+    console.log("----------------------------");
+  }
  /* var mainListDiv = document.getElementById("mainListDiv"),
   mediaButton = document.getElementById("mediaButton");
 
@@ -62,16 +82,27 @@ mediaButton.onclick = function () {
         </div>
         
     <div className="home1">
+    <ScrollUpButton
+      StopPosition={0}
+      ShowAtPosition={150}
+      EasingType='easeOutCubic'
+      AnimationDuration={2}
+      ContainerClassName='ScrollUpButton__Container'
+      TransitionClassName='ScrollUpButton__Toggled'
+      style={{}}
+      ToggledStyle={{}}
+    />
        <form className="form1" >
          <h3>Register Your Event</h3>
         <br></br>
          <div className="input-group1">
             <label  for="event" >Type of Event</label>
        
-            <select name="event" id="event" placeholder="Select an option">
+            <select name="event" id="event" placeholder="Select an option"   onChange={(event) => {setEvent(event.target.value)}}>
             <option value="">Select your option</option>
               <option value="Wedding">Wedding</option>
              <option value="Christening">Christening</option>
+             <option value="Birthday">Birthday</option>
         
             </select>
       
@@ -80,27 +111,30 @@ mediaButton.onclick = function () {
          <div className="input-group1">
          <label >Number of guests</label>
            <input
-             id="event"
-             type="event"
-             name="event"
+             id="nrguests"
+             type="nrguests"
+             name="nrguests"
+             onChange={(event) => {setNrGuests(event.target.value)}}
            />
            </div>
 
          <div className="input-group1">
          <label >Favorite location</label>
            <input
-             id="event"
-             type="event"
-             name="event"
+             id="location"
+             type="location"
+             name="location"
+             onChange={(event) => {setLocation(event.target.value)}}
            />
          </div>
   
          <div className="input-group1">
-         <label htmlFor="event">Budget</label>
+         <label htmlFor="budget">Budget</label>
            <input
-             id="event"
-             type="event"
-             name="event"
+             id="budget"
+             type="budget"
+             name="budget"
+             onChange={(event) => {setBudget(event.target.value)}}
            />
            
          </div>
@@ -109,51 +143,52 @@ mediaButton.onclick = function () {
           <div className="input-group1">
         <label htmlFor="band">Live Band</label>
         
-         <input type="radio" value="Yes" name="band" id="band" className="radio"/> Yes
-         <input type="radio" value="No" name="band" id="band" className="radio" /> No
+         <input type="radio" value="Yes" name="band" id="band" className="radio"  onChange={(event) => {setLiveBand(event.target.value)}}/> Yes
+         <input type="radio" value="No" name="band" id="band" className="radio" onChange={(event) => {setLiveBand(event.target.value)}} /> No
         
          </div>
          <div className="input-group1">
         <label htmlFor="artisticmoment" >Artistic moment</label>
-         <input id="artisticmoment" type="radio" value="Yes" name="artisticmoment" className="radio"/> Yes
-         <input  id="artisticmoment" type="radio" value="No" name="artisticmoment" className="radio"/> No
+         <input id="artisticmoment" type="radio" value="Yes" name="artisticmoment" className="radio" onChange={(event) => {setArtisticMoment(event.target.value)}}/> Yes
+         <input  id="artisticmoment" type="radio" value="No" name="artisticmoment" className="radio" onChange={(event) => {setArtisticMoment(event.target.value)}}/> No
          </div>
          <div className="input-group1">
         <label htmlFor="photographer">Photographer</label>
-         <input id="photographer" type="radio" value="Yes" name="photographer" className="radio" /> Yes
-         <input id="photographer" type="radio" value="No" name="photographer" className="radio"/> No
+         <input id="photographer" type="radio" value="Yes" name="photographer" className="radio" onChange={(event) => {setPhotographer(event.target.value)}} /> Yes
+         <input id="photographer" type="radio" value="No" name="photographer" className="radio" onChange={(event) => {setPhotographer(event.target.value)}}/> No
          </div>
          <div className="input-group1">
         <label htmlFor="videorecording">Video Recording</label>
-         <input id="videorecording" type="radio" value="Yes" name="videorecording" className="radio"/> Yes
-         <input  id="videorecording" type="radio" value="No" name="videorecording"  className="radio"/> No
+         <input id="videorecording" type="radio" value="Yes" name="videorecording" className="radio" onChange={(event) => {setVideoRecording(event.target.value)}}/> Yes
+         <input  id="videorecording" type="radio" value="No" name="videorecording"  className="radio" onChange={(event) => {setVideoRecording(event.target.value)}}/> No
          </div>
          <div className="input-group1">
         <label htmlFor="candybar">Candy Bar</label>
-         <input id="candybar" type="radio" value="Yes" name="candybar" className="radio"/> Yes
-         <input id="candybar" type="radio" value="No" name="candybar" className="radio"/> No
+         <input id="candybar" type="radio" value="Yes" name="candybar" className="radio" onChange={(event) => {setCandyBar(event.target.value)}}/> Yes
+         <input id="candybar" type="radio" value="No" name="candybar" className="radio" onChange={(event) => {setCandyBar(event.target.value)}}/> No
          </div>
          <div className="input-group1">
         <label htmlFor="fruitsbar" >Fruits Bar</label>
-         <input id="fruitsbar" type="radio" value="Yes" name="fruitsbar" className="radio" /> Yes
-         <input id="fruitsbar" type="radio" value="No" name="fruitsbar" className="radio"/> No
+         <input id="fruitsbar" type="radio" value="Yes" name="fruitsbar" className="radio" onChange={(event) => {setfruitsBar(event.target.value)}}/> Yes
+         <input id="fruitsbar" type="radio" value="No" name="fruitsbar" className="radio" onChange={(event) => {setfruitsBar(event.target.value)}}/> No
          </div>
        <div className="input-group1">   
        <label htmlFor="drinks">Drinks</label>
-       <select name="drinks" id="drinks" placeholder="Select an option">
+       <select name="drinks" id="drinks" placeholder="Select an option"
+        onChange={(event) => {setDrinks(event.target.value)}}>
           <option value="">Select your option</option>
           <option value="At the table">At the table</option>
           <option value="Bar with bartender">Bar with bartender</option>
          
         </select>
       
-      
    
     </div>
     <div className="input-group1">  
        <label htmlFor="ringdance" >Ring Dance</label>
           
-          <select name="ringdance" id="ringdance" placeholder="Select an option">
+          <select name="ringdance" id="ringdance" placeholder="Select an option"
+           onChange={(event) => {setRingDance(event.target.value)}}>
           <option value="">Select your option</option>
           <option value="Dominant">Dominant</option>
           <option value="Restricted">Restricted</option>
@@ -161,8 +196,9 @@ mediaButton.onclick = function () {
          </select>
    <br></br>
     </div>
-         <button className="secondary">Submit your Event</button>
+         
    </form>
+   <button className="secondary" onClick={()=>ShowFormValues()}>Submit your Event</button>
 </div>
 </div>
   );
