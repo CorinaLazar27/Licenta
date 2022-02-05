@@ -4,35 +4,31 @@ import logo from "../Image/logo.png"
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import Dropdown from 'react-dropdown';
 
+import 'react-dropdown/style.css';
 import axios from "axios";
 
-function HomePage() {
+function MyEventPage() {
+    const history = useHistory();
 
+ 
 
-  const history = useHistory();
-  const email=window.localStorage.getItem('email');
-  var mainListDiv = document.getElementById("mainListDiv");
-  var mediaButton = document.getElementById("mediaButton");
-  var note = document.getElementById("note");
- setTimeout(()=>{
-    note.style.display="none";
-  }, 100);
+ /* var mainListDiv = document.getElementById("mainListDiv"),
+  mediaButton = document.getElementById("mediaButton");
 
-/*mediaButton.onclick = function () {
+mediaButton.onclick = function () {
   
   "use strict";
   
   mainListDiv.classList.toggle("show_list");
   mediaButton.classList.toggle("active");
-  
+
 };*/
   return (
 
-<nav class="nav">
-  
-
-    <div class="container">
+    <div className="nav">
+       <div class="container">
         <div class="logo">
             <a href="#">Wedding</a>
         </div>
@@ -54,29 +50,27 @@ function HomePage() {
                 <span></span>
             </button>
         </div>
-    </div>
-   
-    <div className="home">
-      <br></br>
-      <h3>Welcome, {email}!</h3>
-      <br></br>
-      <div>
-       <button className="button1" onClick={()=>history.push('/registerevent')}>Register Event</button>
-       </div>
-      <br></br>
-      <div>
-      <button className="button1"  onClick={()=>history.push('/myeventpage')}>My events</button>
-      </div>
-      <div className="footer">
-      <footer></footer>
-      </div>
-      </div>
+        </div>
+        
+    <div className="home1">
+        <h3>My Events</h3>
+        <br></br>
+     <table id="myeventstable">
+     <tr>
+    <th>Event ID</th>
+    <th>Event Name</th>
+    </tr>
+    <tr>
+    <td></td>
+    <td></td>
     
-</nav>
-
-
-
-
+  </tr>
+  
+     </table>
+     <br></br>
+     <button className="table"  onClick={()=> history.push('/registerevent')} >Add an event</button>
+</div>
+</div>
   );
 }
-export default HomePage;
+export default MyEventPage;

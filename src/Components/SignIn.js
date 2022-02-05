@@ -32,6 +32,7 @@ function SingIn() {
     }).catch((error) => {
       if (error.response) {
         console.log("Utilizator sau parola gresita");
+        alert("Utilizator sau parola gresita!");
        // console.log(error.response)
        // console.log(error.response.status)
        // console.log(error.response.headers)
