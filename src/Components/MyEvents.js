@@ -13,7 +13,34 @@ import $ from 'jquery';
 function MyEventPage() {
     const history = useHistory();
     const [data, setData] = useState([]);
-   
+    const email=window.localStorage.getItem('email');
+
+    window.onload = function exampleFunction() {
+  
+      GetMyEvents();
+  }
+
+  function GetMyEvents() {
+    
+    axios({
+      method: "POST",
+      url:"/getmyevents",
+      data:{
+        email: email,
+       }
+    })
+    .then((response) => {
+     setData(response.data.results);
+      console.log(data);
+    }).catch((error) => {
+      if (error.response) {
+       
+       // console.log(error.response)
+       // console.log(error.response.status)
+       // console.log(error.response.headers)
+        }
+    })
+  }
     function GetElements(event) {
     
       axios({
@@ -54,16 +81,16 @@ mediaButton.onclick = function () {
     <div className="nav">
        <div class="container">
         <div class="logo">
-            <a href="#">Wedding</a>
+            <a href="#">Event</a>
         </div>
         <div class="main_list" id="mainListDiv">
             <ul>
                 <li><a href="/homepage">Home</a></li>
                 <li><a href="/registerevent">Register event</a></li>
                 <li><a href="/myeventpage">My events</a></li>
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="/sign-in">Log out</a></li>
+                <li><a href="/profilepage">Profile</a></li>
+                <li><a href="/settingspage">Settings</a></li>
+                <li><a href="/sign-in" onClick={()=>window.localStorage.clear()}>Log out</a></li>
           
             </ul>
         </div>
@@ -82,16 +109,16 @@ mediaButton.onclick = function () {
      <table id="myeventstable">
      <thead>
      <tr>
-    <th>Event ID</th>
-    <th>Event Name</th>
+    <th>Event Type</th>
+    <th>Date</th>
     </tr>
     </thead>
     <tbody>
     {
                         data.map((item) => (
                             <tr >
+                                <td>{item.EventType}</td>
                                 <td>{item.RowKey}</td>
-                                <td>{item.PartitionKey}</td>
           
                             </tr>
                         ))
@@ -103,7 +130,6 @@ mediaButton.onclick = function () {
      
      <br></br>
      <button className="table"  onClick={()=> history.push('/registerevent')} >Add an event</button>
-     <button className="table"  onClick={()=> GetElements()} >Get elements</button>
 </div>
 </div>
   );

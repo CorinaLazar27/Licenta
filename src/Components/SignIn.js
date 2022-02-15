@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import logo from "../Image/logo.png"
+import logo from "../Image/logo1.PNG"
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import $ from 'jquery';
@@ -31,7 +31,7 @@ function notificare() {
   const [email, setEmail] = useState("");
   const [passwordError, setpasswordError] = useState("");
   const [emailError, setemailError] = useState("");
-
+  
   function MakeLogin(event) {
     
     axios({
@@ -44,9 +44,14 @@ function notificare() {
     })
     .then((response) => {
      const res =response.data
-     if(res=="OK")
-      history.push("/homepage");
-     
+     console.log(response);
+     window.localStorage.setItem('nume',res.RowKey)
+     window.localStorage.setItem('data',res.Date)
+     window.localStorage.setItem('parola',res.Password)
+     window.localStorage.setItem('locatie',res.Location)
+     window.localStorage.setItem('numartelefon',res.Phone)
+    if(res!="Utilizator sau parola gresit")
+        history.push("/homepage");
     }).catch((error) => {
       if (error.response) {
         console.log("Utilizator sau parola gresita");
@@ -108,9 +113,11 @@ function notificare() {
 
 
   return (
+    <div className="Background">
     <div className="App">
       <div id="note">Utilizator sau parola gresita!</div>
-         <img src={logo} className="logo" alt="logo" />
+      <h3>Sign in</h3>
+         
             <form className="form" onSubmit={loginSubmit}>
               <div className="input-group">
               <label htmlFor="email">E-mail</label>
@@ -149,7 +156,7 @@ function notificare() {
           Create acccont now!
         </button>
         </div>
-      
+        </div>
       
   );
 }

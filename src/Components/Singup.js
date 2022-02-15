@@ -47,11 +47,14 @@ function trytoLogin()
     .then((response) => {
     props.setToken(response.data.access_token)
     const res =response.data;
+    history.push("/sign-in");
     if(res=="Done")
      history.push("/sign-in");
+    
     }).catch((error) => {
       if (error.response) {
         notificare();
+        history.push("/sign-in");
         console.log(error.response)
         console.log(error.response.status)
         console.log(error.response.headers)

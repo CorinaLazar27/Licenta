@@ -10,8 +10,10 @@ import 'react-dropdown/style.css';
 import axios from "axios";
 
 function RegisterEventPage() {
-   
+  const history = useHistory();
+  const email=window.localStorage.getItem('email');
   const [event, setEvent] = useState("");
+  const [date, setDate] = useState("");
   const [nrguests, setNrGuests] = useState("");
   const [location, setLocation] = useState("");
   const [budget, setBudget] = useState("");
@@ -23,13 +25,56 @@ function RegisterEventPage() {
   const [fruitsBar, setfruitsBar] = useState("");
   const [drinks, setDrinks] = useState("");
   const [ringDance, setRingDance] = useState("");
+  const [dialogBox, setDialogBox]=useState(Boolean);
 
+  function FormOptions() {
+   
+
+    axios({
+      method: "POST",
+      url:"/postform",
+      data:{
+        email: email,
+        event:event,
+        date:date,
+        nrguests:nrguests,
+        location:location,
+        budget:budget,
+        liveband:liveBand,
+        artisticmoment:artisticMoment,
+        photographer:photographer,
+        videorecording:videoRecording,
+        candybar:candyBar,
+        fruitsbar:fruitsBar,
+        drinks:drinks,
+        ringdance:ringDance
+       }
+    })
+    .then((response) => {
+     const res =response.data
+     console.log(res);
+     setDialogBox(true);
+     console.log(dialogBox);
+    
+    }).catch((error) => {
+      if (error.response) {
+      
+        console.log(error.response)
+       console.log(error.response.status)
+       console.log(error.response.headers)
+        }
+    })
+   
  
-
+  
+  }
+  
   function ShowFormValues()
   {
+  
    console.log("----------------------------");
     console.log("Eveniment:"+event);
+    console.log("Data:"+date);
     console.log("Numar invitati:"+nrguests);
     console.log("Locatie:"+location);
     console.log("Buget:"+budget);
@@ -42,11 +87,15 @@ function RegisterEventPage() {
     console.log("Bauturi:"+drinks);
     console.log("Ring dans:"+ringDance);
     console.log("----------------------------");
+    FormOptions();
+
+    
+    //history.push("myeventpage");
   }
- /* var mainListDiv = document.getElementById("mainListDiv"),
+  var mainListDiv = document.getElementById("mainListDiv"),
   mediaButton = document.getElementById("mediaButton");
 
-mediaButton.onclick = function () {
+/*mediaButton.onclick = function () {
   
   "use strict";
   
@@ -57,23 +106,23 @@ mediaButton.onclick = function () {
   return (
 
     <div className="nav">
-       <div class="container">
-        <div class="logo">
-            <a href="#">Wedding</a>
+       <div className="container">
+        <div className="logo">
+            <a href="#">Event</a>
         </div>
-        <div class="main_list" id="mainListDiv">
+        <div className="main_list" id="mainListDiv">
             <ul>
                 <li><a href="/homepage">Home</a></li>
                 <li><a href="/registerevent">Register event</a></li>
                 <li><a href="/myeventpage">My events</a></li>
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="/sign-in">Log out</a></li>
+                <li><a href="/profilepage">Profile</a></li>
+                <li><a href="/settingspage">Settings</a></li>
+                <li><a href="/sign-in" onClick={()=>window.localStorage.clear()}>Log out</a></li>
           
             </ul>
         </div>
-        <div class="media_button">
-            <button class="main_media_button" id="mediaButton">
+        <div className="media_button">
+            <button className="main_media_button" id="mediaButton">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -96,11 +145,11 @@ mediaButton.onclick = function () {
          <h3>Register Your Event</h3>
         <br></br>
          <div className="input-group1">
-            <label  for="event" >Type of Event</label>
-       
+            <label  htmlfor="event" >Type of Event</label>
+        
             <select name="event" id="event" placeholder="Select an option"   onChange={(event) => {setEvent(event.target.value)}}>
             <option value="">Select your option</option>
-              <option value="Wedding">Wedding</option>
+            <option value="Wedding">Wedding</option>
              <option value="Christening">Christening</option>
              <option value="Birthday">Birthday</option>
         
@@ -117,7 +166,15 @@ mediaButton.onclick = function () {
              onChange={(event) => {setNrGuests(event.target.value)}}
            />
            </div>
-
+           <div className="input-group1">
+         <label >Date</label>
+           <input
+             id="date"
+             type="date"
+             name="date"
+             onChange={(event) => {setDate(event.target.value)}}
+           />
+         </div>
          <div className="input-group1">
          <label >Favorite location</label>
            <input
@@ -199,6 +256,8 @@ mediaButton.onclick = function () {
          
    </form>
    <button className="secondary" onClick={()=>ShowFormValues()}>Submit your Event</button>
+  {dialogBox && alert('TRUE')}
+
 </div>
 </div>
   );

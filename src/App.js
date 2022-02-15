@@ -7,7 +7,8 @@ import SingUp from './Components/Singup';
 import HomePage from './Components/HomePage';
 import RegisterEventPage from './Components/RegisterEvent';
 import MyEventPage from './Components/MyEvents';
-
+import ProfilePage from './Components/ProfilePage'
+import SettingsPage from './Components/SettingsPage';
 function App() {
   return (
     
@@ -21,7 +22,8 @@ function App() {
             <Route exact path="/homepage" component={HomePage} />
             <Route exact path="/registerevent" component={RegisterEventPage}/>
             <Route exact path="/myeventpage" component={MyEventPage}/>
-           
+            <Route exact path="/profilepage" component={ProfilePage}/>
+            <Route exact path="/settingspage" component={SettingsPage}/>
           </Switch>
        
     </Router>
