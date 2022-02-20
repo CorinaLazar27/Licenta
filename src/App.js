@@ -9,6 +9,8 @@ import RegisterEventPage from './Components/RegisterEvent';
 import MyEventPage from './Components/MyEvents';
 import ProfilePage from './Components/ProfilePage'
 import SettingsPage from './Components/SettingsPage';
+import SendInvitationsPage from './Components/SendInvitationsPage';
+import EditFormPage from './Components/EditFormPage';
 function App() {
   return (
     
@@ -24,6 +26,8 @@ function App() {
             <Route exact path="/myeventpage" component={MyEventPage}/>
             <Route exact path="/profilepage" component={ProfilePage}/>
             <Route exact path="/settingspage" component={SettingsPage}/>
+            <Route exact path="/sendinvitationspage" component={SendInvitationsPage}/>
+            <Route exact path="/editformpage" component={EditFormPage}/>
           </Switch>
        
     </Router>

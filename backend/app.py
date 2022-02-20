@@ -163,5 +163,68 @@ def updateprofile():
     return "Done"
 
 
+@app.route('/updateform', methods=["POST"])
+def updateform():
+    email = request.json.get("email", None)
+    event = request.json.get("event", None)
+    date = request.json.get("date", None)
+    nrguests = request.json.get("nrguests", None)
+    location = request.json.get("location", None)
+    budget = request.json.get("budget", None)
+    liveband = request.json.get("liveband", None)
+    artisticmoment = request.json.get("artisticmoment", None)
+    photographer = request.json.get("photographer", None)
+    videorecording = request.json.get("videorecording", None)
+    candybar = request.json.get("candybar", None)
+    fruitsbar = request.json.get("fruitsbar", None)
+    drinks = request.json.get("drinks", None)
+    ringdance = request.json.get("ringdance", None)
+
+    print(email)
+    print(event)
+    print(date)
+    print(nrguests)
+    print(location)
+    print(budget)
+    print(liveband)
+    print(artisticmoment)
+    print(photographer)
+    print(videorecording)
+    print(candybar)
+    print(fruitsbar)
+    print(drinks)
+    print(ringdance)
+    table_client = table_service.get_table_client(table_name="Form")
+
+    task = {u'PartitionKey': email,
+            u'RowKey': date,
+            u'EventType': event,
+            u'NumberGuests': nrguests,
+            u'Location': location,
+            u'Budget': budget,
+            u'LiveBand': liveband,
+            u'ArtisticMoment': artisticmoment,
+            u'Photographer': photographer,
+            u'VideoRecording': videorecording,
+            u'CandyBar': candybar,
+            u'FruitsBar': fruitsbar,
+            u'Drinks': drinks,
+            u'RingDance': ringdance
+            }
+    table_client.update_entity(task)
+    return "Done"
+
+
+@app.route('/deleteevent', methods=["POST"])
+def deleteevent():
+    table_client = table_service.get_table_client(table_name="Form")
+    email = request.json.get("email", None)
+    date = request.json.get("date", None)
+    print(email)
+    print(date)
+    table_client.delete_entity(email, date)
+    return "Done"
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

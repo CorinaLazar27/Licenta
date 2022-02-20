@@ -9,7 +9,26 @@ import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import axios from "axios";
 
+
+import Dialog from "@material-ui/core/Dialog";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import Button from "@material-ui/core/Button";
+
 function RegisterEventPage() {
+
+  const [open, setOpen] = React.useState(false);
+  
+  const handleClickToOpen = () => {
+    setOpen(true);
+  };
+  
+  const handleToClose = () => {
+    setOpen(false);
+  };
+
   const history = useHistory();
   const email=window.localStorage.getItem('email');
   const [event, setEvent] = useState("");
@@ -53,8 +72,10 @@ function RegisterEventPage() {
     .then((response) => {
      const res =response.data
      console.log(res);
+     if(res=="Done")
+     {handleClickToOpen();
      setDialogBox(true);
-     console.log(dialogBox);
+     console.log(dialogBox);}
     
     }).catch((error) => {
       if (error.response) {
@@ -145,9 +166,9 @@ function RegisterEventPage() {
          <h3>Register Your Event</h3>
         <br></br>
          <div className="input-group1">
-            <label  htmlfor="event" >Type of Event</label>
+            <label  htmlFor="event" >Type of Event</label>
         
-            <select name="event" id="event" placeholder="Select an option"   onChange={(event) => {setEvent(event.target.value)}}>
+            <select name="event" id="event" placeholder="Select an option"  required onChange={(event) => {setEvent(event.target.value)}}>
             <option value="">Select your option</option>
             <option value="Wedding">Wedding</option>
              <option value="Christening">Christening</option>
@@ -164,6 +185,7 @@ function RegisterEventPage() {
              type="nrguests"
              name="nrguests"
              onChange={(event) => {setNrGuests(event.target.value)}}
+             
            />
            </div>
            <div className="input-group1">
@@ -173,6 +195,7 @@ function RegisterEventPage() {
              type="date"
              name="date"
              onChange={(event) => {setDate(event.target.value)}}
+             required
            />
          </div>
          <div className="input-group1">
@@ -253,10 +276,26 @@ function RegisterEventPage() {
          </select>
    <br></br>
     </div>
-         
+          <button className="secondary" onClick={()=>ShowFormValues()}>Submit your Event</button>
    </form>
-   <button className="secondary" onClick={()=>ShowFormValues()}>Submit your Event</button>
-  {dialogBox && alert('TRUE')}
+  
+
+  
+      <Dialog open={open} onClose={handleToClose}>
+        <DialogTitle>{"Do you want to invite people?"}</DialogTitle>
+       
+        <DialogActions>
+          <Button onClick={()=>history.push("/sendinvitationspage")} 
+                  color="primary" autoFocus>
+        Yes
+          </Button>
+          <Button onClick={()=>history.push("/myeventpage")} 
+                  color="primary" autoFocus>
+            Not now
+          </Button>
+        </DialogActions>
+      </Dialog>
+
 
 </div>
 </div>

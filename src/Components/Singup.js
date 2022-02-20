@@ -54,6 +54,10 @@ function trytoLogin()
     }).catch((error) => {
       if (error.response) {
         notificare();
+        document.getElementById('email').value = ''
+        document.getElementById('password').value = ''
+        document.getElementById('name').value = ''
+    
         history.push("/sign-in");
         console.log(error.response)
         console.log(error.response.status)
@@ -113,8 +117,9 @@ function trytoLogin()
             <div className="input-group">
               <label htmlFor="name">Name</label>
                 <input
-                  type="email"
-                  name="email"
+                  id="name"
+                  type="name"
+                  name="name"
                   placeholder="Enter your name"
                   onChange={(event) => setName(event.target.value)}
                 />
@@ -123,6 +128,7 @@ function trytoLogin()
               <div className="input-group">
               <label htmlFor="email">E-mail</label>
                 <input
+                  id="email"
                   type="email"
                   name="email"
                   placeholder="Enter e-mail"
@@ -133,6 +139,7 @@ function trytoLogin()
               <div className="input-group">
               <label htmlFor="password">Password</label>
                 <input
+                  id="password"
                   type="password"
                   name="password"
                   placeholder="Enter password"
@@ -143,7 +150,7 @@ function trytoLogin()
 
               <button className="secondary" onClick={logMeIn}>Sign Up</button>
         </form>
-        
+        <p>Back to <a href="/sign-in">sign in..</a></p>
         </div>
       
       

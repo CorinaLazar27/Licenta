@@ -23,7 +23,6 @@ body {
   height: 100%;
   width: 100%;
   justify-content: center;
-  background-image: url("Image/image1.jpg");
 }
 
 .App {
@@ -172,7 +171,7 @@ button.table {
   padding: 0 0px;
   max-width: 200px;
   max-height: 80px;
-  background: #ad7ee2;
+  background: #c468c4;
 }
 button.table:hover {
   background: #a47ed0;
@@ -477,7 +476,7 @@ button.table:hover {
   padding-top: 0px;
   padding-bottom: 0px;
   text-align: left;
-  background-color: #ad7ee2;
+  background-color: #c468c4;
   color: white;
 }
 
@@ -632,4 +631,8 @@ body {
   padding-right: 0;
   margin-left: 1rem;
   margin-right: 1rem;
+}
+
+p {
+  font-size: 14px;
 }

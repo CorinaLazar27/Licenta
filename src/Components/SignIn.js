@@ -23,7 +23,7 @@ function notificare() {
   setTimeout(function() {
     $('#note').fadeOut('fast');
 }, 4000); // <-- time in milliseconds
-
+   
 }
   const history = useHistory();
  
@@ -48,13 +48,16 @@ function notificare() {
      window.localStorage.setItem('nume',res.RowKey)
      window.localStorage.setItem('data',res.Date)
      window.localStorage.setItem('parola',res.Password)
-     window.localStorage.setItem('locatie',res.Location)
+     window.localStorage.setItem('locatieprofil',res.Location)
      window.localStorage.setItem('numartelefon',res.Phone)
     if(res!="Utilizator sau parola gresit")
         history.push("/homepage");
     }).catch((error) => {
       if (error.response) {
         console.log("Utilizator sau parola gresita");
+        document.getElementById('email').value = ''
+        document.getElementById('password').value = ''
+    
         notificare();
        // console.log(error.response)
        // console.log(error.response.status)
@@ -102,15 +105,6 @@ function notificare() {
     handleValidation();
   };
  
-  function TryToSignUp()
-  {
-      history.push("/sign-up");
-  }
-  function HomePage()
-  {
-      history.push("/homepage");
-  }
-
 
   return (
     <div className="Background">
@@ -138,6 +132,7 @@ function notificare() {
               <div className="input-group">
               <label htmlFor="password">Password</label>
                 <input
+                  id="password"
                   type="password"
                   name="password"
                   placeholder="Enter password"
@@ -152,9 +147,8 @@ function notificare() {
 
               <button className="primary" onClick={MakeLogin}>Sign In</button>
         </form>
-        <button className="secondary" onClick={()=>TryToSignUp()} >
-          Create acccont now!
-        </button>
+        <p>If you don't have account, <a href="/sign-up">create now!</a></p>
+       
         </div>
         </div>
       

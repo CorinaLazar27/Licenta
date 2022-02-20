@@ -16,14 +16,34 @@ function ProfilePage() {
     const name=window.localStorage.getItem('nume');;
     const date=window.localStorage.getItem('data');
     const password=window.localStorage.getItem('parola');
-    const location=window.localStorage.getItem('locatie');
+    const location=window.localStorage.getItem('locatieprofil');
     const phonenumber=window.localStorage.getItem('numartelefon');
 
     const [locationupdate, setLocationUpdate] = useState("");
     const [phoneupdate, setPhoneUpdate] = useState("");
 
+    $(document).ready(function() {
+
+      document.getElementById('saveButton').style.visibility="hidden";
+      document.getElementById('editButton').style.visibility="visible";
+  
+  });
+  
+
+    function UnblockInputs()
+    {
+      document.getElementById('inputLocation').readOnly=false;
+      document.getElementById('inputPhone').readOnly=false;
+      document.getElementById('editButton').style.visibility="hidden";
+      document.getElementById('saveButton').style.visibility="visible";
+    }
     function UpdateProfile()
     {
+
+      document.getElementById('inputLocation').readOnly=true;
+      document.getElementById('inputPhone').readOnly=true;
+      document.getElementById('editButton').style.visibility="visible";
+      document.getElementById('saveButton').style.visibility="hidden";
             axios({
               method: "POST",
               url:"/updateprofile",
@@ -107,16 +127,7 @@ const handleChange = e => {
    
   }
 };
-function toBase64(file) {
-  var reader = new FileReader();
-  reader.readAsDataURL(file);
-  reader.onload = function () {
-    console.log(reader.result);
-  };
-  reader.onerror = function (error) {
-    console.log('Error: ', error);
-  };
-}
+
 const handleUpload = async e => {
   e.preventDefault();
   const formData = new FormData();
@@ -170,7 +181,7 @@ const handleUpload = async e => {
     <div id="note">Profile change error!</div>
     <hr className="mt-0 mb-4"/>
     <div className="row">
-        <div className="col-xl-4">
+      {/*  <div className="col-xl-4">
           
             <div className="card mb-4 mb-xl-0">
                 <div className="card-header">Profile Picture</div>
@@ -206,7 +217,7 @@ const handleUpload = async e => {
             </div>
         </div>
   
-
+        */}
         <div className="col-xl-8">
          
             <div className="card mb-4">
@@ -233,6 +244,7 @@ const handleUpload = async e => {
                                 <input className="form-control" id="inputLocation" type="text" defaultValue={location}
                                    onChange={(event) => {setLocationUpdate(event.target.value)
                                     window.localStorage.setItem('locatie',event.target.value)}}
+                                    readOnly
                                     />
                             </div>
                         </div>
@@ -244,7 +256,8 @@ const handleUpload = async e => {
                                 <label className="small mb-1" htmlFor="inputPhone">Phone number</label>
                                 <input className="form-control" id="inputPhone" type="tel" defaultValue={phonenumber} 
                                  onChange={(event) => {setPhoneUpdate(event.target.value)
-                                  window.localStorage.setItem('numartelefon',event.target.value)}}/>
+                                  window.localStorage.setItem('numartelefon',event.target.value)}}
+                                  readOnly/>
                             </div>
                           
                             <div className="col-md-6">
@@ -254,8 +267,11 @@ const handleUpload = async e => {
                             </div>
                         </div>
                       
-                        <button className="btn btn-primary" type="button" onClick={()=>UpdateProfile()}>Save changes</button>
+               
+                        <button id="saveButton" className="btn btn-primary" type="button" onClick={()=>UpdateProfile()}>Save changes</button>
                     </form>
+                    
+                    <button id="editButton" className="btn btn-primary" type="button" onClick={()=>UnblockInputs()}>Edit</button>
                 </div>
             </div>
         </div>
