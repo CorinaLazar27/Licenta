@@ -22,12 +22,13 @@ function ProfilePage() {
     const [locationupdate, setLocationUpdate] = useState("");
     const [phoneupdate, setPhoneUpdate] = useState("");
 
-    $(document).ready(function() {
-
-      document.getElementById('saveButton').style.visibility="hidden";
-      document.getElementById('editButton').style.visibility="visible";
+    
+  window.onload = function exampleFunction() {
   
-  });
+    document.getElementById('saveButton').style.visibility="hidden";
+     document.getElementById('editButton').style.visibility="visible";
+   
+}
   
 
     function UnblockInputs()
@@ -52,8 +53,8 @@ function ProfilePage() {
                 name:name,
                 password:password,
                 date:date,
-                location:locationupdate,
-                phonenumber:phoneupdate
+                location:window.localStorage.getItem('locatieprofil'),
+                phonenumber:window.localStorage.getItem('numartelefon')
                 
                }
             })
@@ -243,7 +244,7 @@ const handleUpload = async e => {
                                 <label className="small mb-1" htmlFor="inputLocation">Location</label>
                                 <input className="form-control" id="inputLocation" type="text" defaultValue={location}
                                    onChange={(event) => {setLocationUpdate(event.target.value)
-                                    window.localStorage.setItem('locatie',event.target.value)}}
+                                    window.localStorage.setItem('locatieprofil',event.target.value)}}
                                     readOnly
                                     />
                             </div>

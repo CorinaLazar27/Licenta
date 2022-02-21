@@ -37,10 +37,13 @@ function MyEventPage() {
 
     window.onload = function exampleFunction() {
   
-      GetMyEvents();
+    GetMyEvents();
+    //window.location.reload();
+ 
      
      
   }
+ 
   function GetMyEvents() {
     
     axios({
@@ -211,6 +214,7 @@ function myClick(event){
     <div className="home1">
     <div id="notesucces">Event deleted with succes!</div>
     <div id="note">Error at delete event, try again!</div>
+   
         <h3>My Events</h3>
         <br></br>
      <table id="myeventstable">
@@ -237,7 +241,7 @@ function myClick(event){
      
      <br></br>
      <button className="table"  onClick={()=> history.push('/registerevent')} >Add an event</button>
-     
+                    
      <Dialog open={open} onClose={handleToClose}>
         <DialogTitle>{"What do you want to do?"}</DialogTitle>
                

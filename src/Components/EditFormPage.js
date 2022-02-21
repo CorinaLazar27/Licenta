@@ -28,16 +28,18 @@ function EditFormPage() {
     const budget=window.localStorage.getItem('buget');
     const guests=window.localStorage.getItem('invitati');
     const liveband=window.localStorage.getItem('liveband');
-  
-    $(document).ready(function() {
 
+    window.onload = function exampleFunction() {
+  
+        document.getElementById('saveButton').style.visibility="hidden";
+         document.getElementById('editButton').style.visibility="visible";
+       
+    }
+     $( document ). ready(function(){
         document.getElementById('saveButton').style.visibility="hidden";
         document.getElementById('editButton').style.visibility="visible";
-       
-    
-    });
-    
-  
+     }
+     );
       function UnblockInputs()
       {
          document.getElementById('location').readOnly=false;
@@ -74,20 +76,7 @@ function EditFormPage() {
     document.getElementById('drinks').readOnly=true;
     document.getElementById('ringDance').readOnly=true;
 
-    event=window.localStorage.getItem('eveniment');
-    email=window.localStorage.getItem('email');
-    location=window.localStorage.getItem('locatie');
-    date=window.localStorage.getItem('dataeveniment');
-    ringDance=window.localStorage.getItem('ringdans');
-    drinks=window.localStorage.getItem('bauturi');
-    fruitsbar=window.localStorage.getItem('fruitsbar');
-    candybar=window.localStorage.getItem('candybar');
-    video=window.localStorage.getItem('video');
-    photographer=window.localStorage.getItem('fotograf');
-    artisticmoment=window.localStorage.getItem('momentartistic');
-    budget=window.localStorage.getItem('buget');
-    guests=window.localStorage.getItem('invitati');
-    liveband=window.localStorage.getItem('liveband');
+   
 
     axios({
       method: "POST",
@@ -96,17 +85,17 @@ function EditFormPage() {
         email: email,
         event:event,
         date:date,
-        nrguests:guests,
-        location:location,
-        budget:budget,
-        liveband:liveband,
-        artisticmoment:artisticmoment,
-        photographer:photographer,
-        videorecording:video,
-        candybar:candybar,
-        fruitsbar:fruitsbar,
-        drinks:drinks,
-        ringdance:ringDance
+        nrguests:window.localStorage.getItem('invitati'),
+        location:window.localStorage.getItem('locatie'),
+        budget:window.localStorage.getItem('buget'),
+        liveband:window.localStorage.getItem('liveband'),
+        artisticmoment:window.localStorage.getItem('momentartistic'),
+        photographer:window.localStorage.getItem('fotograf'),
+        videorecording:window.localStorage.getItem('video'),
+        candybar:window.localStorage.getItem('candybar'),
+        fruitsbar:window.localStorage.getItem('fruitsbar'),
+        drinks:window.localStorage.getItem('bauturi'),
+        ringdance:window.localStorage.getItem('ringdans')
        }
     })
     .then((response) => {
@@ -115,7 +104,7 @@ function EditFormPage() {
      if(res=="Done")
      {
          console.log("dONE");
-       //  history.push("/myeventpage");
+         history.push("/myeventpage");
      }
     
     }).catch((error) => {
@@ -283,7 +272,14 @@ return (
                                defaultValue={fruitsbar}
                                onChange={(event) =>  window.localStorage.setItem('fruitsbar',event.target.value)} 
                                readOnly
-                                />
+                            />
+                            {/*  <select name="fruitsbar" id="fruitsbar" defaultValue={fruitsbar}
+                                onChange={(event) => {window.localStorage.setItem('fruitsbar',event.target.value)}}>
+                            <option value="">Select your option</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                            readOnly
+                            </select>*/}
                           </div>
                       </div>
                     
