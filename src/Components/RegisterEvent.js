@@ -276,10 +276,10 @@ function RegisterEventPage() {
          </select>
    <br></br>
     </div>
-          <button className="secondary" onClick={()=>ShowFormValues()}>Submit your Event</button>
+         
    </form>
   
-
+   <button className="secondary" onClick={()=>ShowFormValues()}>Submit your Event</button>
   
       <Dialog open={open} onClose={handleToClose}>
         <DialogTitle>{"Do you want to invite people?"}</DialogTitle>

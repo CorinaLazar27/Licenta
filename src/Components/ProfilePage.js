@@ -219,9 +219,9 @@ const handleUpload = async e => {
         </div>
   
         */}
-        <div className="col-xl-8">
+        <div className="col-xl-16">
          
-            <div className="card mb-4">
+            <div className="card mb-3">
                 <div className="card-header">Account Details</div>
                 <div className="card-body">
                     <form>

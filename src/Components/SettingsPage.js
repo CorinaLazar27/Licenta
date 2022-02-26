@@ -10,6 +10,8 @@ import 'react-dropdown/style.css';
 import axios from "axios";
 import $ from 'jquery';
 
+import emailjs from 'emailjs-com'
+
 function SettingsPage() {
   const email=window.localStorage.getItem('email');
   const name=window.localStorage.getItem('nume');;
@@ -18,6 +20,21 @@ function SettingsPage() {
   const location=window.localStorage.getItem('locatie');
   const phonenumber=window.localStorage.getItem('numartelefon');
 
+  function sendEmail(e){
+    e.preventDefault();
+    emailjs.sendForm("service_n4e6ik8",
+                      "template_ent1jts",
+                      e.target,
+                      "user_K0LHWwDahklB8kPrwKB2k"
+                      ).then(res=>{
+                        document.getElementById('name').value = ''
+                        document.getElementById('email').value = ''
+                        document.getElementById('subject').value = ''
+                        document.getElementById('message').value = ''
+                        console.log(res);
+                      }).catch(err=>console.log(err));
+
+  }
 
   function UpdateProfile()
     {
@@ -215,7 +232,7 @@ mediaButton.onclick = function () {
 
         
         <div class="col-md-9 mb-md-0 mb-5">
-            <form id="contact-form" name="contact-form" action="mail.php" method="POST">
+            <form id="contact-form" name="contact-form" onSubmit={sendEmail}>
 
               
                 <div class="row">
@@ -257,13 +274,12 @@ mediaButton.onclick = function () {
 
                     </div>
                 </div>
-              
-
+                <div class="text-center text-md-left">
+                <button type="submit" class="btn btn-outline-secondary" onclick="document.getElementById('contact-form').submit();">Send</button>
+            </div>
             </form>
 
-            <div class="text-center text-md-left">
-                <button type="button"class="btn btn-outline-secondary" onclick="document.getElementById('contact-form').submit();">Send</button>
-            </div>
+           
             <div class="status"></div>
         </div>
         

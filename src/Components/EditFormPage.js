@@ -164,7 +164,7 @@ return (
     <hr className="mt-0 mb-4"/>
     <div className="row">
       
-        <div className="col-xl-8">
+        <div className="col-xl-16">
          
             <div className="card mb-4">
                 <div className="card-header">{event}</div>
