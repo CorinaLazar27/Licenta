@@ -20,6 +20,7 @@ body {
 .Background {
   align-items: center;
   display: flex;
+  position: fixed;
   height: 100%;
   width: 100%;
   justify-content: center;
@@ -31,6 +32,8 @@ body {
   box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
   max-width: 612px;
   padding-bottom: 66px;
+  margin-bottom: 20%;
+  margin-top: 20%;
   padding-top: 46px;
   text-align: center;
   width: 90%;
@@ -635,4 +638,40 @@ body {
 
 p {
   font-size: 14px;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Jost:wght@100;300;400;700&display=swap");
+
+input[type="text"]:focus {
+  outline: none;
+}
+
+.controls {
+  width: 294px;
+  margin: 15px auto;
+}
+
+#theinput {
+  border: solid 1px green;
+  height: 20px;
+  line-height: 20px;
+  vertical-align: middle;
+}
+#theButton {
+  border: solid 1px green;
+  height: 22px;
+  line-height: 22px;
+  vertical-align: middle;
+}
+
+#remove_fields {
+}
+.fa.fa-minus {
+  color: black;
+  margin-right: 5px;
+}
+
+.fa.fa-plus {
+  color: black;
+  margin-right: 5px;
 }

@@ -110,6 +110,7 @@ function trytoLogin()
   }
 
   return (
+    <div className="Background">
     <div className="App">
       <div id="note">Contul exista deja!</div>
         <h1>Register</h1>
@@ -151,6 +152,7 @@ function trytoLogin()
               <button className="secondary" onClick={logMeIn}>Sign Up</button>
         </form>
         <p>Back to <a href="/sign-in">sign in..</a></p>
+        </div>
         </div>
       
       
