@@ -7,30 +7,32 @@ import { NavLink } from "react-router-dom";
 import Dropdown from "react-dropdown";
 import { CircleArrow as ScrollUpButton } from "react-scroll-up-button";
 import "react-dropdown/style.css";
+import emailjs from "emailjs-com";
 
 function SendInvitationsPage() {
   const history = useHistory();
 
-  const [inputList, setInputList] = useState([{ emailInvitat: "" }]);
+  const [formValues, setFormValues] = useState([{ emailInvitat: "" }]);
 
-  // handle input change
-  const handleInputChange = (e, index) => {
-    const { name, value } = e.target;
-    const list = [...inputList];
-    list[index][name] = value;
-    setInputList(list);
+  let handleChange = (i, e) => {
+    let newFormValues = [...formValues];
+    newFormValues[i][e.target.name] = e.target.value;
+    setFormValues(newFormValues);
   };
 
-  // handle click event of the Remove button
-  const handleRemoveClick = (index) => {
-    const list = [...inputList];
-    list.splice(index, 1);
-    setInputList(list);
+  let addFormFields = () => {
+    setFormValues([...formValues, { emailInvitat: "" }]);
   };
 
-  // handle click event of the Add button
-  const handleAddClick = () => {
-    setInputList([...inputList, { emailInvitat: "" }]);
+  let removeFormFields = (i) => {
+    let newFormValues = [...formValues];
+    newFormValues.splice(i, 1);
+    setFormValues(newFormValues);
+  };
+
+  let handleSubmit = (event) => {
+    event.preventDefault();
+    alert(JSON.stringify(formValues));
   };
 
   var mainListDiv = document.getElementById("mainListDiv"),
@@ -45,6 +47,22 @@ function SendInvitationsPage() {
 
 };*/
 
+  function sendEmail(e) {
+    e.preventDefault();
+    emailjs
+      .sendForm(
+        "service_n4e6ik8",
+        "template_ent1jts",
+        e.target,
+        "user_K0LHWwDahklB8kPrwKB2k"
+      )
+      .then((res) => {
+        document.getElementById("inputinv").value = "";
+
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+  }
   return (
     <div className="nav">
       <div className="container">
@@ -83,47 +101,79 @@ function SendInvitationsPage() {
           </button>
         </div>
       </div>
-
       <div className="home1">
-        <form>
-          {inputList.map((x, i) => {
-            return (
-              <div className="box">
-                <div>
-                  <input
-                    name="emailInvitat"
-                    placeholder="Enter email"
-                    class="survey_options"
-                    value={x.emailInvitat}
-                    onChange={(e) => handleInputChange(e, i)}
-                  />
-
-                  <div className="btn-box">
-                    {inputList.length !== 1 && (
-                      <div class="controls">
-                        <button
-                          id="remove_fields"
-                          className="fa fa-minus"
-                          onClick={() => handleRemoveClick(i)}
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    )}
+        <div class="container1">
+          <form onSubmit={sendEmail}>
+            <div class="row1">
+              <div class="col-25">
+                <label for="subject">Your Name</label>
+              </div>
+              <div class="col-75">
+                <input id="inputinv" name="name" />
+              </div>
+            </div>
+            <div class="row1">
+              {formValues.map((element, index) => (
+                <div className="form-inline" key={index}>
+                  <div class="col-3">
+                    <label for="fname">Email</label>
                   </div>
-                  {inputList.length - 1 === i && (
-                    <div class="controls">
-                      <button className="fa fa-plus" onClick={handleAddClick}>
-                        Add
+                  <div class="col-6">
+                    <input
+                      id="inputinv"
+                      name="emailInvitat"
+                      value={element.emailInvitat || ""}
+                      onChange={(e) => handleChange(index, e)}
+                      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                    />
+                  </div>
+                  {index ? (
+                    <div className="col-3">
+                      <button
+                        type="button"
+                        className="button btn fa fa-minus"
+                        onClick={() => removeFormFields(index)}
+                      >
+                        Remove
                       </button>
                     </div>
-                  )}
+                  ) : null}
                 </div>
+              ))}
+              <div className="button-section">
+                <button
+                  className="button btn fa fa-plus"
+                  type="button"
+                  onClick={() => addFormFields()}
+                >
+                  Add
+                </button>
               </div>
-            );
-          })}
-          <div style={{ marginTop: 20 }}>{JSON.stringify(inputList)}</div>
-        </form>
+            </div>
+
+            <div class="row1">
+              <div class="col-25">
+                <label for="subject">Message</label>
+              </div>
+              <div class="col-75">
+                <textarea
+                  id="message"
+                  name="message"
+                  value="Hello!
+                    Please complete this form to make our event very nice :)
+                    Thank you!"
+                  readOnly
+                ></textarea>
+              </div>
+            </div>
+            <br />
+            <div class="row1">
+              <button className="primary submit" type="submit">
+                Send invitations
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
