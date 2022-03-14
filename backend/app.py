@@ -226,5 +226,61 @@ def deleteevent():
     return "Done"
 
 
+@app.route('/postoptionsinvitation', methods=["POST"])
+def postoptionsinvitation():
+    email = request.json.get("email", None)
+    name = request.json.get("name", None)
+    age = request.json.get("age", None)
+    location = request.json.get("location", None)
+    organizerOpinion = request.json.get("organizerOpinion", None)
+    drinksOpinion = request.json.get("drinksOpinion", None)
+    cakesOpinion = request.json.get("cakesOpinion", None)
+    fruitsOpinion = request.json.get("fruitsOpinion", None)
+    appetizerOpinion = request.json.get("appetizerOpinion", None)
+    maincourseOpinion = request.json.get("maincourseOpinion", None)
+    type2Opinion = request.json.get("type2Opinion", None)
+    musicOpinion = request.json.get("musicOpinion", None)
+    print(email)
+    print(name)
+    print(age)
+    print(location)
+    print(organizerOpinion)
+    print(drinksOpinion)
+    print(cakesOpinion)
+    print(fruitsOpinion)
+    print(appetizerOpinion)
+    print(maincourseOpinion)
+    print(type2Opinion)
+    print(musicOpinion)
+
+    table_client = table_service.get_table_client(
+        table_name="InvitationOpinion")
+
+    OrganizerToStr = ','.join([str(elem) for elem in organizerOpinion])
+    DrinkToStr = ','.join([str(elem) for elem in drinksOpinion])
+    CakesToStr = ','.join([str(elem) for elem in cakesOpinion])
+    FruitsToStr = ','.join([str(elem) for elem in fruitsOpinion])
+    AppetizerToStr = ','.join([str(elem) for elem in appetizerOpinion])
+    MainCourseToStr = ','.join([str(elem) for elem in maincourseOpinion])
+    Type2ToStr = ','.join([str(elem) for elem in type2Opinion])
+    MusicToStr = ','.join([str(elem) for elem in musicOpinion])
+
+    task = {u'PartitionKey': email,
+            u'RowKey': name,
+            u'Age': age,
+            u'Location': location,
+            u'Organizer_opinion': OrganizerToStr,
+            u'Drinks_opinion': DrinkToStr,
+            u'Cakes_opinion': CakesToStr,
+            u'Fruits_opinion': FruitsToStr,
+            u'Appetizer_opinion': AppetizerToStr,
+            u'Main_course_opinion': MainCourseToStr,
+            u'Type2_opinion': Type2ToStr,
+            u'Music_opinion': MusicToStr,
+            }
+    table_client.create_entity(entity=task)
+    return "Done"
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
