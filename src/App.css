@@ -204,8 +204,6 @@ button.table:hover {
   position: absolute;
   line-height: 65px;
   text-align: center;
-  /*background-color: rgba(255, 0, 200, 0.397);*/
-  background-color: #cc4282;
 }
 .nav div.footer {
   position: fixed;

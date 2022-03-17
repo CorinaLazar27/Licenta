@@ -8,6 +8,9 @@ import FacebookLogin from "react-facebook-login";
 import { Card, Image } from "react-bootstrap";
 import { Transition } from "react-transition-group";
 import { TransitionGroup } from "react-transition-group";
+import { Field, Form, Formik } from "formik";
+import { Button, Grid, Typography } from "@material-ui/core";
+import { TextField } from "@mui/material";
 
 function SingIn() {
   $(document).ready(function () {
@@ -47,14 +50,16 @@ function SingIn() {
     }
   };
 
-  function MakeLogin(event) {
+  const MakeLogin = (values) => {
+    const data = {
+      email: values.email,
+      password: values.password,
+    };
+    console.log(data);
     axios({
       method: "POST",
       url: "/login",
-      data: {
-        email: email,
-        password: password,
-      },
+      data: data,
     })
       .then((response) => {
         const res = response.data;
@@ -78,89 +83,54 @@ function SingIn() {
           // console.log(error.response.headers)
         }
       });
-
-    setEmail("");
-    setPassword("");
-
-    event.preventDefault();
-  }
-
-  const handleValidation = () => {
-    let formIsValid = true;
-
-    if (!email.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
-      formIsValid = false;
-      setemailError("Email Not Valid");
-
-      return false;
-    } else {
-      setemailError("");
-      formIsValid = true;
-    }
-
-    if (!password.match(/^[a-zA-Z]{3,22}$/)) {
-      formIsValid = false;
-      setpasswordError(
-        "Only Letters and length must best min 8 Chracters and Max 22 Chracters"
-      );
-      return false;
-    } else {
-      setpasswordError("");
-      formIsValid = true;
-    }
-
-    return formIsValid;
-  };
-
-  const loginSubmit = (e) => {
-    e.preventDefault();
-    handleValidation();
   };
 
   return (
     <div className="Background">
       <div className="App">
         <div id="note">Utilizator sau parola gresita!</div>
-        <h3>Sign in</h3>
-
-        <form className="form" onSubmit={loginSubmit}>
-          <div className="input-group">
-            <label htmlFor="email">E-mail</label>
-            <input
-              id="email"
-              type="email"
-              name="email"
-              placeholder="Enter e-mail"
-              onChange={(event) => {
-                setEmail(event.target.value);
-                window.localStorage.setItem("email", event.target.value);
-              }}
-            />
-            <small id="emailHelp" className="text-danger form-text">
-              {emailError}
-            </small>
-          </div>
-
-          <div className="input-group">
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              name="password"
-              placeholder="Enter password"
-              onChange={(event) => setPassword(event.target.value)}
-            />
-            <small id="passworderror" className="text-danger form-text">
-              {passwordError}
-            </small>
-          </div>
-
-          <button className="primary" onClick={MakeLogin}>
-            Sign In
-          </button>
-        </form>
+        <Typography variant="h4">Conecteaza-te</Typography>
+        <br></br>
+        <Formik
+          initialValues={{
+            email: "",
+            password: "",
+          }}
+          onSubmit={(values) => {
+            MakeLogin(values);
+            console.logs(values);
+          }}
+        >
+          <Form>
+            <Grid container spacing={5} columns={2}>
+              <Grid item xs={12}>
+                <Field
+                  name="email"
+                  label="Email"
+                  variant="outlined"
+                  placeholder="Introdu email-ul"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Field
+                  type="password"
+                  name="password"
+                  label="Parola"
+                  variant="outlined"
+                  placeholder="Introdu parola"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button type="submit" variant="outlined">
+                  Conecteaza-te
+                </Button>
+              </Grid>
+            </Grid>
+          </Form>
+        </Formik>
+        <br></br>
         <p>
-          If you don't have account, <a href="/sign-up">create now!</a>
+          Daca nu ai un cont, <a href="/sign-up">fa unul acum!</a>
         </p>
 
         <Card id="card-fb" style={{ width: "500px" }}>

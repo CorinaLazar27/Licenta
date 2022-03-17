@@ -8,6 +8,7 @@ import Dropdown from "react-dropdown";
 import { CircleArrow as ScrollUpButton } from "react-scroll-up-button";
 import "react-dropdown/style.css";
 import emailjs from "emailjs-com";
+import Header from "./Header";
 
 function SendInvitationsPage() {
   const history = useHistory();
@@ -65,42 +66,7 @@ function SendInvitationsPage() {
   }
   return (
     <div className="nav">
-      <div className="container">
-        <div className="logo">
-          <a href="#">Event</a>
-        </div>
-        <div className="main_list" id="mainListDiv">
-          <ul>
-            <li>
-              <a href="/homepage">Home</a>
-            </li>
-            <li>
-              <a href="/registerevent">Register event</a>
-            </li>
-            <li>
-              <a href="/myeventpage">My events</a>
-            </li>
-            <li>
-              <a href="/profilepage">Profile</a>
-            </li>
-            <li>
-              <a href="/settingspage">Settings</a>
-            </li>
-            <li>
-              <a href="/sign-in" onClick={() => window.localStorage.clear()}>
-                Log out
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div className="media_button">
-          <button className="main_media_button" id="mediaButton">
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-        </div>
-      </div>
+      <Header />
       <div className="home1">
         <div class="container1">
           <form onSubmit={sendEmail}>
@@ -160,7 +126,8 @@ function SendInvitationsPage() {
                   id="message"
                   name="message"
                   value="Hello!
-                    Please complete this form to make our event very nice :)
+                    Please complete this form:  https://complete-form.netlify.app/  to make our event very nice :)
+                   
                     Thank you!"
                   readOnly
                 ></textarea>

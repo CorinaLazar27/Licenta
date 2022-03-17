@@ -9,6 +9,7 @@ import { CircleArrow as ScrollUpButton } from "react-scroll-up-button";
 import "react-dropdown/style.css";
 import axios from "axios";
 import $ from "jquery";
+import Header from "./Header";
 
 function EditFormPage() {
   const history = useHistory();
@@ -105,56 +106,9 @@ function EditFormPage() {
       });
   }
 
-  var mainListDiv = document.getElementById("mainListDiv"),
-    mediaButton = document.getElementById("mediaButton");
-
-  /*mediaButton.onclick = function () {
-  
-  "use strict";
-  
-  mainListDiv.classList.toggle("show_list");
-  mediaButton.classList.toggle("active");
-
-};*/
-
   return (
     <div className="nav">
-      <div className="container">
-        <div className="logo">
-          <a href="#">Event</a>
-        </div>
-        <div className="main_list" id="mainListDiv">
-          <ul>
-            <li>
-              <a href="/homepage">Home</a>
-            </li>
-            <li>
-              <a href="/registerevent">Register event</a>
-            </li>
-            <li>
-              <a href="/myeventpage">My events</a>
-            </li>
-            <li>
-              <a href="/profilepage">Profile</a>
-            </li>
-            <li>
-              <a href="/settingspage">Settings</a>
-            </li>
-            <li>
-              <a href="/sign-in" onClick={() => window.localStorage.clear()}>
-                Log out
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div className="media_button">
-          <button className="main_media_button" id="mediaButton">
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-        </div>
-      </div>
+      <Header />
 
       <div className="home1">
         <hr className="mt-0 mb-4" />
@@ -167,7 +121,7 @@ function EditFormPage() {
                   <div className="row gx-3 mb-3">
                     <div className="col-md-6">
                       <label className="small mb-1" htmlFor="location">
-                        Location
+                        Locatie
                       </label>
                       <input
                         className="form-control"
@@ -186,7 +140,7 @@ function EditFormPage() {
 
                     <div className="col-md-6">
                       <label className="small mb-1" htmlFor="budget">
-                        Budget
+                        Buget
                       </label>
                       <input
                         className="form-control"
@@ -221,7 +175,7 @@ function EditFormPage() {
 
                     <div className="col-md-6">
                       <label className="small mb-1" htmlFor="numberofguests">
-                        Number of guests
+                        Numar invitati
                       </label>
                       <input
                         className="form-control"
@@ -242,7 +196,7 @@ function EditFormPage() {
                   <div className="row gx-3 mb-3">
                     <div className="col-md-6">
                       <label className="small mb-1" htmlFor="liveband">
-                        Live Band
+                        Trupa live
                       </label>
                       <input
                         className="form-control"
@@ -260,7 +214,7 @@ function EditFormPage() {
 
                     <div className="col-md-6">
                       <label className="small mb-1" htmlFor="artisticmoment">
-                        Artistic Moment
+                        Moment artistic
                       </label>
                       <input
                         className="form-control"
@@ -281,7 +235,7 @@ function EditFormPage() {
                   <div className="row gx-3 mb-3">
                     <div className="col-md-6">
                       <label className="small mb-1" htmlFor="photographer">
-                        Photographer
+                        Fotograf
                       </label>
                       <input
                         className="form-control"
@@ -299,7 +253,7 @@ function EditFormPage() {
 
                     <div className="col-md-6">
                       <label className="small mb-1" htmlFor="video">
-                        Video Recording
+                        Inregistrare video
                       </label>
                       <input
                         className="form-control"
@@ -338,7 +292,7 @@ function EditFormPage() {
 
                     <div className="col-md-6">
                       <label className="small mb-1" htmlFor="fruitsbar">
-                        Fruits Bar
+                        Bar cu fructe
                       </label>
                       <input
                         className="form-control"
@@ -384,7 +338,7 @@ function EditFormPage() {
 
                     <div className="col-md-6">
                       <label className="small mb-1" htmlFor="ringDance">
-                        Ring Dance
+                        Ring dans
                       </label>
                       <input
                         className="form-control"
@@ -408,7 +362,7 @@ function EditFormPage() {
                     type="button"
                     onClick={() => UpdateForm()}
                   >
-                    Save changes
+                    Salvare schimbari
                   </button>
                 </form>
                 <button
@@ -426,7 +380,7 @@ function EditFormPage() {
                   type="button"
                   onClick={() => history.push("/sendinvitationspage")}
                 >
-                  Send invitations
+                  Trimite invitatii
                 </button>
               </div>
             </div>
