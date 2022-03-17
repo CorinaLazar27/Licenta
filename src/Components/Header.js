@@ -177,6 +177,7 @@ const Header = (props) => {
                       onClick={() => setAnchor(null)}
                       component={Link}
                       to="/sign-in"
+                      onClick={() => window.localStorage.clear()}
                     >
                       <ListItemIcon>
                         <LogoutIcon />

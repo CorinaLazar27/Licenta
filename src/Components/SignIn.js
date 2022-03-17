@@ -69,6 +69,7 @@ function SingIn() {
         window.localStorage.setItem("parola", res.Password);
         window.localStorage.setItem("locatieprofil", res.Location);
         window.localStorage.setItem("numartelefon", res.Phone);
+        window.localStorage.setItem("email", res.PartitionKey);
         if (res != "Utilizator sau parola gresit") history.push("/homepage");
       })
       .catch((error) => {
@@ -91,6 +92,7 @@ function SingIn() {
         <div id="note">Utilizator sau parola gresita!</div>
         <Typography variant="h4">Conecteaza-te</Typography>
         <br></br>
+
         <Formik
           initialValues={{
             email: "",
