@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import $ from "jquery";
 import { Field, Form, Formik } from "formik";
 import { Button, Grid, Typography } from "@material-ui/core";
+import { FormikTextField } from "./FormikComponents/FormikTextField";
 
 function SingUp(props) {
   const history = useHistory();
@@ -70,27 +71,27 @@ function SingUp(props) {
           <Form>
             <Grid container spacing={5} columns={2}>
               <Grid item xs={12}>
-                <Field
+                <FormikTextField
                   name="name"
                   label="Nume"
-                  variant="filled"
+                  variant="outlined"
                   placeholder="Introdu numele"
                 />
               </Grid>
               <Grid item xs={12}>
-                <Field
+                <FormikTextField
                   name="email"
                   label="Email"
-                  variant="filled"
+                  variant="outlined"
                   placeholder="Introdu email-ul"
                 />
               </Grid>
               <Grid item xs={12}>
-                <Field
+                <FormikTextField
                   type="password"
                   name="password"
                   label="Parola"
-                  variant="filled"
+                  variant="outlined"
                   placeholder="Introdu parola"
                 />
               </Grid>

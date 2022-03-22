@@ -123,18 +123,15 @@ function SettingsPage() {
                 <div id="notesucces">Parola a fost schimbata cu succes!</div>
                 <div id="note">A aparut o eroare la schimbarea parolei!</div>
 
-                {/* 
-      
-      <div className="input-group1">
-       <label>Current password</label>
-       <input 
-       id="newpassword"
-       type="password"
-       onChange={(event) => setNewPassword(event.target.value)
-       }></input>
-       </div>
-       
-       */}
+                <div className="input-group1">
+                  <label>Parola curenta</label>
+                  <input
+                    id="newpassword"
+                    type="password"
+                    onChange={(event) => setNewPassword(event.target.value)}
+                  ></input>
+                </div>
+
                 <div className="input-group1">
                   <label>Parola noua</label>
                   <input

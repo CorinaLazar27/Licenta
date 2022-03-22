@@ -64,6 +64,12 @@ const Header = (props) => {
   const open = Boolean(anchor);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  function Deconectare() {
+    setAnchor(null);
+    window.localStorage.clear();
+  }
+
   const handleMenu = (event) => {
     setAnchor(event.currentTarget);
   };
@@ -130,7 +136,7 @@ const Header = (props) => {
                       <ListItemIcon>
                         <HomeIcon />
                       </ListItemIcon>
-                      <Typography variant="h6"> Acasa</Typography>
+                      <Typography variant="h6">Pagina principala</Typography>
                     </MenuItem>
                     <MenuItem
                       onClick={() => setAnchor(null)}
@@ -174,10 +180,9 @@ const Header = (props) => {
                     </MenuItem>
 
                     <MenuItem
-                      onClick={() => setAnchor(null)}
+                      onClick={() => Deconectare()}
                       component={Link}
                       to="/sign-in"
-                      onClick={() => window.localStorage.clear()}
                     >
                       <ListItemIcon>
                         <LogoutIcon />
@@ -195,7 +200,7 @@ const Header = (props) => {
                     color="default"
                   >
                     <HomeIcon />
-                    Acasa
+                    Pagina principala
                   </Button>
                   <Button
                     variant="text"

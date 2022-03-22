@@ -1,11 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import logo from "../Image/logo.png";
 import { useHistory } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { NavLink } from "react-router-dom";
-import Dropdown from "react-dropdown";
-import { CircleArrow as ScrollUpButton } from "react-scroll-up-button";
 import "react-dropdown/style.css";
 import axios from "axios";
 import { Formik, Form, Field } from "formik";
@@ -16,8 +11,15 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "@material-ui/core/Button";
 import Header from "./Header";
-import { Container, Grid } from "@material-ui/core";
-import { textAlign } from "@mui/system";
+import { Container, Grid, Box } from "@material-ui/core";
+import { FormikTextField } from "./FormikComponents/FormikTextField";
+import { FormikCheckBox } from "./FormikComponents/FormikCheckBox";
+import { FormikSelectSimple } from "./FormikComponents/FormikSelectSimple";
+import { FormikDatePicker } from "./FormikComponents/FormikDatePicker";
+import { LocalizationProvider } from "@mui/lab";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import FormLabel from "@mui/material/FormLabel";
+import RadioGroup from "@mui/material/RadioGroup";
 
 function RegisterEventPage() {
   const [open, setOpen] = React.useState(false);
@@ -109,24 +111,17 @@ function RegisterEventPage() {
     //history.push("myeventpage");
   }
 
+  const eventsSelectItems = ["Nunta", "Botez", "Aniversare"];
+  const ringDanceSelectItems = ["Dominant", "Restrans", "Fara"];
+  const drinksSelectItems = ["Bauturi la masa", "Bartman"];
+
   return (
     <div className="nav">
       <Header />
 
       <div className="home1">
-        <ScrollUpButton
-          StopPosition={0}
-          ShowAtPosition={150}
-          EasingType="easeOutCubic"
-          AnimationDuration={2}
-          ContainerClassName="ScrollUpButton__Container"
-          TransitionClassName="ScrollUpButton__Toggled"
-          style={{}}
-          ToggledStyle={{}}
-        />
-
         <h3>Inregistreaza un eveniment</h3>
-
+        <br></br>
         <Formik
           initialValues={{
             event: "",
@@ -144,230 +139,250 @@ function RegisterEventPage() {
             ringDance: "",
           }}
           onSubmit={(values) => {
+            // values.date = values.date.toLocaleDateString("ro-RO");
             FormOptions(values);
           }}
         >
           <Form>
-            <Container display="flex" alignItems="center">
-              <Grid
-                container
-                columnSpacing={10}
-                sx={{
-                  p: 1,
-                }}
-              >
-                <Grid item xs={6}>
-                  {" "}
-                  <label htmlFor="event">Tipul evenimentului</label>
-                </Grid>
-                <Grid item xs={6}>
-                  {" "}
-                  <Field
-                    as="select"
-                    name="event"
-                    id="event"
-                    placeholder="Select an option"
-                  >
-                    <option value="">Alege optiunea</option>
-                    <option value="Wedding">Nunta</option>
-                    <option value="Christening">Botez</option>
-                    <option value="Zi de nastere">Zi de nastere</option>
-                  </Field>
-                </Grid>
-
-                <Grid item xs={6}>
-                  <label>Numarul invitatilor</label>
-                </Grid>
-                <Grid item xs={6}>
-                  <Field id="nrguests" type="nrguests" name="nrguests" />
-                </Grid>
-                <Grid item xs={6}>
-                  <label>Data</label>
-                </Grid>
-                <Grid item xs={6}>
-                  <Field id="date" type="date" name="date" required />
-                </Grid>
-                <Grid item xs={6}>
-                  <label>Locatie favorita</label>
-                </Grid>
-                <Grid item xs={6}>
-                  <input id="location" type="location" name="location" />
-                </Grid>
-                <Grid item xs={6}>
-                  <label htmlFor="budget">Buget</label>
-                </Grid>
-                <Grid item xs={6}>
-                  <input id="budget" type="budget" name="budget" />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <label htmlFor="band">Band live</label>
-                </Grid>
-                <Grid item xs={6}>
-                  <input
-                    type="radio"
-                    value="Yes"
-                    name="band"
-                    id="band"
-                    className="radio"
-                  />
-                  Yes
-                  <input
-                    type="radio"
-                    value="No"
-                    name="band"
-                    id="band"
-                    className="radio"
-                    onChange={(event) => {
-                      setLiveBand(event.target.value);
-                    }}
-                  />{" "}
-                  No
-                </Grid>
-                <Grid item xs={6}>
-                  <label htmlFor="artisticmoment">Moment artistic</label>
-                </Grid>
-                <Grid item xs={6}>
-                  <input
-                    id="artisticmoment"
-                    type="radio"
-                    value="Yes"
-                    name="artisticmoment"
-                    className="radio"
-                    onChange={(event) => {
-                      setArtisticMoment(event.target.value);
-                    }}
-                  />{" "}
-                  Yes
-                  <input
-                    id="artisticmoment"
-                    type="radio"
-                    value="No"
-                    name="artisticmoment"
-                    className="radio"
-                  />{" "}
-                  No
-                </Grid>
-                <Grid item xs={6}>
-                  <label htmlFor="photographer">Fotograf</label>
-                </Grid>
-                <Grid item xs={6}>
-                  <input
-                    id="photographer"
-                    type="radio"
-                    value="Yes"
-                    name="photographer"
-                    className="radio"
-                  />{" "}
-                  Yes
-                  <input
-                    id="photographer"
-                    type="radio"
-                    value="No"
-                    name="photographer"
-                    className="radio"
-                  />{" "}
-                  No
-                </Grid>
-                <Grid item xs={6}>
-                  <label htmlFor="videorecording">Inregistrare video</label>
-                </Grid>
-                <Grid item xs={6}>
-                  <input
-                    id="videorecording"
-                    type="radio"
-                    value="Yes"
-                    name="videorecording"
-                    className="radio"
-                  />{" "}
-                  Yes
-                  <input
-                    id="videorecording"
-                    type="radio"
-                    value="No"
-                    name="videorecording"
-                    className="radio"
-                  />{" "}
-                  No
-                </Grid>
-                <Grid item xs={6}>
-                  <label htmlFor="candybar">Candy Bar</label>
-                </Grid>
-                <Grid item xs={6}>
-                  <input
-                    id="candybar"
-                    type="radio"
-                    value="Yes"
-                    name="candybar"
-                    className="radio"
-                  />{" "}
-                  Yes
-                  <input
-                    id="candybar"
-                    type="radio"
-                    value="No"
-                    name="candybar"
-                    className="radio"
-                  />{" "}
-                  No
-                </Grid>
-                <Grid item xs={6}>
-                  <label htmlFor="fruitsbar">Bar cu fructe</label>
-                </Grid>
-                <Grid item xs={6}>
-                  <input
-                    id="fruitsbar"
-                    type="radio"
-                    value="Yes"
-                    name="fruitsbar"
-                    className="radio"
-                  />{" "}
-                  Yes
-                  <input
-                    id="fruitsbar"
-                    type="radio"
-                    value="No"
-                    name="fruitsbar"
-                    className="radio"
-                  />{" "}
-                  No
-                </Grid>
-                <Grid item xs={6}>
-                  <label htmlFor="drinks">Bauturi</label>
-                </Grid>
-                <Grid item xs={6}>
-                  <select
-                    name="drinks"
-                    id="drinks"
-                    placeholder="Select an option"
-                  >
-                    <option value="">Alege optiunea</option>
-                    <option value="At the table">La masa</option>
-                    <option value="Bar with bartender">Bar cu bartman</option>
-                  </select>
-                </Grid>
-                <Grid item xs={6}>
-                  <label htmlFor="ringdance">Ring de dans</label>
-                </Grid>
-                <Grid item xs={6}>
-                  <select
-                    name="ringdance"
-                    id="ringdance"
-                    placeholder="Select an option"
-                  >
-                    <option value="">Alege optiunea</option>
-                    <option value="Dominant">Dominant</option>
-                    <option value="Restricted">Restrans</option>
-                  </select>
-                  <br></br>
-                </Grid>
-                <Grid item xs={12}>
-                  <Button type="submit" variant="outlined">
-                    Inregistreaza
-                  </Button>
-                </Grid>
+            <Grid
+              container
+              spacing={3}
+              columnSpacing={5}
+              rowSpacing={4}
+              sx={{
+                padding: "2em",
+              }}
+            >
+              <Grid item xs={12}>
+                {" "}
+                <FormikSelectSimple
+                  id="event"
+                  name="event"
+                  label="Tip eveniment"
+                  items={eventsSelectItems}
+                />
               </Grid>
-            </Container>
+
+              <Grid item xs={6}>
+                <FormikTextField
+                  id="nrguests"
+                  label="Numar invitati"
+                  name="nrguests"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <FormikDatePicker
+                    name="date"
+                    label="Data evenimentului"
+                    variant="standard"
+                  />
+                </LocalizationProvider>
+              </Grid>
+
+              <Grid item xs={6}>
+                <FormikTextField
+                  id="location"
+                  label="Locatie favorita"
+                  name="location"
+                />
+              </Grid>
+
+              <Grid item xs={6}>
+                <FormikTextField id="budget" label="Buget" name="budget" />
+              </Grid>
+
+              <Grid item xs={6}>
+                <Box
+                  sx={{
+                    border: "2px solid",
+                    borderColor: "#DCDCDC",
+                    borderRadius: 4,
+                  }}
+                >
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    Trupa live
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                    >
+                      <label>
+                        <Field type="radio" name="liveBand" value="Da" />
+                        Da
+                      </label>
+                      <label>
+                        <Field type="radio" name="liveBand" value="Nu" />
+                        Nu
+                      </label>
+                    </RadioGroup>
+                  </FormLabel>
+                </Box>
+              </Grid>
+
+              <Grid item xs={6}>
+                <Box
+                  sx={{
+                    border: "2px solid",
+                    borderColor: "#DCDCDC",
+                    borderRadius: 4,
+                  }}
+                >
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    Moment artistic
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                    >
+                      <label>
+                        <Field type="radio" name="artisticMoment" value="Da" />
+                        Da
+                      </label>
+                      <label>
+                        <Field type="radio" name="artisticMoment" value="Nu" />
+                        Nu
+                      </label>
+                    </RadioGroup>
+                  </FormLabel>
+                </Box>
+              </Grid>
+
+              <Grid item xs={6}>
+                <Box
+                  sx={{
+                    border: "2px solid",
+                    borderColor: "#DCDCDC",
+                    borderRadius: 4,
+                  }}
+                >
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    Fotograf
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                    >
+                      <label>
+                        <Field type="radio" name="photographer" value="Da" />
+                        Da
+                      </label>
+                      <label>
+                        <Field type="radio" name="photographer" value="Nu" />
+                        Nu
+                      </label>
+                    </RadioGroup>
+                  </FormLabel>
+                </Box>
+              </Grid>
+
+              <Grid item xs={6}>
+                <Box
+                  sx={{
+                    border: "2px solid",
+                    borderColor: "#DCDCDC",
+                    borderRadius: 4,
+                  }}
+                >
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    Inregistrare video
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                    >
+                      <label>
+                        <Field type="radio" name="videoRecording" value="Da" />
+                        Da
+                      </label>
+                      <label>
+                        <Field type="radio" name="videoRecording" value="Nu" />
+                        Nu
+                      </label>
+                    </RadioGroup>
+                  </FormLabel>
+                </Box>
+              </Grid>
+
+              <Grid item xs={6}>
+                <Box
+                  sx={{
+                    border: "2px solid",
+                    borderColor: "#DCDCDC",
+                    borderRadius: 4,
+                  }}
+                >
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    Candy bar
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                    >
+                      <label>
+                        <Field type="radio" name="candyBar" value="Da" />
+                        Da
+                      </label>
+                      <label>
+                        <Field type="radio" name="candyBar" value="Nu" />
+                        Nu
+                      </label>
+                    </RadioGroup>
+                  </FormLabel>
+                </Box>
+              </Grid>
+
+              <Grid item xs={6}>
+                <Box
+                  sx={{
+                    border: "2px solid",
+                    borderColor: "#DCDCDC",
+                    borderRadius: 4,
+                  }}
+                >
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    Bar cu fructe
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                    >
+                      <label>
+                        <Field type="radio" name="fruitsBar" value="Da" />
+                        Da
+                      </label>
+                      <label>
+                        <Field type="radio" name="fruitsBar" value="Nu" />
+                        Nu
+                      </label>
+                    </RadioGroup>
+                  </FormLabel>
+                </Box>
+              </Grid>
+              <Grid item xs={6}>
+                <FormikSelectSimple
+                  id="drinks"
+                  name="drinks"
+                  label="Servire bauturi"
+                  items={drinksSelectItems}
+                />
+              </Grid>
+
+              <Grid item xs={6}>
+                <FormikSelectSimple
+                  id="ringDance"
+                  name="ringDance"
+                  label="Ring de dans"
+                  items={ringDanceSelectItems}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <Button type="submit" variant="standard">
+                  Inregistreaza
+                </Button>
+              </Grid>
+            </Grid>
           </Form>
         </Formik>
 

@@ -40,8 +40,7 @@ function HomePage() {
   return (
     <nav className="nav">
       <Header />
-      <div className="home">
-        <br></br> <br></br>
+      <div className="home1">
         <h3>Salut, {nume}!</h3>
         <br></br>
         <div>
@@ -49,7 +48,7 @@ function HomePage() {
             className="button1"
             onClick={() => history.push("/registerevent")}
           >
-            Inregistreaza un nou eveniment!
+            Eveniment nou
           </button>
         </div>
         <br></br>

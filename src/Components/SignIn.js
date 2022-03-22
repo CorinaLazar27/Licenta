@@ -1,16 +1,13 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import logo from "../Image/logo1.PNG";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import $ from "jquery";
 import FacebookLogin from "react-facebook-login";
-import { Card, Image } from "react-bootstrap";
-import { Transition } from "react-transition-group";
-import { TransitionGroup } from "react-transition-group";
-import { Field, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import { Button, Grid, Typography } from "@material-ui/core";
-import { TextField } from "@mui/material";
+import { FormikTextField } from "./FormikComponents/FormikTextField";
+import FacebookIcon from "@mui/icons-material/Facebook";
 
 function SingIn() {
   $(document).ready(function () {
@@ -26,27 +23,20 @@ function SingIn() {
   }
   const history = useHistory();
 
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [passwordError, setpasswordError] = useState("");
-  const [emailError, setemailError] = useState("");
-
   const [login, setLogin] = useState(false);
   const [data, setData] = useState({});
-  const [picture, setPicture] = useState("");
 
   const responseFacebook = (response) => {
     console.log(response);
-    setData(response);
-    setPicture(response.picture.data.url);
-    if (response.accessToken) {
-      console.log(data);
 
-      window.localStorage.setItem("nume", data.name);
-      window.localStorage.setItem("email", data.email);
-      setLogin(true);
+    setData(response);
+
+    if (response.accessToken) {
+      window.localStorage.setItem("nume", response.name);
+      window.localStorage.setItem("email", response.email);
+      history.push("/homepage");
     } else {
-      setLogin(false);
+      console.log("Ceva nu a mers ok");
     }
   };
 
@@ -77,11 +67,10 @@ function SingIn() {
           console.log("Utilizator sau parola gresita");
           document.getElementById("email").value = "";
           document.getElementById("password").value = "";
-
           notificare();
-          // console.log(error.response)
-          // console.log(error.response.status)
-          // console.log(error.response.headers)
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
         }
       });
   };
@@ -106,7 +95,8 @@ function SingIn() {
           <Form>
             <Grid container spacing={5} columns={2}>
               <Grid item xs={12}>
-                <Field
+                <FormikTextField
+                  id="email"
                   name="email"
                   label="Email"
                   variant="outlined"
@@ -114,7 +104,8 @@ function SingIn() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <Field
+                <FormikTextField
+                  id="password"
                   type="password"
                   name="password"
                   label="Parola"
@@ -134,30 +125,19 @@ function SingIn() {
         <p>
           Daca nu ai un cont, <a href="/sign-up">fa unul acum!</a>
         </p>
-
-        <Card id="card-fb" style={{ width: "500px" }}>
-          <Card.Header>
-            {!login && (
-              <FacebookLogin
-                appId="4917522175029919"
-                autoLoad={false}
-                fields="name,email,picture"
-                scope="public_profile,email,user_friends"
-                callback={responseFacebook}
-                icon="fa-facebook"
-              />
-            )}
-            {login && <Image src={picture} roundedCircle />}
-          </Card.Header>
-          {login &&
-            ((
-              <Card.Body>
-                <Card.Title>{data.name}</Card.Title>
-                <Card.Text>{data.email}</Card.Text>
-              </Card.Body>
-            ),
-            history.push("homepage"))}
-        </Card>
+        <div style={{ margin: "10%" }}>
+          <FacebookLogin
+            appId="4917522175029919"
+            autoLoad={false}
+            fields="name,email"
+            callback={responseFacebook}
+            buttonStyle={{ color: "blue" }}
+            cssClass="my-facebook-button-class"
+            icon={<FacebookIcon />}
+          >
+            Conectează-te cu Facebook
+          </FacebookLogin>
+        </div>
       </div>
     </div>
   );
