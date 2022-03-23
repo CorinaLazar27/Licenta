@@ -90,27 +90,6 @@ function RegisterEventPage() {
       });
   }
 
-  function ShowFormValues() {
-    console.log("----------------------------");
-    console.log("Eveniment:" + event);
-    console.log("Data:" + date);
-    console.log("Numar invitati:" + nrguests);
-    console.log("Locatie:" + location);
-    console.log("Buget:" + budget);
-    console.log("Band Live:" + liveBand);
-    console.log("Moment artistic:" + artisticMoment);
-    console.log("Fotograf:" + photographer);
-    console.log("Video:" + videoRecording);
-    console.log("Candy Bar:" + candyBar);
-    console.log("Bar fructe:" + fruitsBar);
-    console.log("Bauturi:" + drinks);
-    console.log("Ring dans:" + ringDance);
-    console.log("----------------------------");
-    FormOptions();
-
-    //history.push("myeventpage");
-  }
-
   const eventsSelectItems = ["Nunta", "Botez", "Aniversare"];
   const ringDanceSelectItems = ["Dominant", "Restrans", "Fara"];
   const drinksSelectItems = ["Bauturi la masa", "Bartman"];
@@ -125,7 +104,7 @@ function RegisterEventPage() {
         <Formik
           initialValues={{
             event: "",
-            date: "",
+            date: new Date(),
             nrguests: "",
             location: "",
             budget: "",
@@ -139,7 +118,7 @@ function RegisterEventPage() {
             ringDance: "",
           }}
           onSubmit={(values) => {
-            // values.date = values.date.toLocaleDateString("ro-RO");
+            values.date = values.date.toLocaleDateString();
             FormOptions(values);
           }}
         >

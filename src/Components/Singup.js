@@ -5,23 +5,32 @@ import $ from "jquery";
 import { Field, Form, Formik } from "formik";
 import { Button, Grid, Typography } from "@material-ui/core";
 import { FormikTextField } from "./FormikComponents/FormikTextField";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import { LoadingButton } from "@mui/lab";
+import Tooltip from "@mui/material/Tooltip";
 
-function SingUp(props) {
+function SingUp() {
   const history = useHistory();
 
-  $(document).ready(function () {
-    // Hide the div
-    $("#note").hide();
+  const [openSucces, setOpenSucces] = useState(false);
+  const [openError, setOpenError] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
-  function notificare() {
-    // Show the div in 5s
-    $("#note").show();
-    setTimeout(function () {
-      $("#note").fadeOut("fast");
-    }, 4000); // <-- time in milliseconds
-  }
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSucces(false);
+    setOpenError(false);
+  };
 
   const logMeIn = (values) => {
+    setLoading(true);
     const data = {
       name: values.name,
       email: values.email,
@@ -34,16 +43,17 @@ function SingUp(props) {
       data: data,
     })
       .then((response) => {
-        props.setToken(response.data.access_token);
         const res = response.data;
-        history.push("/sign-in");
-        if (res == "Done") history.push("/sign-in");
+        setLoading(false);
+        setOpenSucces(true);
+        setTimeout(function () {
+          if (res == "Done") history.push("/sign-in");
+        }, 6000);
       })
       .catch((error) => {
         if (error.response) {
-          notificare();
-
-          history.push("/sign-in");
+          setLoading(false);
+          setOpenError(true);
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
@@ -54,9 +64,33 @@ function SingUp(props) {
   return (
     <div className="Background">
       <div className="App">
-        <div id="note">Contul exista deja!</div>
+        <Snackbar
+          open={openError}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+            Eroare la crearea contului!
+          </Alert>
+        </Snackbar>
 
-        <Typography variant="h3">Inregistrare</Typography>
+        <Snackbar
+          open={openSucces}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert
+            onClose={handleClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            Cont creat cu succes!
+          </Alert>
+        </Snackbar>
+
+        <Typography variant="h4">Inregistrare</Typography>
         <br></br>
         <Formik
           initialValues={{
@@ -96,9 +130,15 @@ function SingUp(props) {
                 />
               </Grid>
               <Grid item xs={12}>
-                <Button type="submit" variant="contained">
-                  Creeaza cont
-                </Button>
+                <Tooltip title="Creeaza cont nou">
+                  <LoadingButton
+                    loading={loading}
+                    type="submit"
+                    variant="contained"
+                  >
+                    Creeaza
+                  </LoadingButton>
+                </Tooltip>
               </Grid>
             </Grid>
           </Form>

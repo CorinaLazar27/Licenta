@@ -36,6 +36,7 @@ function EditFormPage() {
     document.getElementById("saveButton").style.visibility = "hidden";
     document.getElementById("editButton").style.visibility = "visible";
   });
+
   function UnblockInputs() {
     document.getElementById("location").readOnly = false;
     document.getElementById("budget").readOnly = false;

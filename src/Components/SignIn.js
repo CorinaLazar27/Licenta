@@ -2,45 +2,44 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import $ from "jquery";
 import FacebookLogin from "react-facebook-login";
 import { Form, Formik } from "formik";
 import { Button, Grid, Typography } from "@material-ui/core";
 import { FormikTextField } from "./FormikComponents/FormikTextField";
 import FacebookIcon from "@mui/icons-material/Facebook";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import { LoadingButton } from "@mui/lab";
 
 function SingIn() {
-  $(document).ready(function () {
-    // Hide the div
-    $("#note").hide();
-  });
-  function notificare() {
-    // Show the div in 5s
-    $("#note").show();
-    setTimeout(function () {
-      $("#note").fadeOut("fast");
-    }, 4000); // <-- time in milliseconds
-  }
   const history = useHistory();
+  const [openError, setOpenError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const [login, setLogin] = useState(false);
-  const [data, setData] = useState({});
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
 
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
   const responseFacebook = (response) => {
     console.log(response);
-
-    setData(response);
 
     if (response.accessToken) {
       window.localStorage.setItem("nume", response.name);
       window.localStorage.setItem("email", response.email);
       history.push("/homepage");
     } else {
-      console.log("Ceva nu a mers ok");
+      setOpenError(true);
     }
   };
 
   const MakeLogin = (values) => {
+    setLoading(true);
     const data = {
       email: values.email,
       password: values.password,
@@ -54,6 +53,7 @@ function SingIn() {
       .then((response) => {
         const res = response.data;
         console.log(response);
+        setLoading(false);
         window.localStorage.setItem("nume", res.RowKey);
         window.localStorage.setItem("data", res.Date);
         window.localStorage.setItem("parola", res.Password);
@@ -64,10 +64,12 @@ function SingIn() {
       })
       .catch((error) => {
         if (error.response) {
-          console.log("Utilizator sau parola gresita");
-          document.getElementById("email").value = "";
-          document.getElementById("password").value = "";
-          notificare();
+          setOpenError(true);
+          setLoading(false);
+
+          //document.getElementById("email").value = "";
+          //document.getElementById("password").value = "";
+
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
@@ -78,7 +80,16 @@ function SingIn() {
   return (
     <div className="Background">
       <div className="App">
-        <div id="note">Utilizator sau parola gresita!</div>
+        <Snackbar
+          open={openError}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+            Eroare la conectare!
+          </Alert>
+        </Snackbar>
         <Typography variant="h4">Conecteaza-te</Typography>
         <br></br>
 
@@ -114,9 +125,13 @@ function SingIn() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <Button type="submit" variant="outlined">
+                <LoadingButton
+                  loading={loading}
+                  type="submit"
+                  variant="outlined"
+                >
                   Conecteaza-te
-                </Button>
+                </LoadingButton>
               </Grid>
             </Grid>
           </Form>

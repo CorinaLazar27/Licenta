@@ -54,9 +54,9 @@ function MyEventPage() {
       })
       .catch((error) => {
         if (error.response) {
-          // console.log(error.response)
-          // console.log(error.response.status)
-          // console.log(error.response.headers)
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
         }
       });
   }
@@ -101,9 +101,9 @@ function MyEventPage() {
         if (error.response) {
           eroare();
 
-          // console.log(error.response)
-          // console.log(error.response.status)
-          // console.log(error.response.headers)
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
         }
       });
   }

@@ -228,7 +228,7 @@ def deleteevent():
 
 @app.route('/postoptionsinvitation', methods=["POST"])
 def postoptionsinvitation():
-    emailOrganizer=request.json.get("emailOrganizer", None)
+    emailOrganizer = request.json.get("emailOrganizer", None)
     email = request.json.get("email", None)
     name = request.json.get("name", None)
     age = request.json.get("age", None)
@@ -266,8 +266,8 @@ def postoptionsinvitation():
     Type2ToStr = ','.join([str(elem) for elem in type2Opinion])
     MusicToStr = ','.join([str(elem) for elem in musicOpinion])
 
-    task = {u'PartitionKey': email,
-            u'RowKey': emailOrganizer,
+    task = {u'PartitionKey': emailOrganizer,
+            u'RowKey': email,
             u'Name': name,
             u'Age': age,
             u'Location': location,
