@@ -28,6 +28,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import SettingsIcon from "@material-ui/icons/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import EventIcon from "@mui/icons-material/Event";
+import { useHistory } from "react-router-dom";
 // LOCAL-STYLING
 
 const useStyles = makeStyles((theme) => ({
@@ -59,6 +60,8 @@ function HideOnScroll(props) {
 }
 
 const Header = (props) => {
+  const history = useHistory();
+
   const classes = useStyles();
   const [anchor, setAnchor] = React.useState(null);
   const open = Boolean(anchor);
@@ -149,9 +152,12 @@ const Header = (props) => {
                       <Typography variant="h6"> Eveniment nou </Typography>
                     </MenuItem>
                     <MenuItem
-                      onClick={() => setAnchor(null)}
+                      onClick={() => {
+                        setAnchor(null);
+                        history.push("/myeventpage");
+                        history.go(0);
+                      }}
                       component={Link}
-                      to="/myeventpage"
                     >
                       <ListItemIcon>
                         <EventIcon />
@@ -214,7 +220,10 @@ const Header = (props) => {
                   <Button
                     variant="text"
                     component={Link}
-                    to="/myeventpage"
+                    onClick={() => {
+                      history.push("/myeventpage");
+                      history.go(0);
+                    }}
                     color="default"
                   >
                     <EventIcon />

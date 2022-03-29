@@ -1,10 +1,18 @@
 from azure.core.credentials import AzureNamedKeyCredential
 from azure.data.tables import TableEntity
 from azure.data.tables import TableServiceClient
-from flask import Flask, request
-from flask import jsonify
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from datetime import date, datetime
+from azure.cosmosdb.table.tableservice import TableService
+from azure.cosmosdb.table.models import Entity
+import pandas as pd
+from azure.cosmosdb.table.tableservice import TableService
+import numpy as np
+import sklearn
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 app = Flask(__name__)
 CORS(app)
 credential = AzureNamedKeyCredential(
@@ -282,6 +290,486 @@ def postoptionsinvitation():
             }
     table_client.create_entity(entity=task)
     return "Done"
+
+
+countAperitiv = 50
+
+
+@app.route('/aperitiveRating', methods=["POST"])
+def aperitivRating():
+    global countAperitiv
+
+    countAperitiv += 1
+    event = request.json.get("event", None)
+    date = request.json.get("date", None)
+    emailOrganizer = request.json.get("emailOrganizer", None)
+    email = request.json.get("email", None)
+    aperitivTraditionalRating = request.json.get(
+        "aperitivTraditionalRating", None)
+    aperitivVegetarianRating = request.json.get(
+        "aperitivVegetarianRating", None)
+    aperitivFructeDeMareRating = request.json.get(
+        "aperitivFructeDeMareRating", None)
+
+    print("Email organizator:"+emailOrganizer)
+    print("Email:"+email)
+    print("apertivTraditionalRating:"+aperitivTraditionalRating)
+    print("aperitivVegetarianRating"+aperitivVegetarianRating)
+    print("aperitivFructeDeMare"+aperitivFructeDeMareRating)
+
+    table_client = table_service.get_table_client(
+        table_name="AperitivRating")
+
+    countString = str(countAperitiv)
+    task = {u'PartitionKey': emailOrganizer,
+            u'RowKey': countString,
+            u'Event': event,
+            u'Data': date,
+            u'Email': email,
+            u'Aperitiv': "Traditional",
+            u'Rating': aperitivTraditionalRating,
+
+            }
+    table_client.create_entity(entity=task)
+
+    countAperitiv += 1
+    countString = str(countAperitiv)
+    task = {u'PartitionKey': emailOrganizer,
+            u'RowKey': countString,
+            u'Event': event,
+            u'Data': date,
+            u'Email': email,
+            u'Aperitiv': "Vegetarian",
+            u'Rating': aperitivVegetarianRating,
+
+            }
+    table_client.create_entity(entity=task)
+
+    countAperitiv += 1
+    countString = str(countAperitiv)
+    task = {u'PartitionKey': emailOrganizer,
+            u'RowKey': countString,
+            u'Event': event,
+            u'Data': date,
+            u'Email': email,
+            u'Aperitiv': "Fructe de mare",
+            u'Rating': aperitivFructeDeMareRating,
+
+            }
+    table_client.create_entity(entity=task)
+
+    return "Done"
+
+
+count = 50
+
+
+@app.route('/type1Rating', methods=["POST"])
+def type1Rating():
+    global count
+
+    count += 1
+    event = request.json.get("event", None)
+    date = request.json.get("date", None)
+    emailOrganizer = request.json.get("emailOrganizer", None)
+    email = request.json.get("email", None)
+    supaTaieteiRating = request.json.get("supaTaieteiRating", None)
+    ciorbaAcraRating = request.json.get("ciorbaAcraRating", None)
+    ciorbaCartofiRating = request.json.get("ciorbaCartofiRating", None)
+    ciorbaPerisoareRating = request.json.get("ciorbaPerisoareRating", None)
+
+    print("emailOrganizer:"+emailOrganizer)
+    print("email"+email)
+    print("supaTaieteiRating"+supaTaieteiRating)
+    print("ciorbaAcraRating"+ciorbaAcraRating)
+    print("ciorbaCartofiRating"+ciorbaCartofiRating)
+    print("ciorbaPerisoareRating"+ciorbaPerisoareRating)
+
+    table_client = table_service.get_table_client(
+        table_name="Type1Rating")
+
+    countString = str(count)
+    task = {u'PartitionKey': emailOrganizer,
+            u'RowKey': countString,
+            u'Event': event,
+            u'Data': date,
+            u'Email': email,
+            u'Type1': "Supa taietei",
+            u'Rating': supaTaieteiRating,
+
+            }
+    table_client.create_entity(entity=task)
+
+    count += 1
+    countString = str(count)
+    task = {u'PartitionKey': emailOrganizer,
+            u'RowKey': countString,
+            u'Event': event,
+            u'Data': date,
+            u'Email': email,
+            u'Type1': "Ciorba acra",
+            u'Rating': ciorbaAcraRating,
+
+            }
+    table_client.create_entity(entity=task)
+
+    count += 1
+    countString = str(count)
+    task = {u'PartitionKey': emailOrganizer,
+            u'RowKey': countString,
+            u'Event': event,
+            u'Data': date,
+            u'Email': email,
+            u'Type1': "Ciorba cartofi",
+            u'Rating': ciorbaCartofiRating,
+
+            }
+    table_client.create_entity(entity=task)
+
+    count += 1
+    countString = str(count)
+    task = {u'PartitionKey': emailOrganizer,
+            u'RowKey': countString,
+            u'Event': event,
+            u'Data': date,
+            u'Email': email,
+            u'Type1': "Ciorba perisoare",
+            u'Rating': ciorbaPerisoareRating,
+
+            }
+    table_client.create_entity(entity=task)
+
+    return "Done"
+
+
+countType2 = 50
+
+
+@app.route('/type2Rating', methods=["POST"])
+def type2Rating():
+    global countType2
+
+    countType2 += 1
+    event = request.json.get("event", None)
+    date = request.json.get("date", None)
+    emailOrganizer = request.json.get("emailOrganizer", None)
+    email = request.json.get("email", None)
+    sarmaleRating = request.json.get("sarmaleRating", None)
+    carnePuiRating = request.json.get("carnePuiRating", None)
+    carnePorcRating = request.json.get("carnePorcRating", None)
+    carneVitaRating = request.json.get("carneVitaRating", None)
+
+    print("emailOrganizer"+emailOrganizer)
+    print("email"+email)
+    print("sarmaleRating"+sarmaleRating)
+    print("carnePuiRating"+carnePuiRating)
+    print("carnePorcRating"+carnePorcRating)
+    print("carneVitaRating"+carneVitaRating)
+
+    table_client = table_service.get_table_client(
+        table_name="Type2Rating")
+
+    countString = str(countType2)
+    task = {u'PartitionKey': emailOrganizer,
+            u'RowKey': countString,
+            u'Event': event,
+            u'Data': date,
+            u'Email': email,
+            u'Type2': "Sarmale",
+            u'Rating': sarmaleRating,
+
+            }
+    table_client.create_entity(entity=task)
+
+    countType2 += 1
+    countString = str(countType2)
+    task = {u'PartitionKey': emailOrganizer,
+            u'RowKey': countString,
+            u'Event': event,
+            u'Data': date,
+            u'Email': email,
+            u'Type2': "Carne pui",
+            u'Rating': carnePuiRating,
+
+            }
+    table_client.create_entity(entity=task)
+
+    countType2 += 1
+    countString = str(countType2)
+    task = {u'PartitionKey': emailOrganizer,
+            u'RowKey': countString,
+            u'Event': event,
+            u'Data': date,
+            u'Email': email,
+            u'Type2': "Carne porc",
+            u'Rating': carnePorcRating,
+
+            }
+    table_client.create_entity(entity=task)
+
+    countType2 += 1
+    countString = str(countType2)
+    task = {u'PartitionKey': emailOrganizer,
+            u'RowKey': countString,
+            u'Event': event,
+            u'Data': date,
+            u'Email': email,
+            u'Type2': "Carne vita",
+            u'Rating': carneVitaRating,
+
+            }
+    table_client.create_entity(entity=task)
+
+    return "Done"
+
+
+countMusic = 50
+
+
+@app.route('/musicRating', methods=["POST"])
+def musicRating():
+    global countMusic
+
+    countMusic += 1
+    event = request.json.get("event", None)
+    date = request.json.get("date", None)
+    emailOrganizer = request.json.get("emailOrganizer", None)
+    email = request.json.get("email", None)
+    muzicaComercialaRating = request.json.get("muzicaComercialaRating", None)
+    muzicaDiscoRating = request.json.get("muzicaDiscoRating", None)
+    muzicaPopRating = request.json.get("muzicaPopRating", None)
+    muzicaRockRating = request.json.get("muzicaRockRating", None)
+    muzicaDePetrecereRating = request.json.get("muzicaDePetrecereRating", None)
+
+    print("emailOrganizer"+emailOrganizer)
+    print("email"+email)
+    print("muzicaComercialaRating"+muzicaComercialaRating)
+    print("muzicaDiscoRating"+muzicaDiscoRating)
+    print("muzicaPopRating"+muzicaPopRating)
+    print("muzicaRockRating"+muzicaRockRating)
+    print("muzicaDePetrecereRating"+muzicaDePetrecereRating)
+
+    table_client = table_service.get_table_client(
+        table_name="MusicRating")
+
+    countString = str(countMusic)
+    task = {u'PartitionKey': emailOrganizer,
+            u'RowKey': countString,
+            u'Event': event,
+            u'Data': date,
+            u'Email': email,
+            u'Music': "Comerciala",
+            u'Rating': muzicaComercialaRating,
+
+            }
+    table_client.create_entity(entity=task)
+
+    countMusic += 1
+    countString = str(countMusic)
+    task = {u'PartitionKey': emailOrganizer,
+            u'RowKey': countString,
+            u'Event': event,
+            u'Data': date,
+            u'Email': email,
+            u'Music': "Disco",
+            u'Rating': muzicaDiscoRating,
+
+            }
+    table_client.create_entity(entity=task)
+
+    countMusic += 1
+    countString = str(countMusic)
+    task = {u'PartitionKey': emailOrganizer,
+            u'RowKey': countString,
+            u'Event': event,
+            u'Data': date,
+            u'Email': email,
+            u'Music': "Pop",
+            u'Rating': muzicaPopRating,
+
+            }
+    table_client.create_entity(entity=task)
+
+    countMusic += 1
+    countString = str(countMusic)
+    task = {u'PartitionKey': emailOrganizer,
+            u'RowKey': countString,
+            u'Event': event,
+            u'Data': date,
+            u'Email': email,
+            u'Music': "Rock",
+            u'Rating': muzicaRockRating,
+
+            }
+    table_client.create_entity(entity=task)
+
+    countMusic += 1
+    countString = str(countMusic)
+    task = {u'PartitionKey': emailOrganizer,
+            u'RowKey': countString,
+            u'Event': event,
+            u'Data': date,
+            u'Email': email,
+            u'Music': "De petrecere",
+            u'Rating': muzicaDePetrecereRating,
+
+            }
+    table_client.create_entity(entity=task)
+
+    return "Done"
+
+
+# table_service = TableService(
+#     connection_string='DefaultEndpointsProtocol=https;AccountName=storagecorina;AccountKey=Z6MCaQlKoDsfm6mFx3afBpKR3thzCvI0JimQVT0aXKUlMNb6z564Y6LZY66/PiqsjI6JZDHoUhjDs6dwDT7/Ng==;EndpointSuffix=core.windows.net')
+
+CONNECTION_STRING = "DefaultEndpointsProtocol=https;AccountName=storagecorina;AccountKey=Z6MCaQlKoDsfm6mFx3afBpKR3thzCvI0JimQVT0aXKUlMNb6z564Y6LZY66/PiqsjI6JZDHoUhjDs6dwDT7/Ng==;EndpointSuffix=core.windows.net"
+SOURCE_TABLE_APERITIVE = "AperitivRating"
+SOURCE_TABLE_TYPE1 = "Type1Rating"
+SOURCE_TABLE_TYPE2 = "Type2Rating"
+SOURCE_TABLE_MUSIC = "MusicRating"
+
+
+def set_table_service():
+    return TableService(connection_string=CONNECTION_STRING)
+
+
+def get_dataframe_from_table_storage_table(table_service, filter_query):
+
+    return pd.DataFrame(get_data_from_table_storage_table(table_service,
+                                                          filter_query))
+
+
+def get_data_from_table_storage_table(table_service, filter_query):
+
+    for record in table_service.query_entities(SOURCE_TABLE_APERITIVE, filter_query):
+        yield record
+
+    for record in table_service.query_entities(
+        SOURCE_TABLE_TYPE1, filter_query
+    ):
+        yield record
+
+    for record in table_service.query_entities(
+        SOURCE_TABLE_TYPE2, filter_query
+    ):
+        yield record
+
+    for record in table_service.query_entities(
+        SOURCE_TABLE_MUSIC, filter_query
+    ):
+        yield record
+
+
+@app.route('/highestRating', methods=["POST"])
+def highestRating():
+
+    email = request.json.get("email", None)
+    event = request.json.get("event", None)
+    date = request.json.get("date", None)
+    print(email)
+    print(event)
+    print(date)
+
+    fq = 'PartitionKey eq \'' + email + '\' and Event eq  \'' + \
+        event + '\' and Data eq \'' + date + '\''
+    ts_aperitive = set_table_service()
+    ts_type1 = set_table_service()
+    ts_type2 = set_table_service()
+    ts_music = set_table_service()
+
+    table_aperitive = get_dataframe_from_table_storage_table(
+        table_service=ts_aperitive, filter_query=fq)
+
+    table_type1 = get_dataframe_from_table_storage_table(
+        table_service=ts_type1, filter_query=fq)
+
+    table_type2 = get_dataframe_from_table_storage_table(
+        table_service=ts_type2, filter_query=fq)
+
+    table_music = get_dataframe_from_table_storage_table(
+        table_service=ts_music, filter_query=fq)
+
+    table_aperitive.head()
+    table_type1.head()
+    table_type2.head()
+    table_music.head()
+
+    table_aperitive['Rating'] = table_aperitive['Rating'].astype(int)
+    table_type1['Rating'] = table_type1['Rating'].astype(int)
+    table_type2['Rating'] = table_type2['Rating'].astype(int)
+    table_music['Rating'] = table_music['Rating'].astype(int)
+
+    # Reccomandation for apperitive
+
+    number_ratings_aperitive = len(table_aperitive)
+    unique_types_aperitive = len(table_aperitive['Aperitiv'].unique())
+
+    # Highest rated apperitive
+    mean_rating_aperitive = table_aperitive.groupby('Aperitiv')[
+        ['Rating']].mean()
+
+    highest_rated_aperitive = mean_rating_aperitive['Rating'].idxmax()
+
+    # Reccomandation for type 1
+
+    number_ratings_type1 = len(table_type1)
+    unique_types_type1 = len(table_type1['Type1'].unique())
+
+    # Highest rated type1
+    mean_rating_type1 = table_type1.groupby('Type1')[['Rating']].mean()
+
+    highest_rated_type1 = mean_rating_type1['Rating'].idxmax()
+
+    # Reccomandation for type 2
+
+    number_ratings_type2 = len(table_type2)
+    unique_types_type2 = len(table_type2['Type2'].unique())
+
+    # Highest rated type 2
+    mean_rating_type2 = table_type2.groupby('Type2')[['Rating']].mean()
+
+    highest_rated_type2 = mean_rating_type2['Rating'].idxmax()
+
+    # Reccomandation for music
+
+    number_ratings_music = len(table_music)
+    unique_types_music = len(table_music['Music'].unique())
+
+    # Highest rated music
+    mean_rating_music = table_music.groupby('Music')[['Rating']].mean()
+
+    highest_rated_music = mean_rating_music['Rating'].idxmax()
+
+    data_set = {
+        "Highest_Rate_Aperitiv": highest_rated_aperitive,
+        "Highest_Rate_Type1": highest_rated_type1,
+        "Highest_Rate_Type2": highest_rated_type2,
+        "Highest_Rate_Music": highest_rated_music,
+        "Rating_aperitiv_fructe_de_mare": mean_rating_aperitive['Rating']['Fructe de mare'],
+        "Rating_aperitiv_traditional": mean_rating_aperitive['Rating']['Traditional'],
+        "Rating_aperitiv_vegetarian": mean_rating_aperitive['Rating']['Vegetarian'],
+
+        "Rating_tip1_ciorba_acra": mean_rating_type1['Rating']['Ciorba acra'],
+        "Rating_tip1_ciorba_cartofi": mean_rating_type1['Rating']['Ciorba cartofi'],
+        "Rating_tip1_ciorba_perisoare": mean_rating_type1['Rating']['Ciorba perisoare'],
+        "Rating_tip1_supa_taietei": mean_rating_type1['Rating']['Supa taietei'],
+
+        "Rating_tip2_sarmale": mean_rating_type2['Rating']['Sarmale'],
+        "Rating_tip2_carne_porc": mean_rating_type2['Rating']['Carne porc'],
+        "Rating_tip2_carne_pui": mean_rating_type2['Rating']['Carne pui'],
+        "Rating_tip2_carne_vita": mean_rating_type2['Rating']['Carne vita'],
+
+        "Rating_muzica_comerciala": mean_rating_music['Rating']['Comerciala'],
+        "Rating_muzica_petrecere": mean_rating_music['Rating']['De petrecere'],
+        "Rating_muzica_disco": mean_rating_music['Rating']['Disco'],
+        "Rating_muzica_pop": mean_rating_music['Rating']['Pop'],
+        "Rating_muzica_rock": mean_rating_music['Rating']['Rock'],
+
+
+
+    }
+
+    return data_set
 
 
 if __name__ == '__main__':

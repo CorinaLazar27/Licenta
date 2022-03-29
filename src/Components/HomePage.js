@@ -55,7 +55,10 @@ function HomePage() {
         <div>
           <button
             className="button1"
-            onClick={() => history.push("/myeventpage")}
+            onClick={() => {
+              history.push("/myeventpage");
+              history.go(0);
+            }}
           >
             Evenimentele mele
           </button>

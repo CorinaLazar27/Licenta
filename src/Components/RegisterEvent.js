@@ -34,19 +34,19 @@ function RegisterEventPage() {
 
   const history = useHistory();
   const email = window.localStorage.getItem("email");
-  const [event, setEvent] = useState("");
-  const [date, setDate] = useState("");
-  const [nrguests, setNrGuests] = useState("");
-  const [location, setLocation] = useState("");
-  const [budget, setBudget] = useState("");
-  const [liveBand, setLiveBand] = useState("");
-  const [artisticMoment, setArtisticMoment] = useState("");
-  const [photographer, setPhotographer] = useState("");
-  const [videoRecording, setVideoRecording] = useState("");
-  const [candyBar, setCandyBar] = useState("");
-  const [fruitsBar, setfruitsBar] = useState("");
-  const [drinks, setDrinks] = useState("");
-  const [ringDance, setRingDance] = useState("");
+  // const [event, setEvent] = useState("");
+  // const [date, setDate] = useState("");
+  // const [nrguests, setNrGuests] = useState("");
+  // const [location, setLocation] = useState("");
+  // const [budget, setBudget] = useState("");
+  // const [liveBand, setLiveBand] = useState("");
+  // const [artisticMoment, setArtisticMoment] = useState("");
+  // const [photographer, setPhotographer] = useState("");
+  // const [videoRecording, setVideoRecording] = useState("");
+  // const [candyBar, setCandyBar] = useState("");
+  // const [fruitsBar, setfruitsBar] = useState("");
+  // const [drinks, setDrinks] = useState("");
+  // const [ringDance, setRingDance] = useState("");
   const [dialogBox, setDialogBox] = useState(Boolean);
 
   function FormOptions(values) {
@@ -377,7 +377,10 @@ function RegisterEventPage() {
               Da
             </Button>
             <Button
-              onClick={() => history.push("/myeventpage")}
+              onClick={() => {
+                history.push("/myeventpage");
+                history.go(0);
+              }}
               color="primary"
               autoFocus
             >
