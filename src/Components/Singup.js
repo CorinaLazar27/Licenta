@@ -145,7 +145,7 @@ function SingUp() {
         </Formik>
         <br></br>
         <p>
-          <a href="/sign-in">Conecteaza-te..</a>
+          Ai deja cont? <a href="/sign-in">Conecteaza-te!</a>
         </p>
       </div>
     </div>

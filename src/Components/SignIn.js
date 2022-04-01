@@ -90,7 +90,7 @@ function SingIn() {
             Eroare la conectare!
           </Alert>
         </Snackbar>
-        <Typography variant="h4">Conecteaza-te</Typography>
+        <Typography variant="h4">Conectare</Typography>
         <br></br>
 
         <Formik
@@ -138,8 +138,10 @@ function SingIn() {
         </Formik>
         <br></br>
         <p>
-          Daca nu ai un cont, <a href="/sign-up">fa unul acum!</a>
+          Nu ai cont? <a href="/sign-up"> Creeaza unul!</a>
         </p>
+        <br></br>
+        <p>sau</p>
         <div style={{ margin: "10%" }}>
           <FacebookLogin
             appId="4917522175029919"
