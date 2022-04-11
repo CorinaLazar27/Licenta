@@ -12,6 +12,9 @@ import numpy as np
 import sklearn
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
 
 app = Flask(__name__)
 CORS(app)
@@ -627,6 +630,7 @@ SOURCE_TABLE_APERITIVE = "AperitivRating"
 SOURCE_TABLE_TYPE1 = "Type1Rating"
 SOURCE_TABLE_TYPE2 = "Type2Rating"
 SOURCE_TABLE_MUSIC = "MusicRating"
+SOURCE_TABLE = "Form"
 
 
 def set_table_service():
@@ -656,6 +660,11 @@ def get_data_from_table_storage_table(table_service, filter_query):
 
     for record in table_service.query_entities(
         SOURCE_TABLE_MUSIC, filter_query
+    ):
+        yield record
+
+    for record in table_service.query_entities(
+        SOURCE_TABLE, filter_query
     ):
         yield record
 
@@ -765,11 +774,73 @@ def highestRating():
         "Rating_muzica_pop": mean_rating_music['Rating']['Pop'],
         "Rating_muzica_rock": mean_rating_music['Rating']['Rock'],
 
-
-
     }
 
     return data_set
+
+
+def clean_data(x):
+    if isinstance(x, list):
+        return [str.lower(i.replace(" ", "")) for i in x]
+    else:
+        if isinstance(x, str):
+            return str.lower(x.replace(" ", ""))
+        elif isinstance(x, int):
+            return str(x)
+        else:
+            return ''
+
+
+def create_all(x):
+    return "".join(x['NumberGuests']) + '|' + ''.join(x['Budget']) + '|' + "".join(x['Drinks'])
+
+
+def get_recommendations(name, indices, cosine_sim2, table):
+    # Get the index of the user that matches the title
+    idx = indices[name]
+
+    # Get the pairwsie similarity scores of all locations with that user
+    sim_scores = list(enumerate(cosine_sim2[idx]))
+
+    # Sort the locations based on the similarity scores
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+
+    # Get the scores of the 10 most similar locations
+    sim_scores = sim_scores[1:4]
+
+    # Get the movie indices
+    email_indices = [i[0] for i in sim_scores]
+
+    # Return the top 3 most similar locations
+    return table['Location'].iloc[email_indices]
+
+
+@app.route('/getRecomandations', methods=["POST"])
+def getRecomandations():
+
+    event = request.json.get("event", None)
+    email = request.json.get("email", None)
+    print(event)
+
+    fq = 'EventType eq \'' + event + '\' '
+    ts = set_table_service()
+    table_form = get_dataframe_from_table_storage_table(
+        table_service=ts, filter_query=fq)
+    features = ['NumberGuests', 'Budget', 'Drinks']
+    print(table_form[features])
+    for feature in features:
+        table_form[feature] = table_form[feature].apply(clean_data)
+    table_form['all'] = table_form.apply(create_all, axis=1)
+
+    count = CountVectorizer()
+    count_matrix = count.fit_transform(table_form['all'])
+    cosine_sim2 = cosine_similarity(count_matrix, count_matrix)
+    table_form = table_form.reset_index()
+    indices = pd.Series(table_form.index, index=table_form['PartitionKey'])
+    recomandation = get_recommendations(
+        email, indices, cosine_sim2, table_form)
+    print(recomandation)
+    return recomandation.to_dict()
 
 
 if __name__ == '__main__':

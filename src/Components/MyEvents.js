@@ -20,7 +20,7 @@ import OverlayLoader from "./OverlayLoader";
 import "react-dropdown/style.css";
 import axios from "axios";
 import $ from "jquery";
-
+import Box from "@mui/material/Box";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -30,6 +30,10 @@ import Button from "@material-ui/core/Button";
 import Header from "./Header";
 import { Tooltip } from "@material-ui/core";
 import { IconButton } from "material-ui";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import CommentIcon from "@mui/icons-material/Comment";
 
 function MyEventPage() {
   const history = useHistory();
@@ -37,9 +41,11 @@ function MyEventPage() {
   const [data, setData] = useState([]);
   const [dateForDelete, setDateForDelete] = useState("");
   const email = window.localStorage.getItem("email");
+  const event = window.localStorage.getItem("eveniment");
   const [loader, setLoader] = useState(true);
-
-  const [open, setOpen] = React.useState(false);
+  const [box, setBox] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [locationsRecomanded, setLocationsRecomanded] = useState([]);
 
   const handleClickToOpen = () => {
     setOpen(true);
@@ -53,6 +59,29 @@ function MyEventPage() {
     GetMyEvents();
     //window.location.reload();
   };
+
+  function GetLocationRecomandation() {
+    axios({
+      method: "POST",
+      url: "/getRecomandations",
+      data: {
+        email: email,
+        event: event,
+      },
+    })
+      .then((response) => {
+        console.log(response.data);
+        setLocationsRecomanded(Object.values(response.data));
+        console.log(locationsRecomanded);
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        }
+      });
+  }
 
   function GetMyEvents() {
     axios({
@@ -124,6 +153,11 @@ function MyEventPage() {
       });
   }
 
+  function chooseLocation() {
+    setBox(true);
+    GetLocationRecomandation();
+  }
+
   $(document).ready(function () {
     // Hide the div
     $("#notesucces").hide();
@@ -165,15 +199,6 @@ function MyEventPage() {
     window.localStorage.setItem("liveband", event.LiveBand);
   }
 
-  const [selected, setSelected] = React.useState([]);
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = data.map((n) => n.RowKey);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
   return (
     <div className="nav">
       <Header />
@@ -194,6 +219,7 @@ function MyEventPage() {
 
               <TableCell> Tipul evenimentului </TableCell>
               <TableCell> Data </TableCell>
+              <TableCell> Restaurant </TableCell>
               <TableCell> Actiuni</TableCell>
             </TableRow>
           </TableHead>
@@ -206,6 +232,10 @@ function MyEventPage() {
                 </TableCell>
                 <TableCell onClick={() => myClick(item)}>
                   {item.RowKey}
+                </TableCell>
+                <TableCell onClick={() => myClick(item)}>
+                  {item.Location !== null && item.Location}
+                  <Button onClick={() => chooseLocation()}>Alege</Button>
                 </TableCell>
                 <TableCell>
                   <Tooltip title="Anulare eveniment">
@@ -284,6 +314,30 @@ function MyEventPage() {
         >
           Adauga un eveniment
         </button>
+
+        {box && (
+          <Box sx={{ border: 2 }}>
+            <label> Altii au ales ... </label>
+
+            <List sx={{ width: "100%", maxWidth: 360 }}>
+              {locationsRecomanded.map((location) => (
+                <ListItem key={location}>
+                  <ListItemText primary={location} />
+                  <button
+                    onClick={() => console.log(location)}
+                    style={{
+                      backgroundColor: "pink",
+                      height: "5vh",
+                      width: "5vw",
+                    }}
+                  >
+                    Alege
+                  </button>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        )}
 
         <Dialog open={open} onClose={handleToClose}>
           <DialogTitle>{"Ce actiune vrei sa faci?"}</DialogTitle>

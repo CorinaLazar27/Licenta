@@ -96,6 +96,7 @@ function EditFormPage() {
         if (res == "Done") {
           console.log("dONE");
           history.push("/myeventpage");
+          history.go(0);
         }
       })
       .catch((error) => {
