@@ -1,14 +1,26 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import $ from "jquery";
-import { Field, Form, Formik } from "formik";
-import { Button, Grid, Typography } from "@material-ui/core";
+
+import { Form, Formik } from "formik";
+import { Grid, Typography } from "@material-ui/core";
 import { FormikTextField } from "./FormikComponents/FormikTextField";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { LoadingButton } from "@mui/lab";
 import Tooltip from "@mui/material/Tooltip";
+import login from "../Image/login.jpg";
+import login1 from "../Image/login1.jpg";
+import login2 from "../Image/login2.jpg";
+import login3 from "../Image/login3.jpg";
+import login4 from "../Image/login4.jpg";
+import login5 from "../Image/login5.jpg";
+import login6 from "../Image/login6.jpg";
+import login7 from "../Image/login7.jpg";
+import login8 from "../Image/login8.jpeg";
+import { Container } from "@mui/material";
+import { Box } from "@mui/system";
+import * as Yup from "yup";
 
 function SingUp() {
   const history = useHistory();
@@ -48,7 +60,7 @@ function SingUp() {
         setOpenSucces(true);
         setTimeout(function () {
           if (res == "Done") history.push("/sign-in");
-        }, 6000);
+        }, 1500);
       })
       .catch((error) => {
         if (error.response) {
@@ -61,36 +73,64 @@ function SingUp() {
       });
   };
 
+  const ValidationsForm = Yup.object().shape({
+    email: Yup.string()
+      .email("Email invalid!")
+      .required("Campul trebuie completat!"),
+    password: Yup.string().required("Campul trebuie completat!"),
+    name: Yup.string().required("Campul trebuie completat!"),
+  });
+
   return (
-    <div className="Background">
-      <div className="App">
+    <Container
+      sx={{
+        root: 0,
+        backgroundColor: "pink",
+        backgroundImage: `url("${login8}")`,
+        backgroundSize: "cover",
+        display: "flex",
+        minHeight: "100vh",
+        minWidth: "100vw",
+        justifyContent: "center",
+        alignItems: "center",
+        paddingTop: 0,
+        paddingX: 0,
+        margin: 0,
+      }}
+    >
+      <Box
+        sx={{
+          background: "rgb(255, 255, 255)",
+          borderRadius: "20%",
+          boxShadow: "2px 4px 6px rgba(0, 0, 0, 1)",
+          padding: "4rem",
+          textAlign: "center",
+          minWidth: "40vw",
+        }}
+      >
         <Snackbar
           open={openError}
-          autoHideDuration={6000}
+          autoHideDuration={1500}
           onClose={handleClose}
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
-          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          <Alert onClose={handleClose} severity="error">
             Eroare la crearea contului!
           </Alert>
         </Snackbar>
 
         <Snackbar
           open={openSucces}
-          autoHideDuration={6000}
+          autoHideDuration={1500}
           onClose={handleClose}
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
-          <Alert
-            onClose={handleClose}
-            severity="success"
-            sx={{ width: "100%" }}
-          >
+          <Alert onClose={handleClose} severity="success">
             Cont creat cu succes!
           </Alert>
         </Snackbar>
 
-        <Typography variant="h4">Inregistrare</Typography>
+        <Typography variant="h4">Înregistrare</Typography>
         <br></br>
         <Formik
           initialValues={{
@@ -98,16 +138,17 @@ function SingUp() {
             name: "",
             password: "",
           }}
+          validationSchema={ValidationsForm}
           onSubmit={(values) => {
             logMeIn(values);
           }}
         >
           <Form>
-            <Grid container spacing={5} columns={2}>
+            <Grid container spacing={5}>
               <Grid item xs={12}>
                 <FormikTextField
                   name="name"
-                  label="Nume"
+                  label="Nume*"
                   variant="outlined"
                   placeholder="Introdu numele"
                 />
@@ -115,7 +156,7 @@ function SingUp() {
               <Grid item xs={12}>
                 <FormikTextField
                   name="email"
-                  label="Email"
+                  label="Email*"
                   variant="outlined"
                   placeholder="Introdu email-ul"
                 />
@@ -124,19 +165,19 @@ function SingUp() {
                 <FormikTextField
                   type="password"
                   name="password"
-                  label="Parola"
+                  label="Parola*"
                   variant="outlined"
                   placeholder="Introdu parola"
                 />
               </Grid>
               <Grid item xs={12}>
-                <Tooltip title="Creeaza cont nou">
+                <Tooltip title="Creează cont nou">
                   <LoadingButton
                     loading={loading}
                     type="submit"
                     variant="contained"
                   >
-                    Creeaza
+                    Creează
                   </LoadingButton>
                 </Tooltip>
               </Grid>
@@ -145,10 +186,10 @@ function SingUp() {
         </Formik>
         <br></br>
         <p>
-          Ai deja cont? <a href="/sign-in">Conecteaza-te!</a>
+          Ai deja cont? <a href="/sign-in">Conectează-te!</a>
         </p>
-      </div>
-    </div>
+      </Box>
+    </Container>
   );
 }
 export default SingUp;

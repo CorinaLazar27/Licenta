@@ -1,5 +1,5 @@
 #root {
-  background: rgba(219, 222, 223, 0.651);
+  background: "blue";
 }
 .Background {
   display: flex;
@@ -8,6 +8,7 @@
   width: 100vw;
   justify-content: center;
   align-items: center;
+
 }
 
 .App {
@@ -458,11 +459,7 @@ button.table:hover {
   color: white;
 }
 
-body {
-  margin-top: 20px;
-  background-color: #f2f6fc;
-  color: #69707a;
-}
+
 .img-account-profile {
   height: 10rem;
 }

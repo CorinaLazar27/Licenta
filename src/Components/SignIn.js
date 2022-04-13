@@ -10,6 +10,15 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { LoadingButton } from "@mui/lab";
+import login from "../Image/login.jpg";
+import login1 from "../Image/login1.jpg";
+import login2 from "../Image/login2.jpg";
+import login3 from "../Image/login3.jpg";
+import login4 from "../Image/login4.jpg";
+import login8 from "../Image/login8.jpeg";
+import { Container } from "@mui/material";
+import { Box } from "@mui/system";
+import * as Yup from "yup";
 
 function SingIn() {
   const history = useHistory();
@@ -64,11 +73,10 @@ function SingIn() {
       })
       .catch((error) => {
         if (error.response) {
+          values.email = "";
+          values.password = "";
           setOpenError(true);
           setLoading(false);
-
-          //document.getElementById("email").value = "";
-          //document.getElementById("password").value = "";
 
           console.log(error.response);
           console.log(error.response.status);
@@ -76,40 +84,61 @@ function SingIn() {
         }
       });
   };
+  const ValidationsForm = Yup.object().shape({
+    email: Yup.string()
+      .email("Email invalid!")
+      .required("Campul trebuie completat!"),
+    password: Yup.string().required("Campul trebuie completat!"),
+  });
 
   return (
-    <div className="Background">
-      <div className="App">
-        <Snackbar
-          open={openError}
-          autoHideDuration={6000}
-          onClose={handleClose}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        >
-          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-            Eroare la conectare!
-          </Alert>
-        </Snackbar>
-        <Typography variant="h4">Conectare</Typography>
-        <br></br>
+    <Container
+      sx={{
+        root: 0,
+        //backgroundColor: "pink",
+        backgroundImage: `url("${login8}")`,
 
+        backgroundSize: "cover",
+        display: "flex",
+        minHeight: "100vh",
+        minWidth: "100vw",
+        justifyContent: "center",
+        alignItems: "center",
+        paddingTop: 0,
+        paddingX: 0,
+        margin: 0,
+      }}
+    >
+      <Box
+        sx={{
+          background: "rgb(255, 255, 255)",
+          borderRadius: "20%",
+          boxShadow: "2px 4px 6px rgba(0, 0, 0, 1)",
+          padding: "4rem",
+          textAlign: "center",
+          minWidth: "40vw",
+        }}
+      >
+        <Typography variant="h4">Intră în cont!</Typography>
+        <br></br>
         <Formik
           initialValues={{
             email: "",
             password: "",
           }}
+          validationSchema={ValidationsForm}
           onSubmit={(values) => {
             MakeLogin(values);
             console.logs(values);
           }}
         >
           <Form>
-            <Grid container spacing={5} columns={2}>
+            <Grid container spacing={5}>
               <Grid item xs={12}>
                 <FormikTextField
                   id="email"
                   name="email"
-                  label="Email"
+                  label="Email*"
                   variant="outlined"
                   placeholder="Introdu email-ul"
                 />
@@ -119,7 +148,7 @@ function SingIn() {
                   id="password"
                   type="password"
                   name="password"
-                  label="Parola"
+                  label="Parola*"
                   variant="outlined"
                   placeholder="Introdu parola"
                 />
@@ -130,7 +159,7 @@ function SingIn() {
                   type="submit"
                   variant="outlined"
                 >
-                  Conecteaza-te
+                  Conectare
                 </LoadingButton>
               </Grid>
             </Grid>
@@ -140,23 +169,33 @@ function SingIn() {
         <p>
           Nu ai cont? <a href="/sign-up"> Creeaza unul!</a>
         </p>
-        <br></br>
+
         <p>sau</p>
-        <div style={{ margin: "10%" }}>
-          <FacebookLogin
-            appId="4917522175029919"
-            autoLoad={false}
-            fields="name,email"
-            callback={responseFacebook}
-            buttonStyle={{ color: "blue" }}
-            cssClass="my-facebook-button-class"
-            icon={<FacebookIcon />}
-          >
-            Conectează-te cu Facebook
-          </FacebookLogin>
-        </div>
-      </div>
-    </div>
+
+        <FacebookLogin
+          appId="4917522175029919"
+          autoLoad={false}
+          fields="name,email"
+          callback={responseFacebook}
+          buttonStyle={{ color: "blue" }}
+          cssClass="my-facebook-button-class"
+          icon={<FacebookIcon />}
+          language="RO"
+        >
+          Conectează-te cu Facebook
+        </FacebookLogin>
+      </Box>
+      <Snackbar
+        open={openError}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="error">
+          Eroare la conectare!
+        </Alert>
+      </Snackbar>
+    </Container>
   );
 }
 export default SingIn;
