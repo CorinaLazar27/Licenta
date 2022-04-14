@@ -33,7 +33,7 @@ import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.error.light,
   },
   menuButton: {
     marginRight: theme.spacing(1),
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
   hover: {
     "&:hover": {
-      color: "black",
+      color: "white",
     },
   },
 }));
@@ -85,7 +85,7 @@ const Header = (props) => {
     palette: {
       type: "dark",
       primary: {
-        main: "#cc4282",
+        main: "#9575cd",
       },
       secondary: {
         main: orange[400],
@@ -139,7 +139,7 @@ const Header = (props) => {
                       <ListItemIcon>
                         <HomeIcon />
                       </ListItemIcon>
-                      <Typography variant="h6">Pagina principala</Typography>
+                      <Typography variant="h6">Pagina principală</Typography>
                     </MenuItem>
                     <MenuItem
                       onClick={() => setAnchor(null)}
@@ -182,7 +182,7 @@ const Header = (props) => {
                       <ListItemIcon>
                         <SettingsIcon />
                       </ListItemIcon>
-                      <Typography variant="h6"> Setari</Typography>
+                      <Typography variant="h6"> Setări</Typography>
                     </MenuItem>
 
                     <MenuItem
@@ -206,7 +206,7 @@ const Header = (props) => {
                     color="default"
                   >
                     <HomeIcon />
-                    Pagina principala
+                    Pagina principală
                   </Button>
                   <Button
                     variant="text"
@@ -246,7 +246,7 @@ const Header = (props) => {
                     color="default"
                   >
                     <SettingsIcon />
-                    Setari
+                    Setări
                   </Button>
 
                   <Button

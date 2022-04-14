@@ -16,6 +16,7 @@ import login2 from "../Image/login2.jpg";
 import login3 from "../Image/login3.jpg";
 import login4 from "../Image/login4.jpg";
 import login8 from "../Image/login8.jpeg";
+import login9 from "../Image/login9.jpg";
 import { Container } from "@mui/material";
 import { Box } from "@mui/system";
 import * as Yup from "yup";
@@ -94,19 +95,13 @@ function SingIn() {
   return (
     <Container
       sx={{
-        root: 0,
-        //backgroundColor: "pink",
-        backgroundImage: `url("${login8}")`,
-
+        backgroundImage: `url("${login1}")`,
         backgroundSize: "cover",
         display: "flex",
         minHeight: "100vh",
         minWidth: "100vw",
         justifyContent: "center",
         alignItems: "center",
-        paddingTop: 0,
-        paddingX: 0,
-        margin: 0,
       }}
     >
       <Box
@@ -165,12 +160,8 @@ function SingIn() {
             </Grid>
           </Form>
         </Formik>
-        <br></br>
-        <p>
-          Nu ai cont? <a href="/sign-up"> Creeaza unul!</a>
-        </p>
 
-        <p>sau</p>
+        <Typography>sau</Typography>
 
         <FacebookLogin
           appId="4917522175029919"
@@ -184,6 +175,9 @@ function SingIn() {
         >
           Conectează-te cu Facebook
         </FacebookLogin>
+        <Typography>
+          <a href="/sign-up"> Nu ai cont? Creeaza unul!</a>
+        </Typography>
       </Box>
       <Snackbar
         open={openError}

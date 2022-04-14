@@ -18,6 +18,7 @@ import login5 from "../Image/login5.jpg";
 import login6 from "../Image/login6.jpg";
 import login7 from "../Image/login7.jpg";
 import login8 from "../Image/login8.jpeg";
+import login9 from "../Image/login9.jpg";
 import { Container } from "@mui/material";
 import { Box } from "@mui/system";
 import * as Yup from "yup";
@@ -84,18 +85,13 @@ function SingUp() {
   return (
     <Container
       sx={{
-        root: 0,
-        backgroundColor: "pink",
-        backgroundImage: `url("${login8}")`,
+        backgroundImage: `url("${login9}")`,
         backgroundSize: "cover",
         display: "flex",
         minHeight: "100vh",
         minWidth: "100vw",
         justifyContent: "center",
         alignItems: "center",
-        paddingTop: 0,
-        paddingX: 0,
-        margin: 0,
       }}
     >
       <Box
