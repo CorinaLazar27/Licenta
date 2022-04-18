@@ -20,13 +20,14 @@ import OverlayLoader from "./OverlayLoader";
 import "react-dropdown/style.css";
 import axios from "axios";
 import $ from "jquery";
-import Box from "@mui/material/Box";
+
 import Dialog from "@material-ui/core/Dialog";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "@mui/material/Button";
+import { Container, Box, Grid, Typography } from "@mui/material";
 
 import Header from "./Header";
 import { Tooltip } from "@material-ui/core";
@@ -201,163 +202,164 @@ function MyEventPage() {
   }
 
   return (
-    <div className="nav">
-      <Header />
-      {loader && <OverlayLoader />}
-      <div className="home1">
-        <div id="notesucces">Eveniment sters cu succes!</div>
-        <div id="note">
-          Eroare la stergerea evenimentului, incearca din nou!
-        </div>
-
-        <h3>Evenimentele mele</h3>
-        <br></br>
-
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell padding="checkbox"></TableCell>
-
-              <TableCell> Tipul evenimentului </TableCell>
-              <TableCell> Data </TableCell>
-              <TableCell> Restaurant </TableCell>
-              <TableCell> Actiuni</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((item) => (
+    <Container
+      maxWidth={false}
+      sx={{
+        backgroundColor: "#FFD59E",
+        backgroundSize: "cover",
+        display: "flex",
+        minHeight: "100vh",
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center",
+      }}
+    >
+      <Grid container rowSpacing={5}>
+        <Grid item xs={12}>
+          <h3>Evenimentele mele</h3>
+        </Grid>
+        <Grid item xs={12}>
+          <Table>
+            <TableHead>
               <TableRow>
                 <TableCell padding="checkbox"></TableCell>
-                <TableCell onClick={() => myClick(item)}>
-                  {item.EventType}
-                </TableCell>
-                <TableCell onClick={() => myClick(item)}>
-                  {item.RowKey}
-                </TableCell>
-                <TableCell onClick={() => myClick(item)}>
-                  {item.Location !== null && item.Location}
-                  <Button onClick={() => chooseLocation()}>Alege</Button>
-                </TableCell>
-                <TableCell>
-                  <Tooltip title="Anulare eveniment">
-                    <Button
-                      sx={{ minWidth: "2px" }}
-                      onClick={() => {
-                        myClick(item);
-                        DeleteEvent();
-                      }}
-                    >
-                      <DeleteIcon />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip title="Editeaza eveniment">
-                    <Button
-                      sx={{ minWidth: "2px" }}
-                      onClick={() => {
-                        myClick(item);
-                        history.push("/editformpage");
-                      }}
-                    >
-                      <EditIcon />
-                    </Button>
-                  </Tooltip>
 
-                  <Tooltip title="Trimite formular la invitati">
-                    <Button
-                      sx={{ minWidth: "2px" }}
-                      onClick={() => {
-                        myClick(item);
-                        history.push("/sendinvitationspage");
-                      }}
-                    >
-                      <ForwardToInboxIcon />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip title="Vizualizeaza rezultate formular">
-                    <Button
-                      sx={{ minWidth: "2px" }}
-                      onClick={() => {
-                        myClick(item);
-                        history.push("/resultpage");
-                        history.go(0);
-                      }}
-                    >
-                      <ContentPasteSearchIcon />
-                    </Button>
-                  </Tooltip>
-                </TableCell>
+                <TableCell> Tipul evenimentului </TableCell>
+                <TableCell> Data </TableCell>
+                <TableCell> Restaurant </TableCell>
+                <TableCell> Actiuni</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {data.map((item) => (
+                <TableRow>
+                  <TableCell padding="checkbox"></TableCell>
+                  <TableCell onClick={() => myClick(item)}>
+                    {item.EventType}
+                  </TableCell>
+                  <TableCell onClick={() => myClick(item)}>
+                    {item.RowKey}
+                  </TableCell>
+                  <TableCell onClick={() => myClick(item)}>
+                    {item.Location !== null && item.Location}
+                    <Button onClick={() => chooseLocation()}>Alege</Button>
+                  </TableCell>
+                  <TableCell>
+                    <Tooltip title="Anulare eveniment">
+                      <Button
+                        sx={{ minWidth: "2px" }}
+                        onClick={() => {
+                          myClick(item);
+                          DeleteEvent();
+                        }}
+                      >
+                        <DeleteIcon />
+                      </Button>
+                    </Tooltip>
+                    <Tooltip title="Editeaza eveniment">
+                      <Button
+                        sx={{ minWidth: "2px" }}
+                        onClick={() => {
+                          myClick(item);
+                          history.push("/editformpage");
+                        }}
+                      >
+                        <EditIcon />
+                      </Button>
+                    </Tooltip>
 
-        {/* <table id="myeventstable">
-          <thead>
-            <tr>
-              <th>Tipul evenimentului</th>
-              <th>Data</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item) => (
-              <tr>
-                <td onClick={() => myClick(item)}>{item.EventType}</td>
-                <td onClick={() => myClick(item)}>{item.RowKey}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table> */}
-
-        <br></br>
-        <button
-          className="table"
-          onClick={() => history.push("/registerevent")}
-        >
-          Adauga un eveniment
-        </button>
-
-        {box && (
-          <Box sx={{ border: 2 }}>
-            <label> Altii au ales ... </label>
-
-            <List sx={{ width: "100%", maxWidth: 360 }}>
-              {locationsRecomanded.map((location) => (
-                <ListItem key={location}>
-                  <ListItemText primary={location} />
-                  <button
-                    onClick={() => console.log(location)}
-                    style={{
-                      backgroundColor: "pink",
-                      height: "5vh",
-                      width: "5vw",
-                    }}
-                  >
-                    Alege
-                  </button>
-                </ListItem>
+                    <Tooltip title="Trimite formular la invitati">
+                      <Button
+                        sx={{ minWidth: "2px" }}
+                        onClick={() => {
+                          myClick(item);
+                          history.push("/sendinvitationspage");
+                        }}
+                      >
+                        <ForwardToInboxIcon />
+                      </Button>
+                    </Tooltip>
+                    <Tooltip title="Vizualizeaza rezultate formular">
+                      <Button
+                        sx={{ minWidth: "2px" }}
+                        onClick={() => {
+                          myClick(item);
+                          history.push("/resultpage");
+                          history.go(0);
+                        }}
+                      >
+                        <ContentPasteSearchIcon />
+                      </Button>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
               ))}
-            </List>
-          </Box>
+            </TableBody>
+          </Table>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            marginTop: "12vh",
+          }}
+        >
+          <Button
+            variant="contained"
+            onClick={() => history.push("/registerevent")}
+          >
+            Adaugă un eveniment
+          </Button>
+        </Grid>
+        {box && (
+          <Grid item xs={12}>
+            <Box sx={{ border: 2 }}>
+              <label> Altii au ales ... </label>
+
+              <List sx={{ width: "100%", maxWidth: 360 }}>
+                {locationsRecomanded.map((location) => (
+                  <ListItem key={location}>
+                    <ListItemText primary={location} />
+                    <button
+                      onClick={() => console.log(location)}
+                      style={{
+                        backgroundColor: "pink",
+                        height: "5vh",
+                        width: "5vw",
+                      }}
+                    >
+                      Alege
+                    </button>
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+          </Grid>
         )}
+      </Grid>
+      <Header />
+      {loader && <OverlayLoader />}
 
-        <Dialog open={open} onClose={handleToClose}>
-          <DialogTitle>{"Ce actiune vrei sa faci?"}</DialogTitle>
+      <div id="notesucces">Eveniment sters cu succes!</div>
+      <div id="note">Eroare la stergerea evenimentului, incearca din nou!</div>
 
-          <DialogActions>
-            <Button
-              onClick={() => history.push("/editformpage")}
-              color="primary"
-              autoFocus
-            >
-              Editare
-            </Button>
-            <Button onClick={() => DeleteEvent()} color="primary" autoFocus>
-              Stergere
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-    </div>
+      <Dialog open={open} onClose={handleToClose}>
+        <DialogTitle>{"Ce actiune vrei sa faci?"}</DialogTitle>
+
+        <DialogActions>
+          <Button
+            onClick={() => history.push("/editformpage")}
+            color="primary"
+            autoFocus
+          >
+            Editare
+          </Button>
+          <Button onClick={() => DeleteEvent()} color="primary" autoFocus>
+            Stergere
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Container>
   );
 }
 export default MyEventPage;

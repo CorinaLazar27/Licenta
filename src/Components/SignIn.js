@@ -10,16 +10,20 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { LoadingButton } from "@mui/lab";
-import login from "../Image/login.jpg";
-import login1 from "../Image/login1.jpg";
-import login2 from "../Image/login2.jpg";
-import login3 from "../Image/login3.jpg";
-import login4 from "../Image/login4.jpg";
-import login8 from "../Image/login8.jpeg";
-import login9 from "../Image/login9.jpg";
+import login10 from "../Image/login10.jpg";
+import login11 from "../Image/login11.jpg";
+import login12 from "../Image/login12.jpg";
+import login13 from "../Image/login13.jpg";
+import login14 from "../Image/login14.jpg";
+import login15 from "../Image/login15.jpg";
+import login16 from "../Image/login16.jpg";
+import login17 from "../Image/login17.jpg";
 import { Container } from "@mui/material";
 import { Box } from "@mui/system";
 import * as Yup from "yup";
+import Header from "./Header";
+import FirstHeader from "./FirstHeader";
+import Footer from "./Footer";
 
 function SingIn() {
   const history = useHistory();
@@ -95,7 +99,7 @@ function SingIn() {
   return (
     <Container
       sx={{
-        backgroundImage: `url("${login1}")`,
+        backgroundImage: `url("${login16}")`,
         backgroundSize: "cover",
         display: "flex",
         minHeight: "100vh",
@@ -104,6 +108,8 @@ function SingIn() {
         alignItems: "center",
       }}
     >
+      <FirstHeader />
+      <Footer />
       <Box
         sx={{
           background: "rgb(255, 255, 255)",

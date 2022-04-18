@@ -19,10 +19,12 @@ import login6 from "../Image/login6.jpg";
 import login7 from "../Image/login7.jpg";
 import login8 from "../Image/login8.jpeg";
 import login9 from "../Image/login9.jpg";
+import login16 from "../Image/login16.jpg";
 import { Container } from "@mui/material";
 import { Box } from "@mui/system";
 import * as Yup from "yup";
-
+import FirstHeader from "./FirstHeader";
+import Footer from "./Footer";
 function SingUp() {
   const history = useHistory();
 
@@ -85,7 +87,7 @@ function SingUp() {
   return (
     <Container
       sx={{
-        backgroundImage: `url("${login9}")`,
+        backgroundImage: `url("${login16}")`,
         backgroundSize: "cover",
         display: "flex",
         minHeight: "100vh",
@@ -94,6 +96,8 @@ function SingUp() {
         alignItems: "center",
       }}
     >
+      <FirstHeader />
+      <Footer />
       <Box
         sx={{
           background: "rgb(255, 255, 255)",

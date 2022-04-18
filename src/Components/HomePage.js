@@ -8,7 +8,7 @@ import { Container, Box, Grid, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import AddIcon from "@material-ui/icons/Add";
 import EventIcon from "@mui/icons-material/Event";
-import login9 from "../Image/login9.jpg";
+
 function HomePage() {
   const history = useHistory();
   const email = window.localStorage.getItem("email");
@@ -44,8 +44,7 @@ function HomePage() {
     <Container
       maxWidth={false}
       sx={{
-        backgroundColor: "#f3e5f5",
-        backgroundImage: `url("${login9}")`,
+        backgroundColor: "#FFD59E",
         backgroundSize: "cover",
         display: "flex",
         minHeight: "100vh",
@@ -57,8 +56,8 @@ function HomePage() {
       <Footer />
       <Box
         sx={{
-          background: "rgb(255, 255, 255)",
-          boxShadow: "2px 4px 6px rgba(0, 0, 0, 1)",
+          background: "rgb(255, 255, 255,0.5)",
+          boxShadow: "2px 4px 6px rgba(0, 0, 0, 0.5)",
           padding: "4rem",
           textAlign: "center",
         }}

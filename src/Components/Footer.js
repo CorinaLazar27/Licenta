@@ -5,11 +5,12 @@ function Footer() {
   return (
     <Box
       sx={{
-        backgroundColor: "white",
-        height: "4vh",
+        boxShadow: 3,
+        backgroundColor: "#9575cd",
+        position: "absolute",
         bottom: "0",
-        minWidth: "100vw",
-        position: "fixed",
+        width: "100%",
+        height: "4vh",
       }}
     ></Box>
   );
