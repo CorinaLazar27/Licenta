@@ -10,8 +10,15 @@
   align-items: center;
 
 }
-
 .App {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  background-color: rgb(230, 180, 230);
+}
+/* .App {
   background: rgb(255, 255, 255);
   border-radius: 4px;
   box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
@@ -22,7 +29,24 @@
   text-align: center;
   align-items: center;
   width: 90%;
+} */
+
+.Background_inv {
+  background: rgb(252, 252, 252);
+  border-radius: 4px;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
+  max-width: 700px;
+  max-height: 90%;
+  padding-bottom: 66px;
+  position: relative;
+  margin-bottom: 7%;
+  margin-top: 7%;
+  padding-top: 46px;
+  text-align: center;
+  width: 90%;
+  padding: 46px;
 }
+
 .App > .logo {
   max-width: 90%;
 }

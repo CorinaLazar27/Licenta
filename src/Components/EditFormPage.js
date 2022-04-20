@@ -169,7 +169,6 @@ function EditFormPage() {
                       <input
                         className="form-control"
                         id="date"
-                        type="date"
                         defaultValue={date}
                         readOnly
                       />

@@ -20,17 +20,20 @@ import { FormikTextField } from "./FormikComponents/FormikTextField";
 import { FormikCheckBox } from "./FormikComponents/FormikCheckBox";
 import { FormikSelectSimple } from "./FormikComponents/FormikSelectSimple";
 import { FormikDatePicker } from "./FormikComponents/FormikDatePicker";
-import { LocalizationProvider } from "@mui/lab";
+import { LoadingButton, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import FormLabel from "@mui/material/FormLabel";
 import RadioGroup from "@mui/material/RadioGroup";
 import Footer from "./Footer";
-
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 import { Container, Box, Grid, Typography } from "@mui/material";
 import * as Yup from "yup";
 
 function RegisterEventPage() {
   const [open, setOpen] = React.useState(false);
+  const [openError, setOpenError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleClickToOpen = () => {
     setOpen(true);
@@ -42,24 +45,13 @@ function RegisterEventPage() {
 
   const history = useHistory();
   const email = window.localStorage.getItem("email");
-  // const [event, setEvent] = useState("");
-  // const [date, setDate] = useState("");
-  // const [nrguests, setNrGuests] = useState("");
-  // const [location, setLocation] = useState("");
-  // const [budget, setBudget] = useState("");
-  // const [liveBand, setLiveBand] = useState("");
-  // const [artisticMoment, setArtisticMoment] = useState("");
-  // const [photographer, setPhotographer] = useState("");
-  // const [videoRecording, setVideoRecording] = useState("");
-  // const [candyBar, setCandyBar] = useState("");
-  // const [fruitsBar, setfruitsBar] = useState("");
-  // const [drinks, setDrinks] = useState("");
-  // const [ringDance, setRingDance] = useState("");
+
   const [dialogBox, setDialogBox] = useState(Boolean);
 
   function FormOptions(values) {
     console.log(values.event);
     console.log(values.date);
+    setLoading(true);
     axios({
       method: "POST",
       url: "/postform",
@@ -81,6 +73,8 @@ function RegisterEventPage() {
       },
     })
       .then((response) => {
+        setLoading(false);
+
         const res = response.data;
         console.log(res);
         if (res == "Done") {
@@ -91,12 +85,26 @@ function RegisterEventPage() {
       })
       .catch((error) => {
         if (error.response) {
+          setOpenError(true);
+          setLoading(false);
+          setTimeout(window.location.reload(), 4000);
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
         }
       });
   }
+
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
 
   const eventsSelectItems = ["Nunta", "Botez", "Aniversare"];
   const ringDanceSelectItems = ["Dominant", "Restrans", "Fara"];
@@ -112,17 +120,26 @@ function RegisterEventPage() {
     <Container
       maxWidth={false}
       sx={{
-        backgroundSize: "cover",
         display: "flex",
         minHeight: "100vh",
-        justifyContent: "center",
-        alignItems: "center",
         textAlign: "center",
+        alignItems: "center",
+        justifyContent: "center",
         position: "relative",
       }}
     >
       <Header />
       <Footer />
+      <Snackbar
+        open={openError}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="error">
+          Eroare la crearea evenimentului!
+        </Alert>
+      </Snackbar>
 
       <Formik
         initialValues={{
@@ -142,7 +159,7 @@ function RegisterEventPage() {
         }}
         validationSchema={ValidationsForm}
         onSubmit={(values) => {
-          // values.date = values.date.toLocaleDateString();
+          values.date = values.date.toLocaleDateString();
           FormOptions(values);
         }}
       >
@@ -159,7 +176,6 @@ function RegisterEventPage() {
               <Typography variant="h4">Înregistrează un eveniment</Typography>
             </Grid>
             <Grid item xs={12}>
-              {" "}
               <FormikSelectSimple
                 id="event"
                 name="event"
@@ -397,9 +413,13 @@ function RegisterEventPage() {
             </Grid>
 
             <Grid item xs={12} sx={{ marginBottom: "5vh" }}>
-              <Button type="submit" variant="contained">
+              <LoadingButton
+                loading={loading}
+                type="submit"
+                variant="contained"
+              >
                 Înregistrează
-              </Button>
+              </LoadingButton>
             </Grid>
           </Grid>
         </Form>
