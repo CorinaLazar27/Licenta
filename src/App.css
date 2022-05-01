@@ -494,15 +494,17 @@ button.table:hover {
   box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
 }
 .card .card-header {
-  font-weight: 500;
+  /* font-weight: 600; */
+  font-weight: bold;
+  
+
 }
 .card-header:first-child {
   border-radius: 0.35rem 0.35rem 0 0;
 }
 .card-header {
   padding: 1rem 1.35rem;
-  margin-bottom: 0;
-  background-color: rgba(33, 40, 50, 0.03);
+
   border-bottom: 1px solid rgba(33, 40, 50, 0.125);
 }
 .form-control,
@@ -581,9 +583,7 @@ button.table:hover {
 .rounded-circle {
   border-radius: 50% !important;
 }
-.card {
-  box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
-}
+
 .card .card-header {
   font-weight: 500;
 }
@@ -595,6 +595,7 @@ button.table:hover {
   margin-bottom: 0;
   background-color: rgba(33, 40, 50, 0.03);
   border-bottom: 1px solid rgba(33, 40, 50, 0.125);
+  font-weight: bold;
 }
 .form-control,
 .dataTable-input {
@@ -611,6 +612,22 @@ button.table:hover {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  border-radius: 0.35rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.select-control
+ {
+  width: 100%;
+  padding: 0.4rem 1.125rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1;
+  color: #69707a;
+  background-color: #e4e6e9;
+  enable-background: "white";
+  background-clip: padding-box;
+  border: 1px solid #c5ccd6;
   border-radius: 0.35rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
@@ -744,4 +761,13 @@ input[type="submit"]:hover {
   margin: 0px auto;
   font-family: helvetica;
   text-align: center;
+}
+
+.Container{
+  max-width: false;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }

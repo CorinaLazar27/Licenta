@@ -31,7 +31,7 @@ import { Container, Box, Grid, Typography } from "@mui/material";
 import * as Yup from "yup";
 
 function RegisterEventPage() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [openError, setOpenError] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -106,30 +106,22 @@ function RegisterEventPage() {
     setOpenError(false);
   };
 
-  const eventsSelectItems = ["Nunta", "Botez", "Aniversare"];
-  const ringDanceSelectItems = ["Dominant", "Restrans", "Fara"];
-  const drinksSelectItems = ["Bauturi la masa", "Bartman"];
+  const eventsSelectItems = ["Nuntă", "Botez", "Aniversare"];
+  const ringDanceSelectItems = ["Dominant", "Restrâns", "Fără"];
+  const drinksSelectItems = ["Băuturi la masă", "Bartman"];
 
   const ValidationsForm = Yup.object().shape({
     event: Yup.string().required("Trebuie aleasă o opțiune!"),
-    nrguests: Yup.number().required("Alege numărul invitațiilor"),
-    budget: Yup.number(),
+    nrguests: Yup.number()
+      .typeError("Introdu doar cifre!")
+      .required("Alege numărul invitațiilor"),
+    budget: Yup.number().typeError("Introdu doar cifre!"),
   });
 
   return (
-    <Container
-      maxWidth={false}
-      sx={{
-        display: "flex",
-        minHeight: "100vh",
-        textAlign: "center",
-        alignItems: "center",
-        justifyContent: "center",
-        position: "relative",
-      }}
-    >
+    <div className="Container">
       <Header />
-      <Footer />
+
       <Snackbar
         open={openError}
         autoHideDuration={3000}
@@ -169,10 +161,12 @@ function RegisterEventPage() {
             columnSpacing={3}
             rowSpacing={5}
             sx={{
-              padding: "2em",
+              paddingTop: "5em",
+              paddingLeft: "5em",
+              paddingRight: "5em",
             }}
           >
-            <Grid item xs={12} sx={{ marginTop: "7vh" }}>
+            <Grid item xs={12}>
               <Typography variant="h4">Înregistrează un eveniment</Typography>
             </Grid>
             <Grid item xs={12}>
@@ -412,11 +406,21 @@ function RegisterEventPage() {
               />
             </Grid>
 
-            <Grid item xs={12} sx={{ marginBottom: "5vh" }}>
+            <Grid item xs={12}>
               <LoadingButton
                 loading={loading}
                 type="submit"
                 variant="contained"
+                sx={{
+                  backgroundColor: "green",
+                  hover: {
+                    "&:hover": {
+                      backgroundColor: "red",
+                    },
+                  },
+
+                  marginBottom: "3vh",
+                }}
               >
                 Înregistrează
               </LoadingButton>
@@ -448,7 +452,7 @@ function RegisterEventPage() {
           </Button>
         </DialogActions>
       </Dialog>
-    </Container>
+    </div>
   );
 }
 export default RegisterEventPage;

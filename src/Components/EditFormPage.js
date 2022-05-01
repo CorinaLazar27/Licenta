@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../Image/logo.png";
 import { useHistory } from "react-router-dom";
@@ -6,13 +6,18 @@ import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import Dropdown from "react-dropdown";
 import { CircleArrow as ScrollUpButton } from "react-scroll-up-button";
-import "react-dropdown/style.css";
 import axios from "axios";
-import $ from "jquery";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 import Header from "./Header";
+
+import { Box, Button } from "@mui/material";
+import OverlayLoader from "./OverlayLoader";
+import { LoadingButton } from "@mui/lab";
 
 function EditFormPage() {
   const history = useHistory();
+  const [loader, setLoader] = useState(false);
   const event = window.localStorage.getItem("eveniment");
   const email = window.localStorage.getItem("email");
   const location = window.localStorage.getItem("locatie");
@@ -28,48 +33,72 @@ function EditFormPage() {
   const guests = window.localStorage.getItem("invitati");
   const liveband = window.localStorage.getItem("liveband");
 
-  window.onload = function exampleFunction() {
-    document.getElementById("saveButton").style.visibility = "hidden";
-    document.getElementById("editButton").style.visibility = "visible";
-  };
-  $(document).ready(function () {
-    document.getElementById("saveButton").style.visibility = "hidden";
-    document.getElementById("editButton").style.visibility = "visible";
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
+  const [openError, setOpenError] = useState(false);
+  const [openSucces, setOpenSucces] = useState(false);
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+    setOpenSucces(false);
+  };
 
   function UnblockInputs() {
-    document.getElementById("location").readOnly = false;
-    document.getElementById("budget").readOnly = false;
-    document.getElementById("numberofguests").readOnly = false;
-    document.getElementById("liveband").readOnly = false;
-    document.getElementById("artisticmoment").readOnly = false;
-    document.getElementById("photographer").readOnly = false;
-    document.getElementById("video").readOnly = false;
-    document.getElementById("candybar").readOnly = false;
-    document.getElementById("fruitsbar").readOnly = false;
-    document.getElementById("drinks").readOnly = false;
-    document.getElementById("ringDance").readOnly = false;
+    if (
+      document.getElementById("editButton").textContent === "Salvează schimbări"
+    ) {
+      document.getElementById("location").readOnly = true;
+      document.getElementById("budget").readOnly = true;
+      document.getElementById("numberofguests").readOnly = true;
+      document.getElementById("liveband").disabled = true;
+      document.getElementById("liveband").style.backgroundColor = "#e4e6e9";
+      document.getElementById("artisticmoment").disabled = true;
+      document.getElementById("artisticmoment").style.backgroundColor =
+        "#e4e6e9";
+      document.getElementById("photographer").disabled = true;
+      document.getElementById("photographer").style.backgroundColor = "#e4e6e9";
+      document.getElementById("video").disabled = true;
+      document.getElementById("video").style.backgroundColor = "#e4e6e9";
+      document.getElementById("candybar").disabled = true;
+      document.getElementById("candybar").style.backgroundColor = "#e4e6e9";
+      document.getElementById("fruitsbar").disabled = true;
+      document.getElementById("fruitsbar").style.backgroundColor = "#e4e6e9";
+      document.getElementById("drinks").disabled = true;
+      document.getElementById("drinks").style.backgroundColor = "#e4e6e9";
+      document.getElementById("ringDance").disabled = true;
+      document.getElementById("ringDance").style.backgroundColor = "#e4e6e9";
+      document.getElementById("editButton").textContent = "Editează";
 
-    document.getElementById("saveButton").style.visibility = "visible";
-    document.getElementById("editButton").style.visibility = "hidden";
+      UpdateForm();
+    } else {
+      document.getElementById("location").readOnly = false;
+      document.getElementById("budget").readOnly = false;
+      document.getElementById("numberofguests").readOnly = false;
+      document.getElementById("liveband").disabled = false;
+      document.getElementById("liveband").style.backgroundColor = "white";
+      document.getElementById("artisticmoment").disabled = false;
+      document.getElementById("artisticmoment").style.backgroundColor = "white";
+      document.getElementById("photographer").disabled = false;
+      document.getElementById("photographer").style.backgroundColor = "white";
+      document.getElementById("video").disabled = false;
+      document.getElementById("video").style.backgroundColor = "white";
+      document.getElementById("candybar").disabled = false;
+      document.getElementById("candybar").style.backgroundColor = "white";
+      document.getElementById("fruitsbar").disabled = false;
+      document.getElementById("fruitsbar").style.backgroundColor = "white";
+      document.getElementById("drinks").disabled = false;
+      document.getElementById("drinks").style.backgroundColor = "white";
+      document.getElementById("ringDance").disabled = false;
+      document.getElementById("ringDance").style.backgroundColor = "white";
+      document.getElementById("editButton").textContent = "Salvează schimbări";
+    }
   }
 
   function UpdateForm() {
-    document.getElementById("saveButton").style.visibility = "hidden";
-    document.getElementById("editButton").style.visibility = "visible";
-
-    document.getElementById("location").readOnly = true;
-    document.getElementById("budget").readOnly = true;
-    document.getElementById("numberofguests").readOnly = true;
-    document.getElementById("liveband").readOnly = true;
-    document.getElementById("artisticmoment").readOnly = true;
-    document.getElementById("photographer").readOnly = true;
-    document.getElementById("video").readOnly = true;
-    document.getElementById("candybar").readOnly = true;
-    document.getElementById("fruitsbar").readOnly = true;
-    document.getElementById("drinks").readOnly = true;
-    document.getElementById("ringDance").readOnly = true;
-
+    setLoader(true);
     axios({
       method: "POST",
       url: "/updateform",
@@ -93,301 +122,399 @@ function EditFormPage() {
       .then((response) => {
         const res = response.data;
         console.log(res);
-        if (res == "Done") {
-          console.log("dONE");
+        setOpenSucces(true);
+        setTimeout(() => {
           history.push("/myeventpage");
           history.go(0);
+        }, 2500);
+        if (res == "Done") {
+          console.log("dONE");
         }
       })
       .catch((error) => {
         if (error.response) {
+          setOpenError(true);
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
         }
-      });
+      })
+      .finally(() => setLoader(false));
   }
 
   return (
-    <div className="nav">
+    <div className="Container">
       <Header />
+      <Box
+        sx={{
+          minWidth: "100vw",
+          marginTop: "8rem",
+        }}
+      >
+        <div className="card-header">{event}</div>
+        <div className="card-body">
+          <form>
+            <div className="row gx-3 mb-3">
+              <div className="col-md-6">
+                <label className="small mb-1" htmlFor="location">
+                  Locație
+                </label>
+                <input
+                  className="form-control"
+                  id="location"
+                  type="text"
+                  defaultValue={location}
+                  onChange={(event) =>
+                    window.localStorage.setItem("locatie", event.target.value)
+                  }
+                  readOnly
+                />
+              </div>
 
-      <div className="home1">
-        <hr className="mt-0 mb-4" />
-        <div className="row">
-          <div className="col-xl-16">
-            <div className="card mb-4">
-              <div className="card-header">{event}</div>
-              <div className="card-body">
-                <form>
-                  <div className="row gx-3 mb-3">
-                    <div className="col-md-6">
-                      <label className="small mb-1" htmlFor="location">
-                        Locatie
-                      </label>
-                      <input
-                        className="form-control"
-                        id="location"
-                        type="text"
-                        defaultValue={location}
-                        onChange={(event) =>
-                          window.localStorage.setItem(
-                            "locatie",
-                            event.target.value
-                          )
-                        }
-                        readOnly
-                      />
-                    </div>
-
-                    <div className="col-md-6">
-                      <label className="small mb-1" htmlFor="budget">
-                        Buget
-                      </label>
-                      <input
-                        className="form-control"
-                        id="budget"
-                        type="text"
-                        name="budget"
-                        defaultValue={budget}
-                        onChange={(event) =>
-                          window.localStorage.setItem(
-                            "buget",
-                            event.target.value
-                          )
-                        }
-                        readOnly
-                      />
-                    </div>
-                  </div>
-
-                  <div className="row gx-3 mb-3">
-                    <div className="col-md-6">
-                      <label className="small mb-1" htmlFor="date">
-                        Date
-                      </label>
-                      <input
-                        className="form-control"
-                        id="date"
-                        defaultValue={date}
-                        readOnly
-                      />
-                    </div>
-
-                    <div className="col-md-6">
-                      <label className="small mb-1" htmlFor="numberofguests">
-                        Numar invitati
-                      </label>
-                      <input
-                        className="form-control"
-                        id="numberofguests"
-                        type="text"
-                        defaultValue={guests}
-                        onChange={(event) =>
-                          window.localStorage.setItem(
-                            "invitati",
-                            event.target.value
-                          )
-                        }
-                        readOnly
-                      />
-                    </div>
-                  </div>
-
-                  <div className="row gx-3 mb-3">
-                    <div className="col-md-6">
-                      <label className="small mb-1" htmlFor="liveband">
-                        Trupa live
-                      </label>
-                      <input
-                        className="form-control"
-                        id="liveband"
-                        defaultValue={liveband}
-                        onChange={(event) =>
-                          window.localStorage.setItem(
-                            "liveband",
-                            event.target.value
-                          )
-                        }
-                        readOnly
-                      />
-                    </div>
-
-                    <div className="col-md-6">
-                      <label className="small mb-1" htmlFor="artisticmoment">
-                        Moment artistic
-                      </label>
-                      <input
-                        className="form-control"
-                        id="artisticmoment"
-                        name="birthday"
-                        defaultValue={artisticmoment}
-                        onChange={(event) =>
-                          window.localStorage.setItem(
-                            "momentartistic",
-                            event.target.value
-                          )
-                        }
-                        readOnly
-                      />
-                    </div>
-                  </div>
-
-                  <div className="row gx-3 mb-3">
-                    <div className="col-md-6">
-                      <label className="small mb-1" htmlFor="photographer">
-                        Fotograf
-                      </label>
-                      <input
-                        className="form-control"
-                        id="photographer"
-                        defaultValue={photographer}
-                        onChange={(event) =>
-                          window.localStorage.setItem(
-                            "fotograf",
-                            event.target.value
-                          )
-                        }
-                        readOnly
-                      />
-                    </div>
-
-                    <div className="col-md-6">
-                      <label className="small mb-1" htmlFor="video">
-                        Inregistrare video
-                      </label>
-                      <input
-                        className="form-control"
-                        id="video"
-                        name="birthday"
-                        defaultValue={video}
-                        onChange={(event) =>
-                          window.localStorage.setItem(
-                            "video",
-                            event.target.value
-                          )
-                        }
-                        readOnly
-                      />
-                    </div>
-                  </div>
-
-                  <div className="row gx-3 mb-3">
-                    <div className="col-md-6">
-                      <label className="small mb-1" htmlFor="candybar">
-                        Candy Bar
-                      </label>
-                      <input
-                        className="form-control"
-                        id="candybar"
-                        defaultValue={candybar}
-                        onChange={(event) =>
-                          window.localStorage.setItem(
-                            "candybar",
-                            event.target.value
-                          )
-                        }
-                        readOnly
-                      />
-                    </div>
-
-                    <div className="col-md-6">
-                      <label className="small mb-1" htmlFor="fruitsbar">
-                        Bar cu fructe
-                      </label>
-                      <input
-                        className="form-control"
-                        id="fruitsbar"
-                        name="fruitsbar"
-                        defaultValue={fruitsbar}
-                        onChange={(event) =>
-                          window.localStorage.setItem(
-                            "fruitsbar",
-                            event.target.value
-                          )
-                        }
-                        readOnly
-                      />
-                      {/*  <select name="fruitsbar" id="fruitsbar" defaultValue={fruitsbar}
-                                onChange={(event) => {window.localStorage.setItem('fruitsbar',event.target.value)}}>
-                            <option value="">Select your option</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                            readOnly
-                            </select>*/}
-                    </div>
-                  </div>
-
-                  <div className="row gx-3 mb-3">
-                    <div className="col-md-6">
-                      <label className="small mb-1" htmlFor="drinks">
-                        Drinks
-                      </label>
-                      <input
-                        className="form-control"
-                        id="drinks"
-                        defaultValue={drinks}
-                        onChange={(event) =>
-                          window.localStorage.setItem(
-                            "bauturi",
-                            event.target.value
-                          )
-                        }
-                        readOnly
-                      />
-                    </div>
-
-                    <div className="col-md-6">
-                      <label className="small mb-1" htmlFor="ringDance">
-                        Ring dans
-                      </label>
-                      <input
-                        className="form-control"
-                        id="ringDance"
-                        name="ringDance"
-                        defaultValue={ringDance}
-                        onChange={(event) =>
-                          window.localStorage.setItem(
-                            "ringdans",
-                            event.target.value
-                          )
-                        }
-                        readOnly
-                      />
-                    </div>
-                  </div>
-
-                  <button
-                    id="saveButton"
-                    className="btn btn-primary"
-                    type="button"
-                    onClick={() => UpdateForm()}
-                  >
-                    Salvare schimbari
-                  </button>
-                </form>
-                <button
-                  id="editButton"
-                  className="btn btn-primary"
-                  type="button"
-                  onClick={() => UnblockInputs()}
-                >
-                  Edit
-                </button>
-                <br></br>
-                <button
-                  id="editButton"
-                  className="btn btn-secondary"
-                  type="button"
-                  onClick={() => history.push("/sendinvitationspage")}
-                >
-                  Trimite invitatii
-                </button>
+              <div className="col-md-6">
+                <label className="small mb-1" htmlFor="budget">
+                  Buget
+                </label>
+                <input
+                  className="form-control"
+                  id="budget"
+                  type="text"
+                  name="budget"
+                  defaultValue={budget}
+                  onChange={(event) =>
+                    window.localStorage.setItem("buget", event.target.value)
+                  }
+                  readOnly
+                />
               </div>
             </div>
-          </div>
+
+            <div className="row gx-3 mb-3">
+              <div className="col-md-6">
+                <label className="small mb-1" htmlFor="date">
+                  Data
+                </label>
+                <input
+                  className="form-control"
+                  id="date"
+                  defaultValue={date}
+                  readOnly
+                />
+              </div>
+
+              <div className="col-md-6">
+                <label className="small mb-1" htmlFor="numberofguests">
+                  Număr invitați
+                </label>
+                <input
+                  className="form-control"
+                  id="numberofguests"
+                  type="text"
+                  defaultValue={guests}
+                  onChange={(event) =>
+                    window.localStorage.setItem("invitati", event.target.value)
+                  }
+                  readOnly
+                />
+              </div>
+            </div>
+
+            <div className="row gx-3 mb-3">
+              <div className="col-md-6">
+                <label className="small mb-1" htmlFor="liveband">
+                  Trupă live
+                </label>
+                {/* <input
+                  className="form-control"
+                  id="liveband"
+                  defaultValue={liveband}
+                  onChange={(event) =>
+                    window.localStorage.setItem("liveband", event.target.value)
+                  }
+                  readOnly
+                /> */}
+                <select
+                  name="liveband"
+                  id="liveband"
+                  disabled="true"
+                  className="select-control"
+                  defaultValue={liveband}
+                  onChange={(event) => {
+                    window.localStorage.setItem("liveband", event.target.value);
+                  }}
+                >
+                  <option value=""></option>
+                  <option value="Da">Da</option>
+                  <option value="Nu">Nu</option>
+                </select>
+              </div>
+
+              <div className="col-md-6">
+                <label className="small mb-1" htmlFor="artisticmoment">
+                  Moment artistic
+                </label>
+                {/* <input
+                  className="form-control"
+                  id="artisticmoment"
+                  name="birthday"
+                  defaultValue={artisticmoment}
+                  onChange={(event) =>
+                    window.localStorage.setItem(
+                      "momentartistic",
+                      event.target.value
+                    )
+                  }
+                  readOnly
+                /> */}
+                <select
+                  name="artisticmoment"
+                  id="artisticmoment"
+                  disabled="true"
+                  className="select-control"
+                  defaultValue={artisticmoment}
+                  onChange={(event) => {
+                    window.localStorage.setItem(
+                      "momentartistic",
+                      event.target.value
+                    );
+                  }}
+                >
+                  <option value=""></option>
+                  <option value="Da">Da</option>
+                  <option value="Nu">Nu</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="row gx-3 mb-3">
+              <div className="col-md-6">
+                <label className="small mb-1" htmlFor="photographer">
+                  Fotograf
+                </label>
+                {/* <input
+                  className="form-control"
+                  id="photographer"
+                  defaultValue={photographer}
+                  onChange={(event) =>
+                    window.localStorage.setItem("fotograf", event.target.value)
+                  }
+                  readOnly
+                /> */}
+                <select
+                  name="photographer"
+                  id="photographer"
+                  disabled="true"
+                  className="select-control"
+                  defaultValue={photographer}
+                  onChange={(event) => {
+                    window.localStorage.setItem("fotograf", event.target.value);
+                  }}
+                >
+                  <option value=""></option>
+                  <option value="Da">Da</option>
+                  <option value="Nu">Nu</option>
+                </select>
+              </div>
+
+              <div className="col-md-6">
+                <label className="small mb-1" htmlFor="video">
+                  Inregistrare video
+                </label>
+                {/* <input
+                  className="form-control"
+                  id="video"
+                  name="birthday"
+                  defaultValue={video}
+                  onChange={(event) =>
+                    window.localStorage.setItem("video", event.target.value)
+                  }
+                  readOnly
+                /> */}
+                <select
+                  name="video"
+                  id="video"
+                  disabled="true"
+                  className="select-control"
+                  defaultValue={video}
+                  onChange={(event) => {
+                    window.localStorage.setItem("video", event.target.value);
+                  }}
+                >
+                  <option value=""></option>
+                  <option value="Da">Da</option>
+                  <option value="Nu">Nu</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="row gx-3 mb-3">
+              <div className="col-md-6">
+                <label className="small mb-1" htmlFor="candybar">
+                  Candy Bar
+                </label>
+                {/* <input
+                  className="form-control"
+                  id="candybar"
+                  defaultValue={candybar}
+                  onChange={(event) =>
+                    window.localStorage.setItem("candybar", event.target.value)
+                  }
+                  readOnly
+                /> */}
+                <select
+                  name="candybar"
+                  id="candybar"
+                  disabled="true"
+                  className="select-control"
+                  defaultValue={candybar}
+                  onChange={(event) => {
+                    window.localStorage.setItem("candybar", event.target.value);
+                  }}
+                >
+                  <option value=""></option>
+                  <option value="Da">Da</option>
+                  <option value="Nu">Nu</option>
+                </select>
+              </div>
+
+              <div className="col-md-6">
+                <label className="small mb-1" htmlFor="fruitsbar">
+                  Bar cu fructe
+                </label>
+                {/* <input
+                  className="form-control"
+                  id="fruitsbar"
+                  name="fruitsbar"
+                  defaultValue={fruitsbar}
+                  onChange={(event) =>
+                    window.localStorage.setItem("fruitsbar", event.target.value)
+                  }
+                  readOnly
+                /> */}
+
+                <select
+                  name="fruitsbar"
+                  id="fruitsbar"
+                  disabled="true"
+                  className="select-control"
+                  defaultValue={fruitsbar}
+                  onChange={(event) => {
+                    window.localStorage.setItem(
+                      "fruitsbar",
+                      event.target.value
+                    );
+                  }}
+                >
+                  <option value=""></option>
+                  <option value="Da">Da</option>
+                  <option value="Nu">Nu</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="row gx-3 mb-3">
+              <div className="col-md-6">
+                <label className="small mb-1" htmlFor="drinks">
+                  Băuturi
+                </label>
+                {/* <input
+                  className="form-control"
+                  id="drinks"
+                  defaultValue={drinks}
+                  onChange={(event) =>
+                    window.localStorage.setItem("bauturi", event.target.value)
+                  }
+                  readOnly
+                /> */}
+                <select
+                  name="drinks"
+                  id="drinks"
+                  disabled="true"
+                  className="select-control"
+                  defaultValue={drinks}
+                  onChange={(event) => {
+                    window.localStorage.setItem("bauturi", event.target.value);
+                  }}
+                >
+                  <option value=""></option>
+                  <option value="Băuturi la masă">Băuturi la masă</option>
+                  <option value="Bartman">Bartman</option>
+                </select>
+              </div>
+
+              <div className="col-md-6">
+                <label className="small mb-1" htmlFor="ringDance">
+                  Ring dans
+                </label>
+                {/* <input
+                  className="form-control"
+                  id="ringDance"
+                  name="ringDance"
+                  defaultValue={ringDance}
+                  onChange={(event) =>
+                    window.localStorage.setItem("ringdans", event.target.value)
+                  }
+                  readOnly
+                /> */}
+                <select
+                  name="ringDance"
+                  id="ringDance"
+                  disabled="true"
+                  className="select-control"
+                  defaultValue={ringDance}
+                  onChange={(event) => {
+                    window.localStorage.setItem("ringdans", event.target.value);
+                  }}
+                >
+                  <option value=""></option>
+                  <option value="Dominant">Dominant</option>
+                  <option value="Restrâns">Restrâns</option>
+                  <option value="Fără">Fără</option>
+                </select>
+              </div>
+            </div>
+          </form>
+          <Button
+            id="editButton"
+            variant="contained"
+            sx={{
+              backgroundColor: "green",
+              hover: {
+                "&:hover": {
+                  backgroundColor: "red",
+                },
+              },
+            }}
+            onClick={() => {
+              UnblockInputs();
+            }}
+          >
+            Editează
+          </Button>
+          {loader && <OverlayLoader />}
         </div>
-      </div>
+        <Snackbar
+          open={openError}
+          autoHideDuration={3000}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert onClose={handleClose} severity="error">
+            Eroare la modificarea datelor!
+          </Alert>
+        </Snackbar>
+
+        <Snackbar
+          open={openSucces}
+          autoHideDuration={3000}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert onClose={handleClose} severity="success">
+            Date modificate cu succes!
+          </Alert>
+        </Snackbar>
+      </Box>
     </div>
   );
 }

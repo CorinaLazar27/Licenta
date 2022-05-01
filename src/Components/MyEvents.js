@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../Image/logo.png";
 import { useHistory } from "react-router-dom";
@@ -57,10 +57,13 @@ function MyEventPage() {
     setOpen(false);
   };
 
-  window.onload = function exampleFunction() {
+  // window.onload = function exampleFunction() {
+  //   GetMyEvents();
+  //   //window.location.reload();
+  // };
+  useEffect(() => {
     GetMyEvents();
-    //window.location.reload();
-  };
+  }, []);
 
   function GetLocationRecomandation() {
     axios({
@@ -72,12 +75,14 @@ function MyEventPage() {
       },
     })
       .then((response) => {
+        setLoader(false);
         console.log(response.data);
         setLocationsRecomanded(Object.values(response.data));
         console.log(locationsRecomanded);
       })
       .catch((error) => {
         if (error.response) {
+          setLoader(false);
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
@@ -156,23 +161,11 @@ function MyEventPage() {
   }
 
   function chooseLocation() {
+    setLoader(true);
     setBox(true);
     GetLocationRecomandation();
   }
 
-  $(document).ready(function () {
-    // Hide the div
-    $("#notesucces").hide();
-    $("#note").hide();
-  });
-
-  function notificare() {
-    // Show the div in 5s
-    $("#notesucces").show();
-    setTimeout(function () {
-      $("#notesucces").fadeOut("fast");
-    }, 3000); // <-- time in milliseconds
-  }
   function eroare() {
     // Show the div in 5s
     $("#note").show();
