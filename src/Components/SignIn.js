@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useState, useEffect } from "react";
+
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import FacebookLogin from "react-facebook-login";
@@ -96,6 +96,33 @@ function SingIn() {
     password: Yup.string().required("Campul trebuie completat!"),
   });
 
+  const breakpoints = {
+    xs: 0,
+    sm: 600,
+    md: 960,
+    lg: 1280,
+    xl: 1920,
+  };
+  const getSize = (width) => {
+    if (width < breakpoints.sm) {
+      return "18px";
+    } else if (width < breakpoints.md) {
+      return "20px";
+    } else if (width < breakpoints.lg) {
+      return "35px";
+    } else if (width < breakpoints.xl) {
+      return "35px";
+    } else return "38px";
+  };
+  const [size, setSize] = useState(getSize(window.innerWidth));
+  const updateDimensions = () => {
+    setSize(getSize(window.innerWidth));
+  };
+  useEffect(() => {
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
+
   return (
     <Container
       sx={{
@@ -120,7 +147,7 @@ function SingIn() {
           minWidth: "40vw",
         }}
       >
-        <Typography variant="h4">Intră în cont!</Typography>
+        <Typography style={{ fontSize: size }}>Intră în cont!</Typography>
         <br></br>
         <Formik
           initialValues={{

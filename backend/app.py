@@ -710,9 +710,6 @@ def highestRating():
 
     # Reccomandation for apperitive
 
-    number_ratings_aperitive = len(table_aperitive)
-    unique_types_aperitive = len(table_aperitive['Aperitiv'].unique())
-
     # Highest rated apperitive
     mean_rating_aperitive = table_aperitive.groupby('Aperitiv')[
         ['Rating']].mean()
@@ -721,9 +718,6 @@ def highestRating():
 
     # Reccomandation for type 1
 
-    number_ratings_type1 = len(table_type1)
-    unique_types_type1 = len(table_type1['Type1'].unique())
-
     # Highest rated type1
     mean_rating_type1 = table_type1.groupby('Type1')[['Rating']].mean()
 
@@ -731,18 +725,12 @@ def highestRating():
 
     # Reccomandation for type 2
 
-    number_ratings_type2 = len(table_type2)
-    unique_types_type2 = len(table_type2['Type2'].unique())
-
     # Highest rated type 2
     mean_rating_type2 = table_type2.groupby('Type2')[['Rating']].mean()
 
     highest_rated_type2 = mean_rating_type2['Rating'].idxmax()
 
     # Reccomandation for music
-
-    number_ratings_music = len(table_music)
-    unique_types_music = len(table_music['Music'].unique())
 
     # Highest rated music
     mean_rating_music = table_music.groupby('Music')[['Rating']].mean()
@@ -775,7 +763,7 @@ def highestRating():
         "Rating_muzica_rock": mean_rating_music['Rating']['Rock'],
 
     }
-
+    print(data_set)
     return data_set
 
 

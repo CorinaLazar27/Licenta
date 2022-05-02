@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
@@ -83,6 +83,32 @@ function SingUp() {
     password: Yup.string().required("Campul trebuie completat!"),
     name: Yup.string().required("Campul trebuie completat!"),
   });
+  const breakpoints = {
+    xs: 0,
+    sm: 600,
+    md: 960,
+    lg: 1280,
+    xl: 1920,
+  };
+  const getSize = (width) => {
+    if (width < breakpoints.sm) {
+      return "18px";
+    } else if (width < breakpoints.md) {
+      return "20px";
+    } else if (width < breakpoints.lg) {
+      return "35px";
+    } else if (width < breakpoints.xl) {
+      return "35px";
+    } else return "38px";
+  };
+  const [size, setSize] = useState(getSize(window.innerWidth));
+  const updateDimensions = () => {
+    setSize(getSize(window.innerWidth));
+  };
+  useEffect(() => {
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
 
   return (
     <Container
@@ -130,7 +156,7 @@ function SingUp() {
           </Alert>
         </Snackbar>
 
-        <Typography variant="h4">Înregistrare</Typography>
+        <Typography style={{ fontSize: size }}>Înregistrare</Typography>
         <br></br>
         <Formik
           initialValues={{

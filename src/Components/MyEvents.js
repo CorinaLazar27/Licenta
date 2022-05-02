@@ -19,7 +19,7 @@ import TableRow from "@mui/material/TableRow";
 import OverlayLoader from "./OverlayLoader";
 import "react-dropdown/style.css";
 import axios from "axios";
-import $ from "jquery";
+import Snackbar from "@mui/material/Snackbar";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -27,7 +27,13 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "@mui/material/Button";
-import { Container, Box, Grid, Typography } from "@mui/material";
+import {
+  Container,
+  Box,
+  Grid,
+  Typography,
+  responsiveFontSizes,
+} from "@mui/material";
 
 import Header from "./Header";
 import { Tooltip } from "@material-ui/core";
@@ -36,31 +42,23 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import CommentIcon from "@mui/icons-material/Comment";
+import MuiAlert from "@mui/material/Alert";
 
 function MyEventPage() {
   const history = useHistory();
-  const [reload, setReload] = useState("1");
+  const [openError, setOpenError] = useState(false);
+  const [openSucces, setOpenSucces] = useState(false);
   const [data, setData] = useState([]);
   const [dateForDelete, setDateForDelete] = useState("");
   const email = window.localStorage.getItem("email");
   const event = window.localStorage.getItem("eveniment");
   const [loader, setLoader] = useState(true);
   const [box, setBox] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [noData, setNoData] = useState(false);
+  const [load, setLoad] = useState(true);
+
   const [locationsRecomanded, setLocationsRecomanded] = useState([]);
 
-  const handleClickToOpen = () => {
-    setOpen(true);
-  };
-
-  const handleToClose = () => {
-    setOpen(false);
-  };
-
-  // window.onload = function exampleFunction() {
-  //   GetMyEvents();
-  //   //window.location.reload();
-  // };
   useEffect(() => {
     GetMyEvents();
   }, []);
@@ -100,12 +98,15 @@ function MyEventPage() {
     })
       .then((response) => {
         setLoader(false);
+        setLoad(false);
         setData(response.data.results);
-        console.log(data);
+        console.log(response.data.results.length);
+        if (response.data.results.length === 0) setNoData(true);
       })
       .catch((error) => {
         if (error.response) {
           setLoader(false);
+          setLoad(false);
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
@@ -133,26 +134,27 @@ function MyEventPage() {
     event.preventDefault();
   }
 
-  function DeleteEvent() {
+  function DeleteEvent(item) {
+    setLoader(true);
     axios({
       method: "POST",
       url: "/deleteevent",
       data: {
         email: email,
-        date: dateForDelete,
+        date: item.RowKey,
       },
     })
       .then((response) => {
+        setOpenSucces(true);
+        setLoader(false);
         if (response.data == "Done") {
-          // handleToClose();
-          window.location.reload(false);
-          //notificare();
+          setTimeout(window.location.reload(false), 4000);
         }
       })
       .catch((error) => {
         if (error.response) {
-          eroare();
-
+          setOpenError(true);
+          setLoader(false);
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
@@ -164,15 +166,6 @@ function MyEventPage() {
     setLoader(true);
     setBox(true);
     GetLocationRecomandation();
-  }
-
-  function eroare() {
-    // Show the div in 5s
-    $("#note").show();
-    setTimeout(function () {
-      $("#notes").fadeOut("fast");
-    }, 3000); // <-- time in milliseconds
-    setOpen(false);
   }
 
   function myClick(event) {
@@ -194,6 +187,17 @@ function MyEventPage() {
     window.localStorage.setItem("liveband", event.LiveBand);
   }
 
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
+
   return (
     <Container
       maxWidth={false}
@@ -208,103 +212,117 @@ function MyEventPage() {
       }}
     >
       <Grid container rowSpacing={5}>
-        <Grid item xs={12}>
-          <h3>Evenimentele mele</h3>
-        </Grid>
-        <Grid item xs={12}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell padding="checkbox"></TableCell>
-
-                <TableCell> Tipul evenimentului </TableCell>
-                <TableCell> Data </TableCell>
-                <TableCell> Restaurant </TableCell>
-                <TableCell> Actiuni</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data.map((item) => (
+        {!noData && !load && (
+          <Grid item xs={12}>
+            <h3>Evenimentele mele</h3>
+          </Grid>
+        )}
+        {noData && !load && (
+          <Grid item xs={12}>
+            <h3>Nu există evenimente!</h3>
+          </Grid>
+        )}
+        {!noData && !load && (
+          <Grid item xs={12}>
+            <Table>
+              <TableHead>
                 <TableRow>
                   <TableCell padding="checkbox"></TableCell>
-                  <TableCell onClick={() => myClick(item)}>
-                    {item.EventType}
-                  </TableCell>
-                  <TableCell onClick={() => myClick(item)}>
-                    {item.RowKey}
-                  </TableCell>
-                  <TableCell onClick={() => myClick(item)}>
-                    {item.Location !== null && item.Location}
-                    <Button onClick={() => chooseLocation()}>Alege</Button>
-                  </TableCell>
-                  <TableCell>
-                    <Tooltip title="Anulare eveniment">
-                      <Button
-                        sx={{ minWidth: "2px" }}
-                        onClick={() => {
-                          myClick(item);
-                          DeleteEvent();
-                        }}
-                      >
-                        <DeleteIcon />
-                      </Button>
-                    </Tooltip>
-                    <Tooltip title="Editeaza eveniment">
-                      <Button
-                        sx={{ minWidth: "2px" }}
-                        onClick={() => {
-                          myClick(item);
-                          history.push("/editformpage");
-                        }}
-                      >
-                        <EditIcon />
-                      </Button>
-                    </Tooltip>
 
-                    <Tooltip title="Trimite formular la invitati">
-                      <Button
-                        sx={{ minWidth: "2px" }}
-                        onClick={() => {
-                          myClick(item);
-                          history.push("/sendinvitationspage");
-                        }}
-                      >
-                        <ForwardToInboxIcon />
-                      </Button>
-                    </Tooltip>
-                    <Tooltip title="Vizualizeaza rezultate formular">
-                      <Button
-                        sx={{ minWidth: "2px" }}
-                        onClick={() => {
-                          myClick(item);
-                          history.push("/resultpage");
-                          history.go(0);
-                        }}
-                      >
-                        <ContentPasteSearchIcon />
-                      </Button>
-                    </Tooltip>
-                  </TableCell>
+                  <TableCell> Tipul evenimentului </TableCell>
+                  <TableCell> Data </TableCell>
+                  <TableCell> Restaurant </TableCell>
+                  <TableCell> Actiuni</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          sx={{
-            marginTop: "12vh",
-          }}
-        >
-          <Button
-            variant="contained"
-            onClick={() => history.push("/registerevent")}
+              </TableHead>
+              <TableBody>
+                {data.map((item) => (
+                  <TableRow>
+                    <TableCell padding="checkbox"></TableCell>
+                    <TableCell onClick={() => myClick(item)}>
+                      {item.EventType}
+                    </TableCell>
+                    <TableCell onClick={() => myClick(item)}>
+                      {item.RowKey}
+                    </TableCell>
+                    <TableCell onClick={() => myClick(item)}>
+                      {item.Location !== null && item.Location}
+                      <Button onClick={() => chooseLocation()}>Alege</Button>
+                    </TableCell>
+                    <TableCell>
+                      <Tooltip title="Anulare eveniment">
+                        <Button
+                          sx={{ minWidth: "2px" }}
+                          onClick={() => {
+                            myClick(item);
+                            DeleteEvent(item);
+                          }}
+                        >
+                          <DeleteIcon />
+                        </Button>
+                      </Tooltip>
+                      <Tooltip title="Editeaza eveniment">
+                        <Button
+                          sx={{ minWidth: "2px" }}
+                          onClick={() => {
+                            myClick(item);
+                            history.push("/editformpage");
+                          }}
+                        >
+                          <EditIcon />
+                        </Button>
+                      </Tooltip>
+
+                      <Tooltip title="Trimite formular la invitați">
+                        <Button
+                          sx={{ minWidth: "2px" }}
+                          onClick={() => {
+                            myClick(item);
+                            history.push("/sendinvitationspage");
+                          }}
+                        >
+                          <ForwardToInboxIcon />
+                        </Button>
+                      </Tooltip>
+                      <Tooltip title="Vizualizeaza rezultate formular">
+                        <Button
+                          sx={{ minWidth: "2px" }}
+                          onClick={() => {
+                            myClick(item);
+                            history.push("/resultpage");
+                            history.go(0);
+                          }}
+                        >
+                          <ContentPasteSearchIcon />
+                        </Button>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Grid>
+        )}
+        {!load && (
+          <Grid
+            item
+            xs={12}
+            sx={{
+              marginTop: "12vh",
+            }}
           >
-            Adaugă un eveniment
-          </Button>
-        </Grid>
-        {box && (
+            <Button
+              variant="contained"
+              onClick={() => {
+                history.push("/registerevent");
+                history.go(0);
+              }}
+            >
+              Adaugă un eveniment
+            </Button>
+          </Grid>
+        )}
+        {box && !loader && (
           <Grid item xs={12}>
             <Box sx={{ border: 2 }}>
               <label> Altii au ales ... </label>
@@ -333,25 +351,27 @@ function MyEventPage() {
       <Header />
       {loader && <OverlayLoader />}
 
-      <div id="notesucces">Eveniment sters cu succes!</div>
-      <div id="note">Eroare la stergerea evenimentului, incearca din nou!</div>
+      <Snackbar
+        open={openError}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="error">
+          Eroare la stergere!
+        </Alert>
+      </Snackbar>
 
-      <Dialog open={open} onClose={handleToClose}>
-        <DialogTitle>{"Ce actiune vrei sa faci?"}</DialogTitle>
-
-        <DialogActions>
-          <Button
-            onClick={() => history.push("/editformpage")}
-            color="primary"
-            autoFocus
-          >
-            Editare
-          </Button>
-          <Button onClick={() => DeleteEvent()} color="primary" autoFocus>
-            Stergere
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Snackbar
+        open={openSucces}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="success">
+          Eveniment sters cu succes!
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }

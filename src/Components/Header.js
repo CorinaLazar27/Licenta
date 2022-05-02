@@ -142,9 +142,12 @@ const Header = (props) => {
                       <Typography variant="h6">Pagina principală</Typography>
                     </MenuItem>
                     <MenuItem
-                      onClick={() => setAnchor(null)}
+                      onClick={() => {
+                        setAnchor(null);
+                        history.push("/registerevent");
+                        history.go(0);
+                      }}
                       component={Link}
-                      to="/registerevent"
                     >
                       <ListItemIcon>
                         <AddIcon />
@@ -165,7 +168,9 @@ const Header = (props) => {
                       <Typography variant="h6">Evenimentele mele</Typography>
                     </MenuItem>
                     <MenuItem
-                      onClick={() => setAnchor(null)}
+                      onClick={() => {
+                        setAnchor(null);
+                      }}
                       component={Link}
                       to="/profilepage"
                     >
@@ -211,7 +216,11 @@ const Header = (props) => {
                   <Button
                     variant="text"
                     component={Link}
-                    to="/registerevent"
+                    onClick={() => {
+                      setAnchor(null);
+                      history.push("/registerevent");
+                      history.go(0);
+                    }}
                     color="default"
                   >
                     <AddIcon />

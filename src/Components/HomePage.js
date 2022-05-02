@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useHistory } from "react-router-dom";
 import Header from "./Header";
@@ -39,6 +39,32 @@ function HomePage() {
   }
 
   window.onload = GetElements;
+  const breakpoints = {
+    xs: 0,
+    sm: 600,
+    md: 960,
+    lg: 1280,
+    xl: 1920,
+  };
+  const getSize = (width) => {
+    if (width < breakpoints.sm) {
+      return "18px";
+    } else if (width < breakpoints.md) {
+      return "20px";
+    } else if (width < breakpoints.lg) {
+      return "35px";
+    } else if (width < breakpoints.xl) {
+      return "35px";
+    } else return "35px";
+  };
+  const [size, setSize] = useState(getSize(window.innerWidth));
+  const updateDimensions = () => {
+    setSize(getSize(window.innerWidth));
+  };
+  useEffect(() => {
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
 
   return (
     <Container
@@ -64,11 +90,12 @@ function HomePage() {
       >
         <Grid container rowSpacing={"3vh"}>
           <Grid item xs={12}>
-            <Typography variant="h4">Salut, {nume}!</Typography>
+            <Typography style={{ fontSize: size }}>Salut, {nume}!</Typography>
           </Grid>
           <Grid item xs={12}>
             <Button
               startIcon={<AddIcon />}
+              sx={{ fontSize: size - 15 }}
               variant="outlined"
               onClick={() => history.push("/registerevent")}
             >
@@ -80,6 +107,7 @@ function HomePage() {
             <Button
               startIcon={<EventIcon />}
               variant="outlined"
+              sx={{ fontSize: size - 15 }}
               onClick={() => {
                 history.push("/myeventpage");
                 history.go(0);

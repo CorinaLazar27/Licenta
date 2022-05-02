@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useHistory } from "react-router-dom";
 import "react-dropdown/style.css";
@@ -118,6 +118,56 @@ function RegisterEventPage() {
     budget: Yup.number().typeError("Introdu doar cifre!"),
   });
 
+  const breakpoints = {
+    xs: 0,
+    sm: 600,
+    md: 960,
+    lg: 1280,
+    xl: 1920,
+  };
+  const getColumns = (width) => {
+    if (width < breakpoints.sm) {
+      return 12;
+    } else if (width < breakpoints.md) {
+      return 12;
+    } else if (width < breakpoints.lg) {
+      return 6;
+    } else if (width < breakpoints.xl) {
+      return 6;
+    } else {
+      return 6;
+    }
+  };
+  const [columns, setColumns] = useState(getColumns(window.innerWidth));
+
+  const getSize = (width) => {
+    if (width < breakpoints.sm) {
+      return "18px";
+    } else if (width < breakpoints.md) {
+      return "20px";
+    } else if (width < breakpoints.lg) {
+      return "35px";
+    } else if (width < breakpoints.xl) {
+      return "35px";
+    } else return "35px";
+  };
+  const [size, setSize] = useState(getSize(window.innerWidth));
+  const updateDimensionsSize = () => {
+    setSize(getSize(window.innerWidth));
+  };
+  useEffect(() => {
+    window.addEventListener("resize", updateDimensionsSize);
+    return () => window.removeEventListener("resize", updateDimensionsSize);
+  }, []);
+
+  const updateDimensions = () => {
+    setColumns(getColumns(window.innerWidth));
+  };
+  useEffect(() => {
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
+
   return (
     <div className="Container">
       <Header />
@@ -167,7 +217,9 @@ function RegisterEventPage() {
             }}
           >
             <Grid item xs={12}>
-              <Typography variant="h4">Înregistrează un eveniment</Typography>
+              <Typography style={{ fontSize: size }}>
+                Înregistrează un eveniment
+              </Typography>
             </Grid>
             <Grid item xs={12}>
               <FormikSelectSimple
@@ -178,14 +230,14 @@ function RegisterEventPage() {
               />
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={columns}>
               <FormikTextField
                 id="nrguests"
                 label="Număr invitați*"
                 name="nrguests"
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={columns}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <FormikDatePicker
                   name="date"
@@ -195,15 +247,15 @@ function RegisterEventPage() {
               </LocalizationProvider>
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={columns}>
               <FormikTextField id="location" label="Locație" name="location" />
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={columns}>
               <FormikTextField id="budget" label="Buget (LEI)" name="budget" />
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={columns}>
               <Box
                 sx={{
                   border: "2px solid",
@@ -234,7 +286,7 @@ function RegisterEventPage() {
               </Box>
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={columns}>
               <Box
                 sx={{
                   border: "2px solid",
@@ -265,7 +317,7 @@ function RegisterEventPage() {
               </Box>
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={columns}>
               <Box
                 sx={{
                   border: "2px solid",
@@ -296,7 +348,7 @@ function RegisterEventPage() {
               </Box>
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={columns}>
               <Box
                 sx={{
                   border: "2px solid",
@@ -327,7 +379,7 @@ function RegisterEventPage() {
               </Box>
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={columns}>
               <Box
                 sx={{
                   border: "2px solid",
@@ -358,7 +410,7 @@ function RegisterEventPage() {
               </Box>
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={columns}>
               <Box
                 sx={{
                   border: "2px solid",
@@ -388,7 +440,7 @@ function RegisterEventPage() {
                 </FormLabel>
               </Box>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={columns}>
               <FormikSelectSimple
                 id="drinks"
                 name="drinks"
@@ -397,7 +449,7 @@ function RegisterEventPage() {
               />
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={columns}>
               <FormikSelectSimple
                 id="ringDance"
                 name="ringDance"

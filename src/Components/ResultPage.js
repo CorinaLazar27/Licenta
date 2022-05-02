@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useHistory } from "react-router-dom";
 import Header from "./Header";
@@ -22,6 +22,9 @@ function ResultPage() {
   const event = window.localStorage.getItem("eveniment");
   const [data, setData] = useState([]);
   const [loader, setLoader] = useState(true);
+  const [error, setError] = useState(false);
+  const [load, setLoad] = useState(true);
+
   const dataAperitive = [
     { argument: "Traditional", value: data.Rating_aperitiv_traditional },
     { argument: "Vegetarian", value: data.Rating_aperitiv_vegetarian },
@@ -65,128 +68,183 @@ function ResultPage() {
     })
       .then((response) => {
         setLoader(false);
+        setLoad(false);
         console.log(response.data);
         setData(response.data);
       })
       .catch((error) => {
         if (error.response) {
           setLoader(false);
+          setLoad(false);
+          setError(true);
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
         }
       });
   }
+
+  const breakpoints = {
+    xs: 0,
+    sm: 600,
+    md: 960,
+    lg: 1280,
+    xl: 1920,
+  };
+  const getColumns = (width) => {
+    if (width < breakpoints.sm) {
+      return 12;
+    } else if (width < breakpoints.md) {
+      return 12;
+    } else if (width < breakpoints.lg) {
+      return 6;
+    } else if (width < breakpoints.xl) {
+      return 6;
+    } else {
+      return 6;
+    }
+  };
+  const [columns, setColumns] = useState(getColumns(window.innerWidth));
+
+  const updateDimensions = () => {
+    setColumns(getColumns(window.innerWidth));
+  };
+  useEffect(() => {
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
   return (
     <nav className="nav">
       <Header />
       {loader && <OverlayLoader />}
       <div className="home1">
-        <Grid
-          container
-          spacing={5}
-          sx={{
-            display: "flex",
-            alignContent: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Grid item xs={6}>
-            <InputLabel>Cel mai votat aperitiv</InputLabel>
-            <Input
-              value={data.Highest_Rate_Aperitiv}
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <InputLabel>Cel mai votat fel 1</InputLabel>
-            <Input
-              value={data.Highest_Rate_Type1}
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <InputLabel>Cel mai votat fel 2</InputLabel>
-            <Input
-              label="Cel mai votat fel 2"
-              value={data.Highest_Rate_Type2}
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <InputLabel>Cel mai votat tip de muzica</InputLabel>
-            <Input
-              value={data.Highest_Rate_Music}
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <label>Rating aperitive</label>
-            <Paper>
-              <Chart data={dataAperitive} sx={{ backgroundColor: "white" }}>
-                <ArgumentAxis />
-                <ValueAxis max={3} />
-
-                <BarSeries
-                  //barWidth={0.2}
-                  valueField="value"
-                  argumentField="argument"
-                  color="purple"
+        {!load && (
+          <Grid
+            container
+            spacing={5}
+            sx={{
+              display: "flex",
+              alignContent: "center",
+              justifyContent: "center",
+            }}
+          >
+            {error && !load && (
+              <Grid item xs={12}>
+                <Typography> Încă nu sunt răspunsuri la chestionar!</Typography>
+              </Grid>
+            )}
+            {!error && !load && (
+              <Grid item xs={columns}>
+                <InputLabel>Cel mai votat aperitiv</InputLabel>
+                <Input
+                  value={data.Highest_Rate_Aperitiv}
+                  InputProps={{
+                    readOnly: true,
+                  }}
                 />
-              </Chart>
-            </Paper>
-          </Grid>
-
-          <Grid item xs={6}>
-            <label>Rating fel 1</label>
-            <Paper>
-              <Chart data={dataType1} sx={{ backgroundColor: "white" }}>
-                <ArgumentAxis />
-                <ValueAxis max={5} />
-
-                <BarSeries
-                  valueField="value"
-                  argumentField="argument"
-                  color="green"
+              </Grid>
+            )}
+            {!error && !load && (
+              <Grid item xs={columns}>
+                <InputLabel>Cel mai votat fel 1</InputLabel>
+                <Input
+                  value={data.Highest_Rate_Type1}
+                  InputProps={{
+                    readOnly: true,
+                  }}
                 />
-              </Chart>
-            </Paper>
-          </Grid>
-          <Grid item xs={6}>
-            <label>Rating fel 2</label>
-            <Paper>
-              <Chart data={dataType2} sx={{ backgroundColor: "white" }}>
-                <ArgumentAxis />
-                <ValueAxis max={5} />
-
-                <BarSeries valueField="value" argumentField="argument" />
-              </Chart>
-            </Paper>
-          </Grid>
-          <Grid item xs={6}>
-            <label>Rating muzica</label>
-            <Paper>
-              <Chart data={dataMusic} sx={{ backgroundColor: "white" }}>
-                <ArgumentAxis />
-                <ValueAxis max={5} />
-
-                <BarSeries
-                  valueField="value"
-                  argumentField="argument"
-                  color="pink"
+              </Grid>
+            )}
+            {!error && !load && (
+              <Grid item xs={columns}>
+                <InputLabel>Cel mai votat fel 2</InputLabel>
+                <Input
+                  label="Cel mai votat fel 2"
+                  value={data.Highest_Rate_Type2}
+                  InputProps={{
+                    readOnly: true,
+                  }}
                 />
-              </Chart>
-            </Paper>
+              </Grid>
+            )}
+            {!error && !load && (
+              <Grid item xs={columns}>
+                <InputLabel>Cel mai votat tip de muzica</InputLabel>
+                <Input
+                  value={data.Highest_Rate_Music}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
+              </Grid>
+            )}
+            {!error && !load && (
+              <Grid item xs={columns}>
+                <label>Rating aperitive</label>
+                <Paper>
+                  <Chart data={dataAperitive} sx={{ backgroundColor: "white" }}>
+                    <ArgumentAxis />
+                    <ValueAxis max={3} />
+
+                    <BarSeries
+                      //barWidth={0.2}
+                      valueField="value"
+                      argumentField="argument"
+                      color="purple"
+                    />
+                  </Chart>
+                </Paper>
+              </Grid>
+            )}
+            {!error && !load && (
+              <Grid item xs={columns}>
+                <label>Rating fel 1</label>
+                <Paper>
+                  <Chart data={dataType1} sx={{ backgroundColor: "white" }}>
+                    <ArgumentAxis />
+                    <ValueAxis max={5} />
+
+                    <BarSeries
+                      valueField="value"
+                      argumentField="argument"
+                      color="green"
+                    />
+                  </Chart>
+                </Paper>
+              </Grid>
+            )}
+            {!error && !load && (
+              <Grid item xs={columns}>
+                <label>Rating fel 2</label>
+                <Paper>
+                  <Chart data={dataType2} sx={{ backgroundColor: "white" }}>
+                    <ArgumentAxis />
+                    <ValueAxis max={5} />
+
+                    <BarSeries valueField="value" argumentField="argument" />
+                  </Chart>
+                </Paper>
+              </Grid>
+            )}
+            {!error && !load && (
+              <Grid item xs={columns}>
+                <label>Rating muzica</label>
+                <Paper>
+                  <Chart data={dataMusic} sx={{ backgroundColor: "white" }}>
+                    <ArgumentAxis />
+                    <ValueAxis max={5} />
+
+                    <BarSeries
+                      valueField="value"
+                      argumentField="argument"
+                      color="pink"
+                    />
+                  </Chart>
+                </Paper>
+              </Grid>
+            )}
           </Grid>
-        </Grid>
+        )}
       </div>
     </nav>
   );
