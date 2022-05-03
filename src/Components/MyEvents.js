@@ -107,6 +107,7 @@ function MyEventPage() {
         if (error.response) {
           setLoader(false);
           setLoad(false);
+          setNoData(true);
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
@@ -202,8 +203,8 @@ function MyEventPage() {
     <Container
       maxWidth={false}
       sx={{
-        backgroundColor: "#FFD59E",
-        backgroundSize: "cover",
+        // backgroundColor: "#FFD59E",
+        // backgroundSize: "cover",
         display: "flex",
         minHeight: "100vh",
         justifyContent: "center",

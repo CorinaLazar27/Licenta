@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import logo from "../Image/logo.png";
+
 import { useHistory } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { NavLink } from "react-router-dom";
-import Dropdown from "react-dropdown";
-import { CircleArrow as ScrollUpButton } from "react-scroll-up-button";
+
 import axios from "axios";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import Header from "./Header";
 
-import { Box, Button } from "@mui/material";
+import { Box, Button, Grid } from "@mui/material";
 import OverlayLoader from "./OverlayLoader";
-import { LoadingButton } from "@mui/lab";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 function EditFormPage() {
   const history = useHistory();
@@ -148,9 +145,33 @@ function EditFormPage() {
       <Box
         sx={{
           minWidth: "100vw",
-          marginTop: "8rem",
+          marginTop: "4rem",
         }}
       >
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "left",
+            margin: "2rem",
+          }}
+        >
+          <Button
+            sx={{
+              fontSize: "2vw",
+            }}
+            startIcon={<ArrowBackIcon />}
+            variant="contained"
+            onClick={() => {
+              history.push("/myeventpage");
+              history.go(0);
+            }}
+          >
+            Înapoi
+          </Button>
+        </Grid>
         <div className="card-header">{event}</div>
         <div className="card-body">
           <form>

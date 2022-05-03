@@ -1,17 +1,35 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import logo from "../Image/logo.png";
 import { useHistory } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { NavLink } from "react-router-dom";
-import Dropdown from "react-dropdown";
-import { CircleArrow as ScrollUpButton } from "react-scroll-up-button";
 import "react-dropdown/style.css";
 import emailjs from "emailjs-com";
 import Header from "./Header";
+import { Container, Grid, Typography, Button } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { TextField } from "@mui/material";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 function SendInvitationsPage() {
   const history = useHistory();
+
+  const nume = window.localStorage.getItem("nume");
+  const eveniment = window.localStorage.getItem("eveniment");
+  const data = window.localStorage.getItem("dataeveniment");
+  const messageValue =
+    "Salut! Te astept în data de: " +
+    data +
+    " la " +
+    eveniment.toLocaleLowerCase() +
+    ". " +
+    "\n" +
+    "Te rugăm să completezi formularul de la următorul link pentru a afla preferințele tale legate de evenimentul la care îmi doresc să participi: https://complete-form.netlify.app/ " +
+    "\n" +
+    "Mulțumesc foarte mult!";
+  const [loading, setLoading] = useState(false);
 
   const [formValues, setFormValues] = useState([{ emailInvitat: "" }]);
 
@@ -23,33 +41,32 @@ function SendInvitationsPage() {
 
   let addFormFields = () => {
     setFormValues([...formValues, { emailInvitat: "" }]);
+    console.log(formValues);
   };
 
   let removeFormFields = (i) => {
     let newFormValues = [...formValues];
     newFormValues.splice(i, 1);
     setFormValues(newFormValues);
+    console.log(formValues);
   };
+  const [openError, setOpenError] = useState(false);
+  const [openSucces, setOpenSucces] = useState(false);
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
 
-  let handleSubmit = (event) => {
-    event.preventDefault();
-    alert(JSON.stringify(formValues));
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+    setOpenSucces(false);
   };
-
-  var mainListDiv = document.getElementById("mainListDiv"),
-    mediaButton = document.getElementById("mediaButton");
-
-  /*mediaButton.onclick = function () {
-  
-  "use strict";
-  
-  mainListDiv.classList.toggle("show_list");
-  mediaButton.classList.toggle("active");
-
-};*/
 
   function sendEmail(e) {
     e.preventDefault();
+    setLoading(true);
     emailjs
       .sendForm(
         "service_n4e6ik8",
@@ -59,90 +76,150 @@ function SendInvitationsPage() {
       )
       .then((res) => {
         document.getElementById("inputinv").value = "";
-
+        setLoading(false);
+        setOpenSucces(true);
         console.log(res);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+        setOpenError(true);
+      });
   }
-  return (
-    <div className="nav">
-      <Header />
-      <div className="home1">
-        <div class="container1">
-          <form onSubmit={sendEmail}>
-            <div class="row1">
-              <div class="col-25">
-                <label for="subject">Your Name</label>
-              </div>
-              <div class="col-75">
-                <input id="inputinv" name="name" />
-              </div>
-            </div>
-            <div class="row1">
-              {formValues.map((element, index) => (
-                <div className="form-inline" key={index}>
-                  <div class="col-3">
-                    <label for="fname">Email</label>
-                  </div>
-                  <div class="col-6">
-                    <input
-                      id="inputinv"
-                      name="emailInvitat"
-                      value={element.emailInvitat || ""}
-                      onChange={(e) => handleChange(index, e)}
-                      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                    />
-                  </div>
-                  {index ? (
-                    <div className="col-3">
-                      <button
-                        type="button"
-                        className="button btn fa fa-minus"
-                        onClick={() => removeFormFields(index)}
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ) : null}
-                </div>
-              ))}
-              <div className="button-section">
-                <button
-                  className="button btn fa fa-plus"
-                  type="button"
-                  onClick={() => addFormFields()}
-                >
-                  Add
-                </button>
-              </div>
-            </div>
 
-            <div class="row1">
-              <div class="col-25">
-                <label for="subject">Message</label>
-              </div>
-              <div class="col-75">
-                <textarea
+  return (
+    <Container
+      maxWidth={false}
+      sx={{
+        display: "flex",
+        minHeight: "100vh",
+        alignItems: "flex-start",
+        textAlign: "center",
+      }}
+    >
+      <Snackbar
+        open={openError}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="error">
+          Eroare la trimiterea chestionarului!
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openSucces}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="success">
+          Chestionar trimis cu succes!
+        </Alert>
+      </Snackbar>
+      <Header />
+      <Grid container sx={{ marginTop: "10vh", minHeight: "40vh" }}>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "left",
+            margin: "1rem",
+          }}
+        >
+          <Button
+            sx={{
+              fontSize: "2vw",
+            }}
+            startIcon={<ArrowBackIcon />}
+            variant="contained"
+            onClick={() => {
+              history.push("/myeventpage");
+              history.go(0);
+            }}
+          >
+            Înapoi
+          </Button>
+        </Grid>
+        <Grid item xs={12} sx={{ padding: "2vh" }}>
+          <form onSubmit={sendEmail}>
+            <Grid container rowSpacing={3}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  readOnly
+                  id="name"
+                  name="name"
+                  label="Nume*"
+                  variant="standard"
+                  value={nume}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                {formValues.map((element, index) => {
+                  return (
+                    <div>
+                      <TextField
+                        fullWidth
+                        id="inputinv"
+                        type="email"
+                        name="emailInvitat"
+                        label="Email"
+                        variant="standard"
+                        value={element.emailInvitat || ""}
+                        onChange={(e) => handleChange(index, e)}
+                      />
+
+                      {index ? (
+                        <div className="col-3">
+                          <Button
+                            startIcon={<DeleteOutlineIcon />}
+                            onClick={() => removeFormFields(index)}
+                          >
+                            Șterge
+                          </Button>
+                        </div>
+                      ) : null}
+                    </div>
+                  );
+                })}
+
+                <Button startIcon={<AddIcon />} onClick={() => addFormFields()}>
+                  Adaugă email
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
                   id="message"
                   name="message"
-                  value="Hello!
-                    Please complete this form:  https://complete-form.netlify.app/  to make our event very nice :)
-                   
-                    Thank you!"
-                  readOnly
-                ></textarea>
-              </div>
-            </div>
-            <br />
-            <div class="row1">
-              <button className="primary submit" type="submit">
-                Send invitations
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+                  label="Mesaj"
+                  multiline
+                  rows={5}
+                  value={messageValue}
+                />
+                <Typography sx={{ color: "red", marginBottom: "1vh" }}>
+                  Puteți modifica textul mesajului, dar să nu ștergeți link-ul
+                  pentru completarea chestionarului!!
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <LoadingButton
+                  loading={loading}
+                  type="submit"
+                  variant="contained"
+                >
+                  Trimite{" "}
+                </LoadingButton>
+              </Grid>
+            </Grid>
+          </form>{" "}
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
 export default SendInvitationsPage;

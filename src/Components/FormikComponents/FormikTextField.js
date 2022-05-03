@@ -12,7 +12,9 @@ export const FormikTextField = (props) => {
       label={props.label}
       type={props.type ? props.type : "text"}
       fullWidth
-      value={field.value ?? ""}
+      value={field.value ?? props.value ?? ""}
+      rows={props.rows}
+      multiline={props.multiline ?? false}
       onChange={field.onChange}
       error={(meta.touched && Boolean(meta.error)) || Boolean(props.apiError)}
       helperText={meta.touched && meta.error}

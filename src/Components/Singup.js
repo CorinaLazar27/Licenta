@@ -113,8 +113,8 @@ function SingUp() {
   return (
     <Container
       sx={{
-        backgroundImage: `url("${login16}")`,
-        backgroundSize: "cover",
+        // backgroundImage: `url("${login16}")`,
+        // backgroundSize: "cover",
         display: "flex",
         minHeight: "100vh",
         minWidth: "100vw",
@@ -123,7 +123,7 @@ function SingUp() {
       }}
     >
       <FirstHeader />
-      <Footer />
+
       <Box
         sx={{
           background: "rgb(255, 255, 255)",

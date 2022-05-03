@@ -21,9 +21,8 @@ import login17 from "../Image/login17.jpg";
 import { Container } from "@mui/material";
 import { Box } from "@mui/system";
 import * as Yup from "yup";
-import Header from "./Header";
+
 import FirstHeader from "./FirstHeader";
-import Footer from "./Footer";
 
 function SingIn() {
   const history = useHistory();
@@ -126,8 +125,8 @@ function SingIn() {
   return (
     <Container
       sx={{
-        backgroundImage: `url("${login16}")`,
-        backgroundSize: "cover",
+        // backgroundImage: `url("${login16}")`,
+        // backgroundSize: "cover",
         display: "flex",
         minHeight: "100vh",
         minWidth: "100vw",
@@ -136,7 +135,7 @@ function SingIn() {
       }}
     >
       <FirstHeader />
-      <Footer />
+
       <Box
         sx={{
           background: "rgb(255, 255, 255)",

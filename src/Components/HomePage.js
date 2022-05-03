@@ -14,8 +14,6 @@ function HomePage() {
   const email = window.localStorage.getItem("email");
   const nume = window.localStorage.getItem("nume");
 
-  var note = document.getElementById("note");
-
   const [data, setData] = useState("");
   function GetElements(event) {
     axios({
@@ -70,8 +68,8 @@ function HomePage() {
     <Container
       maxWidth={false}
       sx={{
-        backgroundColor: "#FFD59E",
-        backgroundSize: "cover",
+        // backgroundColor: "#FFD59E",
+        // backgroundSize: "cover",
         display: "flex",
         minHeight: "100vh",
         justifyContent: "center",
@@ -97,7 +95,10 @@ function HomePage() {
               startIcon={<AddIcon />}
               sx={{ fontSize: size - 15 }}
               variant="outlined"
-              onClick={() => history.push("/registerevent")}
+              onClick={() => {
+                history.push("/registerevent");
+                history.go(0);
+              }}
             >
               Creează
             </Button>
