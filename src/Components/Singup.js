@@ -127,7 +127,6 @@ function SingUp() {
       <Box
         sx={{
           background: "rgb(255, 255, 255)",
-          borderRadius: "20%",
           boxShadow: "2px 4px 6px rgba(0, 0, 0, 1)",
           padding: "4rem",
           textAlign: "center",

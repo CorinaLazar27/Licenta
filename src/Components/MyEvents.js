@@ -201,7 +201,7 @@ function MyEventPage() {
 
   return (
     <Container
-      maxWidth={false}
+      maxWidth={"100vw"}
       sx={{
         // backgroundColor: "#FFD59E",
         // backgroundSize: "cover",
@@ -224,12 +224,19 @@ function MyEventPage() {
           </Grid>
         )}
         {!noData && !load && (
-          <Grid item xs={12}>
-            <Table>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Table sx={{ maxWidth: "80vw" }}>
               <TableHead>
                 <TableRow>
                   <TableCell padding="checkbox"></TableCell>
-
                   <TableCell> Tipul evenimentului </TableCell>
                   <TableCell> Data </TableCell>
                   <TableCell> Restaurant </TableCell>
@@ -309,7 +316,7 @@ function MyEventPage() {
             item
             xs={12}
             sx={{
-              marginTop: "12vh",
+              marginTop: "5vh",
             }}
           >
             <Button

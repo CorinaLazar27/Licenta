@@ -5,13 +5,20 @@ import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import Dropdown from "react-dropdown";
-
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import "react-dropdown/style.css";
 import axios from "axios";
-import $ from "jquery";
 
 import emailjs from "emailjs-com";
 import Header from "./Header";
+import { Container, Grid, Box, Button, TextField } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 function SettingsPage() {
   const email = window.localStorage.getItem("email");
@@ -20,13 +27,16 @@ function SettingsPage() {
   const password = window.localStorage.getItem("parola");
   const location = window.localStorage.getItem("locatie");
   const phonenumber = window.localStorage.getItem("numartelefon");
-
+  const [loading, setLoading] = useState(false);
+  const [newpassword, setNewPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
   function sendEmail(e) {
+    setLoading(true);
     e.preventDefault();
     emailjs
       .sendForm(
         "service_n4e6ik8",
-        "template_ent1jts",
+        "template_4fpqkau",
         e.target,
         "user_K0LHWwDahklB8kPrwKB2k"
       )
@@ -36,11 +46,20 @@ function SettingsPage() {
         document.getElementById("subject").value = "";
         document.getElementById("message").value = "";
         console.log(res);
+        setLoading(false);
+        setTimeout(window.location.reload(false), 3000);
+        setOpenSuccesEmail(true);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setLoading(false);
+        setOpenErrorEmail(true);
+        setTimeout(window.location.reload(false), 3000);
+        console.log(err);
+      });
   }
 
   function UpdateProfile() {
+    setLoading(true);
     axios({
       method: "POST",
       url: "/updateprofile",
@@ -55,12 +74,18 @@ function SettingsPage() {
     })
       .then((response) => {
         console.log(response.data);
-        if (response.data == "Done") notificare();
+        window.localStorage.setItem("parola", newpassword);
+        setLoading(false);
+        setOpenSuccesPassword(true);
+        setTimeout(window.location.reload(false), 3000);
+        // if (response.data == "Done") notificare();
       })
       .catch((error) => {
-        eroare();
         if (error.response) {
           console.log(error);
+          setLoading(false);
+          setOpenErrorPassword(true);
+          setTimeout(window.location.reload(false), 3000);
           // console.log(error.response)
           // console.log(error.response.status)
           // console.log(error.response.headers)
@@ -68,257 +93,243 @@ function SettingsPage() {
       });
   }
 
-  const [newpassword, setNewPassword] = useState("");
-
-  $(document).ready(function () {
-    // Hide the div
-    $("#notesucces").hide();
-    $("#note").hide();
+  const [openSuccesPassword, setOpenSuccesPassword] = useState(false);
+  const [openErrorPassword, setOpenErrorPassword] = useState(false);
+  const [openDifferentPassword, setOpenDifferentPassword] = useState(false);
+  const [openSuccesEmail, setOpenSuccesEmail] = useState(false);
+  const [openErrorEmail, setOpenErrorEmail] = useState(false);
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
-  function notificare() {
-    // Show the div in 5s
-    $("#notesucces").show();
-    setTimeout(function () {
-      $("#notesucces").fadeOut("fast");
-    }, 3000); // <-- time in milliseconds
-  }
-  function eroare() {
-    // Show the div in 5s
-    $("#note").show();
-    setTimeout(function () {
-      $("#notes").fadeOut("fast");
-    }, 3000); // <-- time in milliseconds
-  }
 
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccesPassword(false);
+    setOpenErrorPassword(false);
+    setOpenDifferentPassword(false);
+    setOpenSuccesEmail(false);
+    setOpenErrorEmail(false);
+  };
   return (
-    <div className="nav">
+    <Container
+      maxWidth={false}
+      sx={{
+        display: "flex",
+        minHeight: "100vh",
+        alignItems: "flex-start",
+        justifyContent: "center",
+        textAlign: "center",
+      }}
+    >
+      <Snackbar
+        open={openSuccesPassword}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="success">
+          Parola a fost schimbată cu succes!
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openErrorPassword}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="error">
+          A apărut o eroare la schimbarea parolei!
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openDifferentPassword}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="error">
+          Nu ați introdus parola curentă corect!
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openSuccesEmail}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="success">
+          Email-ul a fost trimis cu succes!
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openErrorEmail}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="error">
+          Eroare la trimiterea email-ului!
+        </Alert>
+      </Snackbar>
       <Header />
 
-      <div className="home1">
-        <h3>Setari</h3>
-        <br></br>
-        <div id="accordion">
-          <div class="card">
-            <div class="card-header" id="headingOne">
-              <h5 class="mb-0">
-                <button
-                  class="btn"
-                  data-toggle="collapse"
-                  data-target="#collapseOne"
-                  aria-expanded="true"
-                  aria-controls="collapseOne"
-                >
-                  Schimba parola
-                </button>
-              </h5>
-            </div>
-
-            <div
-              id="collapseOne"
-              class="collapse"
-              aria-labelledby="headingOne"
-              data-parent="#accordion"
+      <Box
+        sx={{
+          width: "100vw",
+          padding: "2%",
+          marginTop: "10vh",
+        }}
+      >
+        <Grid container rowSpacing={"10vh"}>
+          <Grid item xs={12}>
+            <h3>Setări</h3>
+          </Grid>
+          <Grid item xs={12}>
+            <Accordion
+              style={{
+                minHeight: "8vh",
+                width: "98vw",
+                backgroundColor: "#F5F4F2",
+                color: "black",
+              }}
             >
-              <div class="card-body">
-                <div id="notesucces">Parola a fost schimbata cu succes!</div>
-                <div id="note">A aparut o eroare la schimbarea parolei!</div>
-
-                <div className="input-group1">
-                  <label>Parola curenta</label>
-                  <input
-                    id="newpassword"
-                    type="password"
-                    onChange={(event) => setNewPassword(event.target.value)}
-                  ></input>
-                </div>
-
-                <div className="input-group1">
-                  <label>Parola noua</label>
-                  <input
-                    id="newpassword"
-                    type="password"
-                    onChange={(event) => {
-                      setNewPassword(event.target.value);
-                      window.localStorage.setItem("parola", event.target.value);
-                    }}
-                  ></input>
-                </div>
-
-                {/* <div className="input-group1">
-       <label>Confirm password</label>
-       <input 
-       id="newpassword"
-       type="password"
-       onChange={(event) => setNewPassword(event.target.value)
-       }></input>
-       </div> */}
-
-                <button
-                  className="btn btn-primary"
-                  onClick={() => UpdateProfile()}
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography>Schimbă parola</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid
+                  container
+                  rowSpacing={2}
+                  sx={{ backgroundColor: "white" }}
+                  padding="1vh"
                 >
-                  Schimba
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-header" id="headingTwo">
-              <h5 class="mb-0">
-                <button
-                  class="btn  collapsed"
-                  data-toggle="collapse"
-                  data-target="#collapseTwo"
-                  aria-expanded="false"
-                  aria-controls="collapseTwo"
-                >
-                  Despre noi
-                </button>
-              </h5>
-            </div>
-            <div
-              id="collapseTwo"
-              class="collapse"
-              aria-labelledby="headingTwo"
-              data-parent="#accordion"
+                  <Grid item xs={12}>
+                    <TextField
+                      id="Parola curentă"
+                      name="Parola curentă"
+                      label="Parola curentă"
+                      type="password"
+                      onChange={(event) =>
+                        setCurrentPassword(event.target.value)
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      id="Parola nouă"
+                      name="Parola nouă"
+                      label="Parola nouă"
+                      type="password"
+                      onChange={(event) => {
+                        setNewPassword(event.target.value);
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sx={{ marginBottom: "1vh" }}>
+                    <LoadingButton
+                      loading={loading}
+                      variant="contained"
+                      onClick={() => {
+                        if (currentPassword == password) UpdateProfile();
+                        else setOpenDifferentPassword(true);
+                      }}
+                    >
+                      Schimbă
+                    </LoadingButton>
+                  </Grid>
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion
+              style={{
+                width: "98vw",
+                minHeight: "8vh",
+                backgroundColor: "#F5F4F2",
+                color: "black",
+              }}
             >
-              <div class="card-body"></div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-header" id="headingThree">
-              <h5 class="mb-0">
-                <button
-                  class="btn  collapsed"
-                  data-toggle="collapse"
-                  data-target="#collapseThree"
-                  aria-expanded="false"
-                  aria-controls="collapseTwo"
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel2a-content"
+                id="panel2a-header"
+              >
+                <Typography>Ajutor</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid
+                  item
+                  xs={12}
+                  sx={{ padding: "2vh", backgroundColor: "white" }}
                 >
-                  Ajutor
-                </button>
-              </h5>
-            </div>
-            <div
-              id="collapseThree"
-              class="collapse"
-              aria-labelledby="headingThree"
-              data-parent="#accordion"
-            >
-              <div class="card-body">
-                <section class="mb-3">
-                  <h3 class="h1-responsive font-weight-bold text-center my-4">
-                    Contacteaza-ne
-                  </h3>
+                  <h3>Contactează-ne</h3>
+                  <h7>
+                    Ai întrebări? Te rugăm nu ezita să ne contactezi! Echipa
+                    noastră îți va raspunde cât de repede poate.
+                  </h7>
+                  <form onSubmit={sendEmail}>
+                    <Grid container rowSpacing={3}>
+                      <Grid item xs={12}>
+                        <TextField
+                          fullWidth
+                          id="name"
+                          name="name"
+                          label="Nume"
+                          variant="standard"
+                          required
+                        />
+                      </Grid>
 
-                  <p class="text-center w-responsive mx-auto ">
-                    Ai intrebari? Te rugam nu ezita sa ne contactezi! Echipa
-                    noastra iti va raspunde cat de repede poate.
-                  </p>
-
-                  <div class="row">
-                    <div class="col-md-9 mb-md-0 mb-5">
-                      <form
-                        id="contact-form"
-                        name="contact-form"
-                        onSubmit={sendEmail}
-                      >
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="md-form mb-0">
-                              <input
-                                type="text"
-                                id="name"
-                                name="name"
-                                class="form-control"
-                              />
-                              <label for="name" class="">
-                                Numele tau
-                              </label>
-                            </div>
-                          </div>
-
-                          <div class="col-md-6">
-                            <div class="md-form mb-0">
-                              <input
-                                type="text"
-                                id="email"
-                                name="email"
-                                class="form-control"
-                              />
-                              <label for="email" class="">
-                                Adresa ta de email
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="row">
-                          <div class="col-md-12">
-                            <div class="md-form mb-0">
-                              <input
-                                type="text"
-                                id="subject"
-                                name="subject"
-                                class="form-control"
-                              />
-                              <label for="subject" class="">
-                                Subiect
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="row">
-                          <div class="col-md-12">
-                            <div class="md-form">
-                              <textarea
-                                type="text"
-                                id="message"
-                                name="message"
-                                rows="2"
-                                class="form-control md-textarea"
-                              ></textarea>
-                              <label for="message">Mesajul tau</label>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="text-center text-md-left">
-                          <button
-                            type="submit"
-                            class="btn btn-outline-secondary"
-                            onclick="document.getElementById('contact-form').submit();"
-                          >
-                            Trimite
-                          </button>
-                        </div>
-                      </form>
-
-                      <div class="status"></div>
-                    </div>
-
-                    <div class="col-md-3 text-center">
-                      <ul class="list-unstyled mb-0">
-                        <li>
-                          <i class="fas fa-phone mt-2 fa-2x"></i>
-                          <p>0760117716</p>
-                        </li>
-
-                        <li>
-                          <i class="fas fa-envelope mt-2 fa-2x"></i>
-                          <p>corina_lazar27@yahoo.com</p>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </section>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+                      <Grid item xs={12}>
+                        <TextField
+                          fullWidth
+                          id="email"
+                          type="email"
+                          name="email"
+                          label="Email"
+                          variant="standard"
+                          required
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          fullWidth
+                          id="subject"
+                          name="subject"
+                          label="Subiect"
+                          required
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          fullWidth
+                          id="message"
+                          name="message"
+                          label="Mesaj"
+                          multiline
+                          rows={5}
+                          required
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <LoadingButton
+                          loading={loading}
+                          type="submit"
+                          variant="contained"
+                        >
+                          Trimite{" "}
+                        </LoadingButton>
+                      </Grid>
+                    </Grid>
+                  </form>{" "}
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
+          </Grid>
+        </Grid>
+      </Box>
+    </Container>
   );
 }
 export default SettingsPage;

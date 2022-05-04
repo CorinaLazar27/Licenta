@@ -149,12 +149,12 @@ function SendInvitationsPage() {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  readOnly
+                  required
                   id="name"
                   name="name"
-                  label="Nume*"
+                  label="Nume"
                   variant="standard"
-                  value={nume}
+                  defaultValue={nume}
                 />
               </Grid>
 
@@ -171,6 +171,7 @@ function SendInvitationsPage() {
                         variant="standard"
                         value={element.emailInvitat || ""}
                         onChange={(e) => handleChange(index, e)}
+                        required
                       />
 
                       {index ? (
@@ -199,7 +200,8 @@ function SendInvitationsPage() {
                   label="Mesaj"
                   multiline
                   rows={5}
-                  value={messageValue}
+                  defaultValue={messageValue}
+                  required
                 />
                 <Typography sx={{ color: "red", marginBottom: "1vh" }}>
                   Puteți modifica textul mesajului, dar să nu ștergeți link-ul
