@@ -120,10 +120,10 @@ function EditFormPage() {
         const res = response.data;
         console.log(res);
         setOpenSucces(true);
-        setTimeout(() => {
-          history.push("/myeventpage");
-          history.go(0);
-        }, 2500);
+        // setTimeout(() => {
+        //   history.push("/myeventpage");
+        //   history.go(0);
+        // }, 2500);
         if (res == "Done") {
           console.log("dONE");
         }

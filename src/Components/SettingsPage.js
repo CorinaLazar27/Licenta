@@ -190,7 +190,7 @@ function SettingsPage() {
             <Accordion
               style={{
                 minHeight: "8vh",
-                width: "98vw",
+                // width: "100vw",
                 backgroundColor: "#F5F4F2",
                 color: "black",
               }}
@@ -244,7 +244,6 @@ function SettingsPage() {
             </Accordion>
             <Accordion
               style={{
-                width: "98vw",
                 minHeight: "8vh",
                 backgroundColor: "#F5F4F2",
                 color: "black",

@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import logo from "../Image/logo.png";
+
 import { useHistory } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { NavLink } from "react-router-dom";
-import Dropdown from "react-dropdown";
-import Checkbox from "@mui/material/Checkbox";
+
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
@@ -13,7 +10,7 @@ import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
+
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import OverlayLoader from "./OverlayLoader";
@@ -27,22 +24,14 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "@mui/material/Button";
-import {
-  Container,
-  Box,
-  Grid,
-  Typography,
-  responsiveFontSizes,
-} from "@mui/material";
-
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import { Container, Box, Grid, Typography, TextField } from "@mui/material";
 import Header from "./Header";
 import { Tooltip } from "@material-ui/core";
-import { IconButton } from "material-ui";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import CommentIcon from "@mui/icons-material/Comment";
 import MuiAlert from "@mui/material/Alert";
+import { LoadingButton } from "@mui/lab";
 
 function MyEventPage() {
   const history = useHistory();
@@ -56,14 +45,24 @@ function MyEventPage() {
   const [box, setBox] = useState(false);
   const [noData, setNoData] = useState(false);
   const [load, setLoad] = useState(true);
+  const [restaurant, setRestaurant] = useState("");
+  const [openDialogDelete, setOpenDialogDelete] = useState(false);
+  const [sure, setSure] = useState(false);
 
   const [locationsRecomanded, setLocationsRecomanded] = useState([]);
+  const [openInputText, setOpenInputText] = useState(false);
+  const [noRecomandations, setNoRecomandations] = useState(false);
+
+  const handleToClose = () => {
+    setOpenDialogDelete(false);
+  };
 
   useEffect(() => {
     GetMyEvents();
   }, []);
 
   function GetLocationRecomandation() {
+    setNoRecomandations(false);
     axios({
       method: "POST",
       url: "/getRecomandations",
@@ -76,11 +75,23 @@ function MyEventPage() {
         setLoader(false);
         console.log(response.data);
         setLocationsRecomanded(Object.values(response.data));
-        console.log(locationsRecomanded);
+        if (
+          Object.values(response.data).length != 0 ||
+          Object.values(response.data)[0] != ""
+        )
+          setLocationsRecomanded(Object.values(response.data));
+        else {
+          setNoRecomandations(true);
+          console.log("NU SUNT LOCATII");
+          setLocationsRecomanded([]);
+        }
+        console.log("locationRecomanded", locationsRecomanded);
+        console.log("AAA", Object.values(response.data)[0]);
       })
       .catch((error) => {
         if (error.response) {
           setLoader(false);
+          setNoRecomandations(true);
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
@@ -101,6 +112,7 @@ function MyEventPage() {
         setLoad(false);
         setData(response.data.results);
         console.log(response.data.results.length);
+        console.log(response.data.results.location);
         if (response.data.results.length === 0) setNoData(true);
       })
       .catch((error) => {
@@ -135,7 +147,7 @@ function MyEventPage() {
     event.preventDefault();
   }
 
-  function DeleteEvent(item) {
+  const DeleteEvent = (item) => {
     setLoader(true);
     axios({
       method: "POST",
@@ -161,12 +173,60 @@ function MyEventPage() {
           console.log(error.response.headers);
         }
       });
-  }
+  };
 
   function chooseLocation() {
     setLoader(true);
     setBox(true);
     GetLocationRecomandation();
+  }
+
+  const [loading, setLoading] = useState(false);
+  const [openSuccesLocation, setOpenSuccesLocation] = useState(false);
+  const [openErrorLocation, setOpenErrorLocation] = useState(false);
+  function UpdateForm() {
+    setLoading(true);
+    axios({
+      method: "POST",
+      url: "/updateform",
+      data: {
+        email: email,
+        event: event,
+        date: window.localStorage.getItem("dataeveniment"),
+        nrguests: window.localStorage.getItem("invitati"),
+        location: window.localStorage.getItem("locatie"),
+        budget: window.localStorage.getItem("buget"),
+        liveband: window.localStorage.getItem("liveband"),
+        artisticmoment: window.localStorage.getItem("momentartistic"),
+        photographer: window.localStorage.getItem("fotograf"),
+        videorecording: window.localStorage.getItem("video"),
+        candybar: window.localStorage.getItem("candybar"),
+        fruitsbar: window.localStorage.getItem("fruitsbar"),
+        drinks: window.localStorage.getItem("bauturi"),
+        ringdance: window.localStorage.getItem("ringdans"),
+      },
+    })
+      .then((response) => {
+        const res = response.data;
+        console.log(res);
+        //setOpenSuccesLocation(true);
+        setTimeout(() => {
+          history.push("/myeventpage");
+          history.go(0);
+        }, 2000);
+        if (res == "Done") {
+          console.log("dONE");
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          setOpenErrorLocation(true);
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        }
+      })
+      .finally(() => setLoading(false));
   }
 
   function myClick(event) {
@@ -254,8 +314,18 @@ function MyEventPage() {
                       {item.RowKey}
                     </TableCell>
                     <TableCell onClick={() => myClick(item)}>
-                      {item.Location !== null && item.Location}
-                      <Button onClick={() => chooseLocation()}>Alege</Button>
+                      {item.Location != "" && item.Location}
+
+                      {item.Location == "" && (
+                        <Button
+                          onClick={() => {
+                            setOpenInputText(true);
+                            chooseLocation();
+                          }}
+                        >
+                          Alege
+                        </Button>
+                      )}
                     </TableCell>
                     <TableCell>
                       <Tooltip title="Anulare eveniment">
@@ -263,6 +333,10 @@ function MyEventPage() {
                           sx={{ minWidth: "2px" }}
                           onClick={() => {
                             myClick(item);
+                            // setSure(false);
+                            // setOpenDialogDelete(true);
+
+                            // if (sure == true)
                             DeleteEvent(item);
                           }}
                         >
@@ -333,25 +407,97 @@ function MyEventPage() {
         {box && !loader && (
           <Grid item xs={12}>
             <Box sx={{ border: 2 }}>
-              <label> Altii au ales ... </label>
-
-              <List sx={{ width: "100%", maxWidth: 360 }}>
+              <label> Alții au ales ... </label>
+              <Grid
+                container
+                sx={{ justifyContent: "center", marginBottom: "2vh" }}
+              >
+                {noRecomandations && (
+                  <h6>
+                    Nu există recomandări pentru evenimentul dumneavoastră..
+                  </h6>
+                )}
                 {locationsRecomanded.map((location) => (
-                  <ListItem key={location}>
-                    <ListItemText primary={location} />
-                    <button
-                      onClick={() => console.log(location)}
-                      style={{
-                        backgroundColor: "pink",
-                        height: "5vh",
-                        width: "5vw",
-                      }}
+                  <Card
+                    style={{
+                      backgroundColor: "#F5F4F2",
+                      color: "black",
+                      minHeight: "10vh",
+                      minWidth: "10vw",
+                      marginRight: "2vw",
+                    }}
+                  >
+                    <CardContent>
+                      <Typography
+                        sx={{
+                          color: "black",
+                        }}
+                      >
+                        {location}
+                      </Typography>
+                    </CardContent>
+                    <CardActions
+                      sx={{ justifyContent: "center", alignItems: "center" }}
                     >
-                      Alege
-                    </button>
-                  </ListItem>
+                      <LoadingButton
+                        loading={loading}
+                        onClick={() => {
+                          window.localStorage.setItem("locatie", location);
+                          UpdateForm();
+                        }}
+                        style={{
+                          color: "white",
+                          backgroundColor: "purple",
+                          height: "5vh",
+                          width: "5vw",
+                        }}
+                      >
+                        Alege
+                      </LoadingButton>
+                    </CardActions>
+                  </Card>
                 ))}
-              </List>
+                {openInputText && (
+                  <Card
+                    style={{
+                      backgroundColor: "#F5F4F2",
+                      color: "black",
+                      minHeight: "10vh",
+                      minWidth: "10vw",
+                      marginLeft: "3vw",
+                    }}
+                  >
+                    <CardContent>
+                      <TextField
+                        variant="outlined"
+                        label="Altă opțiune"
+                        size="small"
+                        value={restaurant}
+                        onChange={(e) => setRestaurant(e.target.value)}
+                      ></TextField>
+                    </CardContent>
+                    <CardActions
+                      sx={{ justifyContent: "center", alignItems: "center" }}
+                    >
+                      <LoadingButton
+                        loading={loading}
+                        onClick={() => {
+                          window.localStorage.setItem("locatie", restaurant);
+                          UpdateForm();
+                        }}
+                        style={{
+                          color: "white",
+                          backgroundColor: "purple",
+                          height: "5vh",
+                          width: "5vw",
+                        }}
+                      >
+                        Alege
+                      </LoadingButton>
+                    </CardActions>
+                  </Card>
+                )}
+              </Grid>
             </Box>
           </Grid>
         )}
@@ -371,6 +517,28 @@ function MyEventPage() {
       </Snackbar>
 
       <Snackbar
+        open={openErrorLocation}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="error">
+          Eroare la alegerea locației!
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={openSuccesLocation}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="success">
+          Locatie aleasa cu succes!
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
         open={openSucces}
         autoHideDuration={3000}
         onClose={handleClose}
@@ -380,6 +548,40 @@ function MyEventPage() {
           Eveniment sters cu succes!
         </Alert>
       </Snackbar>
+
+      <Dialog
+        open={openDialogDelete}
+        onClose={handleToClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle>
+          {"Sunteți sigur că vreți să stergeți evenimentul?"}
+        </DialogTitle>
+
+        <DialogActions>
+          <Button
+            color="primary"
+            autoFocus
+            onClick={() => {
+              setSure(true);
+              handleToClose();
+            }}
+          >
+            Da
+          </Button>
+          <Button
+            color="primary"
+            autoFocus
+            onClick={() => {
+              history.push("/myeventpage");
+              history.go(0);
+            }}
+          >
+            Nu
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

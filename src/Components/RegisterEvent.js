@@ -87,7 +87,7 @@ function RegisterEventPage() {
         if (error.response) {
           setOpenError(true);
           setLoading(false);
-          setTimeout(window.location.reload(), 4000);
+          // setTimeout(window.location.reload(), 8000);
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);

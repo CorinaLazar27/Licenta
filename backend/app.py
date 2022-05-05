@@ -314,11 +314,11 @@ def aperitivRating():
     aperitivFructeDeMareRating = request.json.get(
         "aperitivFructeDeMareRating", None)
 
-    print("Email organizator:"+emailOrganizer)
-    print("Email:"+email)
-    print("apertivTraditionalRating:"+aperitivTraditionalRating)
-    print("aperitivVegetarianRating"+aperitivVegetarianRating)
-    print("aperitivFructeDeMare"+aperitivFructeDeMareRating)
+    # print("Email organizator:"+emailOrganizer)
+    # print("Email:"+email)
+    # print("apertivTraditionalRating:"+aperitivTraditionalRating)
+    # print("aperitivVegetarianRating"+aperitivVegetarianRating)
+    # print("aperitivFructeDeMare"+aperitivFructeDeMareRating)
 
     table_client = table_service.get_table_client(
         table_name="AperitivRating")
@@ -381,12 +381,12 @@ def type1Rating():
     ciorbaCartofiRating = request.json.get("ciorbaCartofiRating", None)
     ciorbaPerisoareRating = request.json.get("ciorbaPerisoareRating", None)
 
-    print("emailOrganizer:"+emailOrganizer)
-    print("email"+email)
-    print("supaTaieteiRating"+supaTaieteiRating)
-    print("ciorbaAcraRating"+ciorbaAcraRating)
-    print("ciorbaCartofiRating"+ciorbaCartofiRating)
-    print("ciorbaPerisoareRating"+ciorbaPerisoareRating)
+    # print("emailOrganizer:"+emailOrganizer)
+    # print("email"+email)
+    # print("supaTaieteiRating"+supaTaieteiRating)
+    # print("ciorbaAcraRating"+ciorbaAcraRating)
+    # print("ciorbaCartofiRating"+ciorbaCartofiRating)
+    # print("ciorbaPerisoareRating"+ciorbaPerisoareRating)
 
     table_client = table_service.get_table_client(
         table_name="Type1Rating")
@@ -544,13 +544,13 @@ def musicRating():
     muzicaRockRating = request.json.get("muzicaRockRating", None)
     muzicaDePetrecereRating = request.json.get("muzicaDePetrecereRating", None)
 
-    print("emailOrganizer"+emailOrganizer)
-    print("email"+email)
-    print("muzicaComercialaRating"+muzicaComercialaRating)
-    print("muzicaDiscoRating"+muzicaDiscoRating)
-    print("muzicaPopRating"+muzicaPopRating)
-    print("muzicaRockRating"+muzicaRockRating)
-    print("muzicaDePetrecereRating"+muzicaDePetrecereRating)
+    # print("emailOrganizer"+emailOrganizer)
+    # print("email"+email)
+    # print("muzicaComercialaRating"+muzicaComercialaRating)
+    # print("muzicaDiscoRating"+muzicaDiscoRating)
+    # print("muzicaPopRating"+muzicaPopRating)
+    # print("muzicaRockRating"+muzicaRockRating)
+    # print("muzicaDePetrecereRating"+muzicaDePetrecereRating)
 
     table_client = table_service.get_table_client(
         table_name="MusicRating")

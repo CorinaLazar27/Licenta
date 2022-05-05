@@ -26,7 +26,7 @@ function SendInvitationsPage() {
     eveniment.toLocaleLowerCase() +
     ". " +
     "\n" +
-    "Te rugăm să completezi formularul de la următorul link pentru a afla preferințele tale legate de evenimentul la care îmi doresc să participi: https://complete-form.netlify.app/ " +
+    "Te rugăm să completezi formularul de la următorul link pentru a afla preferințele tale legate de evenimentul la care îmi doresc să participi: https://completare-chestionar.netlify.app " +
     "\n" +
     "Mulțumesc foarte mult!";
   const [loading, setLoading] = useState(false);
