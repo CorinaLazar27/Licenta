@@ -783,9 +783,9 @@ def create_all(x):
     return "".join(x['NumberGuests']) + '|' + ''.join(x['Budget']) + '|' + "".join(x['Drinks'])
 
 
-def get_recommendations(name, indices, cosine_sim2, table):
+def get_recommendations(email, date, indices, cosine_sim2, table):
     # Get the index of the user that matches the title
-    idx = indices[name]
+    idx = indices[email, date]
 
     # Get the pairwsie similarity scores of all locations with that user
     sim_scores = list(enumerate(cosine_sim2[idx]))
@@ -798,6 +798,8 @@ def get_recommendations(name, indices, cosine_sim2, table):
 
     # Get the movie indices
     email_indices = [i[0] for i in sim_scores]
+    print("email_indices")
+    print(table['Location'].iloc[email_indices])
 
     # Return the top 3 most similar locations
     return table['Location'].iloc[email_indices]
@@ -807,9 +809,11 @@ def get_recommendations(name, indices, cosine_sim2, table):
 def getRecomandations():
 
     event = request.json.get("event", None)
+    date = request.json.get("date", None)
     email = request.json.get("email", None)
     print(event)
-
+    print(date)
+    print(email)
     fq = 'EventType eq \'' + event + '\' '
     ts = set_table_service()
     table_form = get_dataframe_from_table_storage_table(
@@ -824,9 +828,19 @@ def getRecomandations():
     count_matrix = count.fit_transform(table_form['all'])
     cosine_sim2 = cosine_similarity(count_matrix, count_matrix)
     table_form = table_form.reset_index()
-    indices = pd.Series(table_form.index, index=table_form['PartitionKey'])
+    indices = pd.Series(
+        table_form.index, index=table_form[['PartitionKey', 'RowKey']])
+    print("indices")
+    print(indices[email, date])
+
+    indices1 = pd.Series(
+        table_form.index, index=table_form['RowKey'])
+    print("indices1")
+    print(indices1)
+
     recomandation = get_recommendations(
-        email, indices, cosine_sim2, table_form)
+        email, date, indices, cosine_sim2, table_form)
+    print("recomandation")
     print(recomandation)
     return recomandation.to_dict()
 

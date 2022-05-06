@@ -41,6 +41,7 @@ function MyEventPage() {
   const [dateForDelete, setDateForDelete] = useState("");
   const email = window.localStorage.getItem("email");
   const event = window.localStorage.getItem("eveniment");
+  const date = window.localStorage.getItem("dataeveniment");
   const [loader, setLoader] = useState(true);
   const [box, setBox] = useState(false);
   const [noData, setNoData] = useState(false);
@@ -69,24 +70,33 @@ function MyEventPage() {
       data: {
         email: email,
         event: event,
+        date: date,
       },
     })
       .then((response) => {
         setLoader(false);
         console.log(response.data);
-        setLocationsRecomanded(Object.values(response.data));
-        if (
-          Object.values(response.data).length != 0 ||
-          Object.values(response.data)[0] != ""
-        )
+
+        if (Object.values(response.data).length != 0)
           setLocationsRecomanded(Object.values(response.data));
         else {
           setNoRecomandations(true);
           console.log("NU SUNT LOCATII");
           setLocationsRecomanded([]);
         }
+        if (
+          response.data[0] === "" &&
+          response.data[1] === "" &&
+          response.data[2] === ""
+        )
+          setNoRecomandations(true);
+        if (
+          locationsRecomanded[0] === "" &&
+          locationsRecomanded[1] === "" &&
+          locationsRecomanded[2] === ""
+        )
+          setNoRecomandations(true);
         console.log("locationRecomanded", locationsRecomanded);
-        console.log("AAA", Object.values(response.data)[0]);
       })
       .catch((error) => {
         if (error.response) {
@@ -417,85 +427,103 @@ function MyEventPage() {
                     Nu există recomandări pentru evenimentul dumneavoastră..
                   </h6>
                 )}
-                {locationsRecomanded.map((location) => (
-                  <Card
-                    style={{
-                      backgroundColor: "#F5F4F2",
-                      color: "black",
-                      minHeight: "10vh",
-                      minWidth: "10vw",
-                      marginRight: "2vw",
-                    }}
-                  >
-                    <CardContent>
-                      <Typography
-                        sx={{
+
+                {locationsRecomanded.map((location) => {
+                  if (location !== "")
+                    return (
+                      <Card
+                        style={{
+                          backgroundColor: "#F5F4F2",
                           color: "black",
+                          minHeight: "10vh",
+                          minWidth: "10vw",
+                          marginRight: "2vw",
                         }}
                       >
-                        {location}
-                      </Typography>
-                    </CardContent>
-                    <CardActions
-                      sx={{ justifyContent: "center", alignItems: "center" }}
-                    >
-                      <LoadingButton
-                        loading={loading}
-                        onClick={() => {
-                          window.localStorage.setItem("locatie", location);
-                          UpdateForm();
-                        }}
-                        style={{
-                          color: "white",
-                          backgroundColor: "purple",
-                          height: "5vh",
-                          width: "5vw",
-                        }}
-                      >
-                        Alege
-                      </LoadingButton>
-                    </CardActions>
-                  </Card>
-                ))}
+                        <CardContent>
+                          <Typography
+                            sx={{
+                              color: "black",
+                            }}
+                          >
+                            {location}
+                          </Typography>
+                        </CardContent>
+                        <CardActions
+                          sx={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <LoadingButton
+                            loading={loading}
+                            onClick={() => {
+                              window.localStorage.setItem("locatie", location);
+                              UpdateForm();
+                            }}
+                            style={{
+                              color: "white",
+                              backgroundColor: "purple",
+                              height: "5vh",
+                              width: "5vw",
+                            }}
+                          >
+                            Alege
+                          </LoadingButton>
+                        </CardActions>
+                      </Card>
+                    );
+                })}
+
                 {openInputText && (
-                  <Card
-                    style={{
-                      backgroundColor: "#F5F4F2",
-                      color: "black",
-                      minHeight: "10vh",
-                      minWidth: "10vw",
-                      marginLeft: "3vw",
+                  <Grid
+                    container
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginTop: "2vh",
                     }}
                   >
-                    <CardContent>
-                      <TextField
-                        variant="outlined"
-                        label="Altă opțiune"
-                        size="small"
-                        value={restaurant}
-                        onChange={(e) => setRestaurant(e.target.value)}
-                      ></TextField>
-                    </CardContent>
-                    <CardActions
-                      sx={{ justifyContent: "center", alignItems: "center" }}
+                    <Card
+                      style={{
+                        backgroundColor: "#F5F4F2",
+                        color: "black",
+                        minHeight: "10vh",
+                        minWidth: "10vw",
+                        marginLeft: "3vw",
+                      }}
                     >
-                      <LoadingButton
-                        loading={loading}
-                        onClick={() => {
-                          window.localStorage.setItem("locatie", restaurant);
-                          UpdateForm();
-                        }}
-                        style={{
-                          color: "white",
-                          backgroundColor: "purple",
-                          height: "5vh",
-                          width: "5vw",
-                        }}
+                      <CardContent>
+                        <TextField
+                          variant="outlined"
+                          label="Altă opțiune"
+                          size="small"
+                          value={restaurant}
+                          onChange={(e) => setRestaurant(e.target.value)}
+                        ></TextField>
+                      </CardContent>
+                      <CardActions
+                        sx={{ justifyContent: "center", alignItems: "center" }}
                       >
-                        Alege
-                      </LoadingButton>
-                    </CardActions>
-                  </Card>
+                        <LoadingButton
+                          loading={loading}
+                          onClick={() => {
+                            window.localStorage.setItem("locatie", restaurant);
+                            UpdateForm();
+                          }}
+                          style={{
+                            color: "white",
+                            backgroundColor: "purple",
+                            height: "5vh",
+                            width: "5vw",
+                          }}
+                        >
+                          Alege
+                        </LoadingButton>
+                      </CardActions>
+                    </Card>
+                  </Grid>
                 )}
               </Grid>
             </Box>
