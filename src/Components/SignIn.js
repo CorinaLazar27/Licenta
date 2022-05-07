@@ -67,7 +67,7 @@ function SingIn() {
         const res = response.data;
         console.log(response);
         setLoading(false);
-        window.localStorage.setItem("nume", res.RowKey);
+        window.localStorage.setItem("nume", res.Name);
         window.localStorage.setItem("data", res.Date);
         window.localStorage.setItem("parola", res.Password);
         window.localStorage.setItem("locatieprofil", res.Location);

@@ -54,7 +54,7 @@ function SingUp() {
     console.log(data);
     axios({
       method: "POST",
-      url: "/register",
+      url: "/register1",
       data: data,
     })
       .then((response) => {

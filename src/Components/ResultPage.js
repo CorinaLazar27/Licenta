@@ -189,6 +189,19 @@ function ResultPage() {
                     </Grid>
                   )}
                   {!error && !load && (
+                    <Grid item xs={12}>
+                      <InputLabel>Număr răspunsuri chestionar</InputLabel>
+                      <Input
+                        style={{ textAlign: "right" }}
+                        textAlign="center"
+                        value={data.Answers}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+                    </Grid>
+                  )}
+                  {!error && !load && (
                     <Grid item xs={columns}>
                       <InputLabel>Cel mai votat aperitiv</InputLabel>
                       <Input

@@ -18,6 +18,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 app = Flask(__name__)
 CORS(app)
+CORS(app, resources={r"*": {"origins": "*"}})
 credential = AzureNamedKeyCredential(
     "storagecorina", "Z6MCaQlKoDsfm6mFx3afBpKR3thzCvI0JimQVT0aXKUlMNb6z564Y6LZY66/PiqsjI6JZDHoUhjDs6dwDT7/Ng==")
 table_service = TableServiceClient(
@@ -62,6 +63,28 @@ def register():
     print(password)
     print(date)
     task = {u'PartitionKey': email, u'RowKey': name,
+            u'Password': password, u'Date': date}
+    table_client.create_entity(entity=task)
+    return "Done"
+
+
+@app.route('/register1', methods=["POST"])
+def register1():
+    name = request.json.get("name", None)
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+   # current dateTime
+    now = datetime.now()
+
+# convert to date String
+    date = now.strftime("%d/%m/%Y")
+    print('Date String:', date)
+    table_client = table_service.get_table_client(table_name="Login")
+    print(email)
+    print(name)
+    print(password)
+    print(date)
+    task = {u'PartitionKey': email, u'RowKey': email, u'Name': name,
             u'Password': password, u'Date': date}
     table_client.create_entity(entity=task)
     return "Done"
@@ -298,15 +321,353 @@ def postoptionsinvitation():
 countAperitiv = 50
 
 
-@app.route('/aperitiveRating', methods=["POST"])
-def aperitivRating():
-    global countAperitiv
+# @app.route('/aperitiveRating', methods=["POST"])
+# def aperitivRating():
+#     global countAperitiv
 
-    countAperitiv += 1
+#     countAperitiv += 1
+#     event = request.json.get("event", None)
+#     date = request.json.get("date", None)
+#     emailOrganizer = request.json.get("emailOrganizer", None)
+#     email = request.json.get("email", None)
+#     aperitivTraditionalRating = request.json.get(
+#         "aperitivTraditionalRating", None)
+#     aperitivVegetarianRating = request.json.get(
+#         "aperitivVegetarianRating", None)
+#     aperitivFructeDeMareRating = request.json.get(
+#         "aperitivFructeDeMareRating", None)
+
+#     # print("Email organizator:"+emailOrganizer)
+#     # print("Email:"+email)
+#     # print("apertivTraditionalRating:"+aperitivTraditionalRating)
+#     # print("aperitivVegetarianRating"+aperitivVegetarianRating)
+#     # print("aperitivFructeDeMare"+aperitivFructeDeMareRating)
+
+#     table_client = table_service.get_table_client(
+#         table_name="AperitivRating")
+
+#     countString = str(countAperitiv)
+#     task = {u'PartitionKey': emailOrganizer,
+#             u'RowKey': countString,
+#             u'Event': event,
+#             u'Data': date,
+#             u'Email': email,
+#             u'Aperitiv': "Traditional",
+#             u'Rating': aperitivTraditionalRating,
+
+#             }
+#     table_client.create_entity(entity=task)
+
+#     countAperitiv += 1
+#     countString = str(countAperitiv)
+#     task = {u'PartitionKey': emailOrganizer,
+#             u'RowKey': countString,
+#             u'Event': event,
+#             u'Data': date,
+#             u'Email': email,
+#             u'Aperitiv': "Vegetarian",
+#             u'Rating': aperitivVegetarianRating,
+
+#             }
+#     table_client.create_entity(entity=task)
+
+#     countAperitiv += 1
+#     countString = str(countAperitiv)
+#     task = {u'PartitionKey': emailOrganizer,
+#             u'RowKey': countString,
+#             u'Event': event,
+#             u'Data': date,
+#             u'Email': email,
+#             u'Aperitiv': "Fructe de mare",
+#             u'Rating': aperitivFructeDeMareRating,
+
+#             }
+#     table_client.create_entity(entity=task)
+
+#     return "Done"
+
+
+# count = 50
+
+
+# @app.route('/type1Rating', methods=["POST"])
+# def type1Rating():
+#     global count
+
+#     count += 1
+#     event = request.json.get("event", None)
+#     date = request.json.get("date", None)
+#     emailOrganizer = request.json.get("emailOrganizer", None)
+#     email = request.json.get("email", None)
+#     supaTaieteiRating = request.json.get("supaTaieteiRating", None)
+#     ciorbaAcraRating = request.json.get("ciorbaAcraRating", None)
+#     ciorbaCartofiRating = request.json.get("ciorbaCartofiRating", None)
+#     ciorbaPerisoareRating = request.json.get("ciorbaPerisoareRating", None)
+
+#     # print("emailOrganizer:"+emailOrganizer)
+#     # print("email"+email)
+#     # print("supaTaieteiRating"+supaTaieteiRating)
+#     # print("ciorbaAcraRating"+ciorbaAcraRating)
+#     # print("ciorbaCartofiRating"+ciorbaCartofiRating)
+#     # print("ciorbaPerisoareRating"+ciorbaPerisoareRating)
+
+#     table_client = table_service.get_table_client(
+#         table_name="Type1Rating")
+
+#     countString = str(count)
+#     task = {u'PartitionKey': emailOrganizer,
+#             u'RowKey': countString,
+#             u'Event': event,
+#             u'Data': date,
+#             u'Email': email,
+#             u'Type1': "Supa taietei",
+#             u'Rating': supaTaieteiRating,
+
+#             }
+#     table_client.create_entity(entity=task)
+
+#     count += 1
+#     countString = str(count)
+#     task = {u'PartitionKey': emailOrganizer,
+#             u'RowKey': countString,
+#             u'Event': event,
+#             u'Data': date,
+#             u'Email': email,
+#             u'Type1': "Ciorba acra",
+#             u'Rating': ciorbaAcraRating,
+
+#             }
+#     table_client.create_entity(entity=task)
+
+#     count += 1
+#     countString = str(count)
+#     task = {u'PartitionKey': emailOrganizer,
+#             u'RowKey': countString,
+#             u'Event': event,
+#             u'Data': date,
+#             u'Email': email,
+#             u'Type1': "Ciorba cartofi",
+#             u'Rating': ciorbaCartofiRating,
+
+#             }
+#     table_client.create_entity(entity=task)
+
+#     count += 1
+#     countString = str(count)
+#     task = {u'PartitionKey': emailOrganizer,
+#             u'RowKey': countString,
+#             u'Event': event,
+#             u'Data': date,
+#             u'Email': email,
+#             u'Type1': "Ciorba perisoare",
+#             u'Rating': ciorbaPerisoareRating,
+
+#             }
+#     table_client.create_entity(entity=task)
+
+#     return "Done"
+
+
+# countType2 = 50
+
+
+# @app.route('/type2Rating', methods=["POST"])
+# def type2Rating():
+#     global countType2
+
+#     countType2 += 1
+#     event = request.json.get("event", None)
+#     date = request.json.get("date", None)
+#     emailOrganizer = request.json.get("emailOrganizer", None)
+#     email = request.json.get("email", None)
+#     sarmaleRating = request.json.get("sarmaleRating", None)
+#     carnePuiRating = request.json.get("carnePuiRating", None)
+#     carnePorcRating = request.json.get("carnePorcRating", None)
+#     carneVitaRating = request.json.get("carneVitaRating", None)
+
+#     print("emailOrganizer"+emailOrganizer)
+#     print("email"+email)
+#     print("sarmaleRating"+sarmaleRating)
+#     print("carnePuiRating"+carnePuiRating)
+#     print("carnePorcRating"+carnePorcRating)
+#     print("carneVitaRating"+carneVitaRating)
+
+#     table_client = table_service.get_table_client(
+#         table_name="Type2Rating")
+
+#     countString = str(countType2)
+#     task = {u'PartitionKey': emailOrganizer,
+#             u'RowKey': countString,
+#             u'Event': event,
+#             u'Data': date,
+#             u'Email': email,
+#             u'Type2': "Sarmale",
+#             u'Rating': sarmaleRating,
+
+#             }
+#     table_client.create_entity(entity=task)
+
+#     countType2 += 1
+#     countString = str(countType2)
+#     task = {u'PartitionKey': emailOrganizer,
+#             u'RowKey': countString,
+#             u'Event': event,
+#             u'Data': date,
+#             u'Email': email,
+#             u'Type2': "Carne pui",
+#             u'Rating': carnePuiRating,
+
+#             }
+#     table_client.create_entity(entity=task)
+
+#     countType2 += 1
+#     countString = str(countType2)
+#     task = {u'PartitionKey': emailOrganizer,
+#             u'RowKey': countString,
+#             u'Event': event,
+#             u'Data': date,
+#             u'Email': email,
+#             u'Type2': "Carne porc",
+#             u'Rating': carnePorcRating,
+
+#             }
+#     table_client.create_entity(entity=task)
+
+#     countType2 += 1
+#     countString = str(countType2)
+#     task = {u'PartitionKey': emailOrganizer,
+#             u'RowKey': countString,
+#             u'Event': event,
+#             u'Data': date,
+#             u'Email': email,
+#             u'Type2': "Carne vita",
+#             u'Rating': carneVitaRating,
+
+#             }
+#     table_client.create_entity(entity=task)
+
+#     return "Done"
+
+
+# countMusic = 50
+
+
+# @app.route('/musicRating', methods=["POST"])
+# def musicRating():
+#     global countMusic
+
+#     countMusic += 1
+#     event = request.json.get("event", None)
+#     date = request.json.get("date", None)
+#     emailOrganizer = request.json.get("emailOrganizer", None)
+#     email = request.json.get("email", None)
+#     muzicaComercialaRating = request.json.get("muzicaComercialaRating", None)
+#     muzicaDiscoRating = request.json.get("muzicaDiscoRating", None)
+#     muzicaPopRating = request.json.get("muzicaPopRating", None)
+#     muzicaRockRating = request.json.get("muzicaRockRating", None)
+#     muzicaDePetrecereRating = request.json.get("muzicaDePetrecereRating", None)
+
+#     # print("emailOrganizer"+emailOrganizer)
+#     # print("email"+email)
+#     # print("muzicaComercialaRating"+muzicaComercialaRating)
+#     # print("muzicaDiscoRating"+muzicaDiscoRating)
+#     # print("muzicaPopRating"+muzicaPopRating)
+#     # print("muzicaRockRating"+muzicaRockRating)
+#     # print("muzicaDePetrecereRating"+muzicaDePetrecereRating)
+
+#     table_client = table_service.get_table_client(
+#         table_name="MusicRating")
+
+#     countString = str(countMusic)
+#     task = {u'PartitionKey': emailOrganizer,
+#             u'RowKey': countString,
+#             u'Event': event,
+#             u'Data': date,
+#             u'Email': email,
+#             u'Music': "Comerciala",
+#             u'Rating': muzicaComercialaRating,
+
+#             }
+#     table_client.create_entity(entity=task)
+
+#     countMusic += 1
+#     countString = str(countMusic)
+#     task = {u'PartitionKey': emailOrganizer,
+#             u'RowKey': countString,
+#             u'Event': event,
+#             u'Data': date,
+#             u'Email': email,
+#             u'Music': "Disco",
+#             u'Rating': muzicaDiscoRating,
+
+#             }
+#     table_client.create_entity(entity=task)
+
+#     countMusic += 1
+#     countString = str(countMusic)
+#     task = {u'PartitionKey': emailOrganizer,
+#             u'RowKey': countString,
+#             u'Event': event,
+#             u'Data': date,
+#             u'Email': email,
+#             u'Music': "Pop",
+#             u'Rating': muzicaPopRating,
+
+#             }
+#     table_client.create_entity(entity=task)
+
+#     countMusic += 1
+#     countString = str(countMusic)
+#     task = {u'PartitionKey': emailOrganizer,
+#             u'RowKey': countString,
+#             u'Event': event,
+#             u'Data': date,
+#             u'Email': email,
+#             u'Music': "Rock",
+#             u'Rating': muzicaRockRating,
+
+#             }
+#     table_client.create_entity(entity=task)
+
+#     countMusic += 1
+#     countString = str(countMusic)
+#     task = {u'PartitionKey': emailOrganizer,
+#             u'RowKey': countString,
+#             u'Event': event,
+#             u'Data': date,
+#             u'Email': email,
+#             u'Music': "De petrecere",
+#             u'Rating': muzicaDePetrecereRating,
+
+#             }
+#     table_client.create_entity(entity=task)
+
+#     return "Done"
+
+
+countRating = 50
+
+
+@app.route('/ratingChestionar', methods=["POST"])
+def ratingChestionar():
+    global countRating
+
+    countRating += 1
+
+    table_client_aperitiv = table_service.get_table_client(
+        table_name="AperitivRating")
+    table_client_type1 = table_service.get_table_client(
+        table_name="Type1Rating")
+    table_client_type2 = table_service.get_table_client(
+        table_name="Type2Rating")
+    table_client_music = table_service.get_table_client(
+        table_name="MusicRating")
+
     event = request.json.get("event", None)
     date = request.json.get("date", None)
     emailOrganizer = request.json.get("emailOrganizer", None)
     email = request.json.get("email", None)
+
     aperitivTraditionalRating = request.json.get(
         "aperitivTraditionalRating", None)
     aperitivVegetarianRating = request.json.get(
@@ -314,317 +675,197 @@ def aperitivRating():
     aperitivFructeDeMareRating = request.json.get(
         "aperitivFructeDeMareRating", None)
 
-    # print("Email organizator:"+emailOrganizer)
-    # print("Email:"+email)
-    # print("apertivTraditionalRating:"+aperitivTraditionalRating)
-    # print("aperitivVegetarianRating"+aperitivVegetarianRating)
-    # print("aperitivFructeDeMare"+aperitivFructeDeMareRating)
-
-    table_client = table_service.get_table_client(
-        table_name="AperitivRating")
-
-    countString = str(countAperitiv)
-    task = {u'PartitionKey': emailOrganizer,
-            u'RowKey': countString,
-            u'Event': event,
-            u'Data': date,
-            u'Email': email,
-            u'Aperitiv': "Traditional",
-            u'Rating': aperitivTraditionalRating,
-
-            }
-    table_client.create_entity(entity=task)
-
-    countAperitiv += 1
-    countString = str(countAperitiv)
-    task = {u'PartitionKey': emailOrganizer,
-            u'RowKey': countString,
-            u'Event': event,
-            u'Data': date,
-            u'Email': email,
-            u'Aperitiv': "Vegetarian",
-            u'Rating': aperitivVegetarianRating,
-
-            }
-    table_client.create_entity(entity=task)
-
-    countAperitiv += 1
-    countString = str(countAperitiv)
-    task = {u'PartitionKey': emailOrganizer,
-            u'RowKey': countString,
-            u'Event': event,
-            u'Data': date,
-            u'Email': email,
-            u'Aperitiv': "Fructe de mare",
-            u'Rating': aperitivFructeDeMareRating,
-
-            }
-    table_client.create_entity(entity=task)
-
-    return "Done"
-
-
-count = 50
-
-
-@app.route('/type1Rating', methods=["POST"])
-def type1Rating():
-    global count
-
-    count += 1
-    event = request.json.get("event", None)
-    date = request.json.get("date", None)
-    emailOrganizer = request.json.get("emailOrganizer", None)
-    email = request.json.get("email", None)
     supaTaieteiRating = request.json.get("supaTaieteiRating", None)
     ciorbaAcraRating = request.json.get("ciorbaAcraRating", None)
     ciorbaCartofiRating = request.json.get("ciorbaCartofiRating", None)
     ciorbaPerisoareRating = request.json.get("ciorbaPerisoareRating", None)
 
-    # print("emailOrganizer:"+emailOrganizer)
-    # print("email"+email)
-    # print("supaTaieteiRating"+supaTaieteiRating)
-    # print("ciorbaAcraRating"+ciorbaAcraRating)
-    # print("ciorbaCartofiRating"+ciorbaCartofiRating)
-    # print("ciorbaPerisoareRating"+ciorbaPerisoareRating)
-
-    table_client = table_service.get_table_client(
-        table_name="Type1Rating")
-
-    countString = str(count)
-    task = {u'PartitionKey': emailOrganizer,
-            u'RowKey': countString,
-            u'Event': event,
-            u'Data': date,
-            u'Email': email,
-            u'Type1': "Supa taietei",
-            u'Rating': supaTaieteiRating,
-
-            }
-    table_client.create_entity(entity=task)
-
-    count += 1
-    countString = str(count)
-    task = {u'PartitionKey': emailOrganizer,
-            u'RowKey': countString,
-            u'Event': event,
-            u'Data': date,
-            u'Email': email,
-            u'Type1': "Ciorba acra",
-            u'Rating': ciorbaAcraRating,
-
-            }
-    table_client.create_entity(entity=task)
-
-    count += 1
-    countString = str(count)
-    task = {u'PartitionKey': emailOrganizer,
-            u'RowKey': countString,
-            u'Event': event,
-            u'Data': date,
-            u'Email': email,
-            u'Type1': "Ciorba cartofi",
-            u'Rating': ciorbaCartofiRating,
-
-            }
-    table_client.create_entity(entity=task)
-
-    count += 1
-    countString = str(count)
-    task = {u'PartitionKey': emailOrganizer,
-            u'RowKey': countString,
-            u'Event': event,
-            u'Data': date,
-            u'Email': email,
-            u'Type1': "Ciorba perisoare",
-            u'Rating': ciorbaPerisoareRating,
-
-            }
-    table_client.create_entity(entity=task)
-
-    return "Done"
-
-
-countType2 = 50
-
-
-@app.route('/type2Rating', methods=["POST"])
-def type2Rating():
-    global countType2
-
-    countType2 += 1
-    event = request.json.get("event", None)
-    date = request.json.get("date", None)
-    emailOrganizer = request.json.get("emailOrganizer", None)
-    email = request.json.get("email", None)
     sarmaleRating = request.json.get("sarmaleRating", None)
     carnePuiRating = request.json.get("carnePuiRating", None)
     carnePorcRating = request.json.get("carnePorcRating", None)
     carneVitaRating = request.json.get("carneVitaRating", None)
 
-    print("emailOrganizer"+emailOrganizer)
-    print("email"+email)
-    print("sarmaleRating"+sarmaleRating)
-    print("carnePuiRating"+carnePuiRating)
-    print("carnePorcRating"+carnePorcRating)
-    print("carneVitaRating"+carneVitaRating)
-
-    table_client = table_service.get_table_client(
-        table_name="Type2Rating")
-
-    countString = str(countType2)
-    task = {u'PartitionKey': emailOrganizer,
-            u'RowKey': countString,
-            u'Event': event,
-            u'Data': date,
-            u'Email': email,
-            u'Type2': "Sarmale",
-            u'Rating': sarmaleRating,
-
-            }
-    table_client.create_entity(entity=task)
-
-    countType2 += 1
-    countString = str(countType2)
-    task = {u'PartitionKey': emailOrganizer,
-            u'RowKey': countString,
-            u'Event': event,
-            u'Data': date,
-            u'Email': email,
-            u'Type2': "Carne pui",
-            u'Rating': carnePuiRating,
-
-            }
-    table_client.create_entity(entity=task)
-
-    countType2 += 1
-    countString = str(countType2)
-    task = {u'PartitionKey': emailOrganizer,
-            u'RowKey': countString,
-            u'Event': event,
-            u'Data': date,
-            u'Email': email,
-            u'Type2': "Carne porc",
-            u'Rating': carnePorcRating,
-
-            }
-    table_client.create_entity(entity=task)
-
-    countType2 += 1
-    countString = str(countType2)
-    task = {u'PartitionKey': emailOrganizer,
-            u'RowKey': countString,
-            u'Event': event,
-            u'Data': date,
-            u'Email': email,
-            u'Type2': "Carne vita",
-            u'Rating': carneVitaRating,
-
-            }
-    table_client.create_entity(entity=task)
-
-    return "Done"
-
-
-countMusic = 50
-
-
-@app.route('/musicRating', methods=["POST"])
-def musicRating():
-    global countMusic
-
-    countMusic += 1
-    event = request.json.get("event", None)
-    date = request.json.get("date", None)
-    emailOrganizer = request.json.get("emailOrganizer", None)
-    email = request.json.get("email", None)
     muzicaComercialaRating = request.json.get("muzicaComercialaRating", None)
     muzicaDiscoRating = request.json.get("muzicaDiscoRating", None)
     muzicaPopRating = request.json.get("muzicaPopRating", None)
     muzicaRockRating = request.json.get("muzicaRockRating", None)
     muzicaDePetrecereRating = request.json.get("muzicaDePetrecereRating", None)
 
-    # print("emailOrganizer"+emailOrganizer)
-    # print("email"+email)
-    # print("muzicaComercialaRating"+muzicaComercialaRating)
-    # print("muzicaDiscoRating"+muzicaDiscoRating)
-    # print("muzicaPopRating"+muzicaPopRating)
-    # print("muzicaRockRating"+muzicaRockRating)
-    # print("muzicaDePetrecereRating"+muzicaDePetrecereRating)
+    countString = str(countRating)
 
-    table_client = table_service.get_table_client(
-        table_name="MusicRating")
+    task_aperitiv = {u'PartitionKey': emailOrganizer,
+                     u'RowKey': countString,
+                     u'Event': event,
+                     u'Data': date,
+                     u'Email': email,
+                     u'Aperitiv': "Traditional",
+                     u'Rating': aperitivTraditionalRating,
+                     }
 
-    countString = str(countMusic)
-    task = {u'PartitionKey': emailOrganizer,
-            u'RowKey': countString,
-            u'Event': event,
-            u'Data': date,
-            u'Email': email,
-            u'Music': "Comerciala",
-            u'Rating': muzicaComercialaRating,
+    task_type1 = {u'PartitionKey': emailOrganizer,
+                  u'RowKey': countString,
+                  u'Event': event,
+                  u'Data': date,
+                  u'Email': email,
+                  u'Type1': "Supa taietei",
+                  u'Rating': supaTaieteiRating,
+                  }
+    task_type2 = {u'PartitionKey': emailOrganizer,
+                  u'RowKey': countString,
+                  u'Event': event,
+                  u'Data': date,
+                  u'Email': email,
+                  u'Type2': "Sarmale",
+                  u'Rating': sarmaleRating,
+                  }
+    task_music = {u'PartitionKey': emailOrganizer,
+                  u'RowKey': countString,
+                  u'Event': event,
+                  u'Data': date,
+                  u'Email': email,
+                  u'Music': "Comerciala",
+                  u'Rating': muzicaComercialaRating,
 
-            }
-    table_client.create_entity(entity=task)
+                  }
 
-    countMusic += 1
-    countString = str(countMusic)
-    task = {u'PartitionKey': emailOrganizer,
-            u'RowKey': countString,
-            u'Event': event,
-            u'Data': date,
-            u'Email': email,
-            u'Music': "Disco",
-            u'Rating': muzicaDiscoRating,
+    table_client_aperitiv.create_entity(entity=task_aperitiv)
+    table_client_type1.create_entity(entity=task_type1)
+    table_client_type2.create_entity(entity=task_type2)
+    table_client_music.create_entity(entity=task_music)
 
-            }
-    table_client.create_entity(entity=task)
+    countRating += 1
+    countString = str(countRating)
+    task_aperitiv = {u'PartitionKey': emailOrganizer,
+                     u'RowKey': countString,
+                     u'Event': event,
+                     u'Data': date,
+                     u'Email': email,
+                     u'Aperitiv': "Vegetarian",
+                     u'Rating': aperitivVegetarianRating,
+                     }
+    task_type1 = {u'PartitionKey': emailOrganizer,
+                  u'RowKey': countString,
+                  u'Event': event,
+                  u'Data': date,
+                  u'Email': email,
+                  u'Type1': "Ciorba acra",
+                  u'Rating': ciorbaAcraRating,
+                  }
+    task_type2 = {u'PartitionKey': emailOrganizer,
+                  u'RowKey': countString,
+                  u'Event': event,
+                  u'Data': date,
+                  u'Email': email,
+                  u'Type2': "Carne pui",
+                  u'Rating': carnePuiRating,
+                  }
+    task_music = {u'PartitionKey': emailOrganizer,
+                  u'RowKey': countString,
+                  u'Event': event,
+                  u'Data': date,
+                  u'Email': email,
+                  u'Music': "Disco",
+                  u'Rating': muzicaDiscoRating,
+                  }
 
-    countMusic += 1
-    countString = str(countMusic)
-    task = {u'PartitionKey': emailOrganizer,
-            u'RowKey': countString,
-            u'Event': event,
-            u'Data': date,
-            u'Email': email,
-            u'Music': "Pop",
-            u'Rating': muzicaPopRating,
+    table_client_aperitiv.create_entity(entity=task_aperitiv)
+    table_client_type1.create_entity(entity=task_type1)
+    table_client_type2.create_entity(entity=task_type2)
+    table_client_music.create_entity(entity=task_music)
 
-            }
-    table_client.create_entity(entity=task)
+    countRating += 1
+    countString = str(countRating)
+    task_aperitiv = {u'PartitionKey': emailOrganizer,
+                     u'RowKey': countString,
+                     u'Event': event,
+                     u'Data': date,
+                     u'Email': email,
+                     u'Aperitiv': "Fructe de mare",
+                     u'Rating': aperitivFructeDeMareRating,
+                     }
 
-    countMusic += 1
-    countString = str(countMusic)
-    task = {u'PartitionKey': emailOrganizer,
-            u'RowKey': countString,
-            u'Event': event,
-            u'Data': date,
-            u'Email': email,
-            u'Music': "Rock",
-            u'Rating': muzicaRockRating,
+    task_type1 = {u'PartitionKey': emailOrganizer,
+                  u'RowKey': countString,
+                  u'Event': event,
+                  u'Data': date,
+                  u'Email': email,
+                  u'Type1': "Ciorba cartofi",
+                  u'Rating': ciorbaCartofiRating,
+                  }
 
-            }
-    table_client.create_entity(entity=task)
+    task_type2 = {u'PartitionKey': emailOrganizer,
+                  u'RowKey': countString,
+                  u'Event': event,
+                  u'Data': date,
+                  u'Email': email,
+                  u'Type2': "Carne porc",
+                  u'Rating': carnePorcRating,
+                  }
 
-    countMusic += 1
-    countString = str(countMusic)
-    task = {u'PartitionKey': emailOrganizer,
-            u'RowKey': countString,
-            u'Event': event,
-            u'Data': date,
-            u'Email': email,
-            u'Music': "De petrecere",
-            u'Rating': muzicaDePetrecereRating,
+    task_music = {u'PartitionKey': emailOrganizer,
+                  u'RowKey': countString,
+                  u'Event': event,
+                  u'Data': date,
+                  u'Email': email,
+                  u'Music': "Pop",
+                  u'Rating': muzicaPopRating,
+                  }
 
-            }
-    table_client.create_entity(entity=task)
+    table_client_aperitiv.create_entity(entity=task_aperitiv)
+    table_client_type1.create_entity(entity=task_type1)
+    table_client_type2.create_entity(entity=task_type2)
+    table_client_music.create_entity(entity=task_music)
 
+    countRating += 1
+    countString = str(countRating)
+    task_type1 = {u'PartitionKey': emailOrganizer,
+                  u'RowKey': countString,
+                  u'Event': event,
+                  u'Data': date,
+                  u'Email': email,
+                  u'Type1': "Ciorba perisoare",
+                  u'Rating': ciorbaPerisoareRating,
+
+                  }
+
+    task_type2 = {u'PartitionKey': emailOrganizer,
+                  u'RowKey': countString,
+                  u'Event': event,
+                  u'Data': date,
+                  u'Email': email,
+                  u'Type2': "Carne vita",
+                  u'Rating': carneVitaRating,
+                  }
+    task_music = {u'PartitionKey': emailOrganizer,
+                  u'RowKey': countString,
+                  u'Event': event,
+                  u'Data': date,
+                  u'Email': email,
+                  u'Music': "Rock",
+                  u'Rating': muzicaRockRating,
+                  }
+
+    table_client_type1.create_entity(entity=task_type1)
+    table_client_type2.create_entity(entity=task_type2)
+    table_client_music.create_entity(entity=task_music)
+
+    countRating += 1
+    countString = str(countRating)
+
+    task_music = {u'PartitionKey': emailOrganizer,
+                  u'RowKey': countString,
+                  u'Event': event,
+                  u'Data': date,
+                  u'Email': email,
+                  u'Music': "De petrecere",
+                  u'Rating': muzicaDePetrecereRating,
+                  }
+    table_client_music.create_entity(entity=task_music)
     return "Done"
 
 
 # table_service = TableService(
 #     connection_string='DefaultEndpointsProtocol=https;AccountName=storagecorina;AccountKey=Z6MCaQlKoDsfm6mFx3afBpKR3thzCvI0JimQVT0aXKUlMNb6z564Y6LZY66/PiqsjI6JZDHoUhjDs6dwDT7/Ng==;EndpointSuffix=core.windows.net')
-
 CONNECTION_STRING = "DefaultEndpointsProtocol=https;AccountName=storagecorina;AccountKey=Z6MCaQlKoDsfm6mFx3afBpKR3thzCvI0JimQVT0aXKUlMNb6z564Y6LZY66/PiqsjI6JZDHoUhjDs6dwDT7/Ng==;EndpointSuffix=core.windows.net"
 SOURCE_TABLE_APERITIVE = "AperitivRating"
 SOURCE_TABLE_TYPE1 = "Type1Rating"
@@ -738,6 +979,7 @@ def highestRating():
     highest_rated_music = mean_rating_music['Rating'].idxmax()
 
     data_set = {
+        "Answers": table_aperitive['Email'].nunique(),
         "Highest_Rate_Aperitiv": highest_rated_aperitive,
         "Highest_Rate_Type1": highest_rated_type1,
         "Highest_Rate_Type2": highest_rated_type2,
@@ -780,7 +1022,7 @@ def clean_data(x):
 
 
 def create_all(x):
-    return "".join(x['NumberGuests']) + '|' + ''.join(x['Budget']) + '|' + "".join(x['Drinks'])
+    return "".join(x['NumberGuests']) + '|' + ''.join(x['Budget']) + '|' + "".join(x['Drinks']) + '|' + "".join(x['RingDance'])
 
 
 def get_recommendations(email, date, indices, cosine_sim2, table):
@@ -818,7 +1060,7 @@ def getRecomandations():
     ts = set_table_service()
     table_form = get_dataframe_from_table_storage_table(
         table_service=ts, filter_query=fq)
-    features = ['NumberGuests', 'Budget', 'Drinks']
+    features = ['NumberGuests', 'Budget', 'Drinks', 'RingDance']
     print(table_form[features])
     for feature in features:
         table_form[feature] = table_form[feature].apply(clean_data)
