@@ -133,7 +133,7 @@ function ResultPage() {
     >
       <Header />
       {loader && <OverlayLoader />}
-      <Grid container sx={{ marginTop: "10vh" }}>
+      <Grid container sx={{ marginTop: "10vh", marginBottom: "5vh" }}>
         <Grid
           item
           xs={12}

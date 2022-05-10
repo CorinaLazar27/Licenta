@@ -15,7 +15,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 function SendInvitationsPage() {
   const history = useHistory();
-
+  const email = window.localStorage.getItem("email");
   const nume = window.localStorage.getItem("nume");
   const eveniment = window.localStorage.getItem("eveniment");
   const data = window.localStorage.getItem("dataeveniment");
@@ -26,7 +26,14 @@ function SendInvitationsPage() {
     eveniment.toLocaleLowerCase() +
     ". " +
     "\n" +
-    "Te rugăm să completezi formularul de la următorul link pentru a afla preferințele tale legate de evenimentul la care îmi doresc să participi: https://completare-chestionar.netlify.app " +
+    "Te rugăm să completezi formularul de la următorul link pentru a afla preferințele tale legate de evenimentul la care îmi doresc să participi:" +
+    "\n" +
+    "https://completare-chestionar.netlify.app/?email=" +
+    email +
+    "&event=" +
+    eveniment +
+    "&date=" +
+    data +
     "\n" +
     "Mulțumesc foarte mult!";
   const [loading, setLoading] = useState(false);
