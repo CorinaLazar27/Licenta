@@ -18,6 +18,7 @@ function EditFormPage() {
   const event = window.localStorage.getItem("eveniment");
   const email = window.localStorage.getItem("email");
   const location = window.localStorage.getItem("locatie");
+  const judet = window.localStorage.getItem("judet");
   const date = window.localStorage.getItem("dataeveniment");
   const ringDance = window.localStorage.getItem("ringdans");
   const drinks = window.localStorage.getItem("bauturi");
@@ -48,6 +49,7 @@ function EditFormPage() {
       document.getElementById("editButton").textContent === "Salvează schimbări"
     ) {
       document.getElementById("location").readOnly = true;
+      document.getElementById("judet").readOnly = true;
       document.getElementById("budget").readOnly = true;
       document.getElementById("numberofguests").readOnly = true;
       document.getElementById("liveband").disabled = true;
@@ -72,6 +74,7 @@ function EditFormPage() {
       UpdateForm();
     } else {
       document.getElementById("location").readOnly = false;
+      document.getElementById("judet").readOnly = false;
       document.getElementById("budget").readOnly = false;
       document.getElementById("numberofguests").readOnly = false;
       document.getElementById("liveband").disabled = false;
@@ -105,6 +108,7 @@ function EditFormPage() {
         date: date,
         nrguests: window.localStorage.getItem("invitati"),
         location: window.localStorage.getItem("locatie"),
+        judet: window.localStorage.getItem("judet"),
         budget: window.localStorage.getItem("buget"),
         liveband: window.localStorage.getItem("liveband"),
         artisticmoment: window.localStorage.getItem("momentartistic"),
@@ -172,7 +176,9 @@ function EditFormPage() {
             Înapoi
           </Button>
         </Grid>
-        <div className="card-header">{event}</div>
+        <div className="card-header">
+          {event} {date}
+        </div>
         <div className="card-body">
           <form>
             <div className="row gx-3 mb-3">
@@ -199,7 +205,7 @@ function EditFormPage() {
                 <input
                   className="form-control"
                   id="budget"
-                  type="text"
+                  type="number"
                   name="budget"
                   defaultValue={budget}
                   onChange={(event) =>
@@ -212,13 +218,13 @@ function EditFormPage() {
 
             <div className="row gx-3 mb-3">
               <div className="col-md-6">
-                <label className="small mb-1" htmlFor="date">
-                  Data
+                <label className="small mb-1" htmlFor="judet">
+                  Judet
                 </label>
                 <input
                   className="form-control"
-                  id="date"
-                  defaultValue={date}
+                  id="judet"
+                  defaultValue={judet}
                   readOnly
                 />
               </div>
@@ -230,7 +236,7 @@ function EditFormPage() {
                 <input
                   className="form-control"
                   id="numberofguests"
-                  type="text"
+                  type="number"
                   defaultValue={guests}
                   onChange={(event) =>
                     window.localStorage.setItem("invitati", event.target.value)
@@ -274,19 +280,7 @@ function EditFormPage() {
                 <label className="small mb-1" htmlFor="artisticmoment">
                   Moment artistic
                 </label>
-                {/* <input
-                  className="form-control"
-                  id="artisticmoment"
-                  name="birthday"
-                  defaultValue={artisticmoment}
-                  onChange={(event) =>
-                    window.localStorage.setItem(
-                      "momentartistic",
-                      event.target.value
-                    )
-                  }
-                  readOnly
-                /> */}
+
                 <select
                   name="artisticmoment"
                   id="artisticmoment"

@@ -22,7 +22,13 @@ export const FormikSelectSimple = ({ items, ...props }) => {
       }}
     >
       {items.map((item) => (
-        <MenuItem key={item} value={item}>
+        <MenuItem
+          key={item}
+          value={item}
+          sx={{
+            maxHeight: "2.5vh",
+          }}
+        >
           {item}
         </MenuItem>
       ))}

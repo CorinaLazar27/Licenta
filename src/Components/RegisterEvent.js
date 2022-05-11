@@ -5,29 +5,20 @@ import "react-dropdown/style.css";
 import axios from "axios";
 import { Formik, Form, Field } from "formik";
 import Dialog from "@mui/material/Dialog";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
 import Button from "@mui/material/Button";
 import Header from "./Header";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
-import Stack from "@mui/material/Stack";
-
 import { FormikTextField } from "./FormikComponents/FormikTextField";
-import { FormikCheckBox } from "./FormikComponents/FormikCheckBox";
 import { FormikSelectSimple } from "./FormikComponents/FormikSelectSimple";
 import { FormikDatePicker } from "./FormikComponents/FormikDatePicker";
 import { LoadingButton, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import FormLabel from "@mui/material/FormLabel";
 import RadioGroup from "@mui/material/RadioGroup";
-import Footer from "./Footer";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import { Container, Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import * as Yup from "yup";
 
 function RegisterEventPage() {
@@ -61,6 +52,7 @@ function RegisterEventPage() {
         date: values.date,
         nrguests: values.nrguests,
         location: values.location,
+        judet: values.judet,
         budget: values.budget,
         liveband: values.liveBand,
         artisticmoment: values.artisticMoment,
@@ -87,7 +79,7 @@ function RegisterEventPage() {
         if (error.response) {
           setOpenError(true);
           setLoading(false);
-          // setTimeout(window.location.reload(), 8000);
+
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
@@ -107,6 +99,49 @@ function RegisterEventPage() {
   };
 
   const eventsSelectItems = ["Nuntă", "Botez", "Aniversare"];
+  const judetSelectItems = [
+    "Alba",
+    "Arad",
+    "Argeș",
+    "Bacău",
+    "Bihor",
+    "Bistrița Năsăud",
+    "Botoșani",
+    "Brăila",
+    "Brașov",
+    "Buzău",
+    "Călărași",
+    "Caraș Severin",
+    "Cluj",
+    "Constanța",
+    "Covasna",
+    "Dâmbovița",
+    "Dolj",
+    "Galați",
+    "Giurgiu",
+    "Gorj",
+    "Hargita",
+    "Hunedoara",
+    "Ialomița",
+    "Iași",
+    "Ilfov",
+    "Maramureș",
+    "Mehedinti",
+    "Mureș",
+    "Neamț",
+    "Olt",
+    "Prahova",
+    "Sălaj",
+    "Satu mare",
+    "Sibiu",
+    "Suceava",
+    "Teleorman",
+    "Timiș",
+    "Tulcea",
+    "Vâlcea",
+    "Vaslui",
+    "Vrancea",
+  ];
   const ringDanceSelectItems = ["Dominant", "Restrâns", "Fără"];
   const drinksSelectItems = ["Băuturi la masă", "Bartman"];
 
@@ -116,6 +151,7 @@ function RegisterEventPage() {
       .typeError("Introdu doar cifre!")
       .required("Alege numărul invitațiilor"),
     budget: Yup.number().typeError("Introdu doar cifre!"),
+    judet: Yup.string().required("Trebuie aleasă o opțiune!"),
   });
 
   const breakpoints = {
@@ -189,6 +225,7 @@ function RegisterEventPage() {
           date: new Date(),
           nrguests: "",
           location: "",
+          judet: "",
           budget: "",
           liveBand: "",
           artisticMoment: "",
@@ -221,12 +258,20 @@ function RegisterEventPage() {
                 Înregistrează un eveniment
               </Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={columns}>
               <FormikSelectSimple
                 id="event"
                 name="event"
                 label="Tip eveniment*"
                 items={eventsSelectItems}
+              />
+            </Grid>
+            <Grid item xs={columns}>
+              <FormikSelectSimple
+                id="judet"
+                name="judet"
+                label="Judet eveniment*"
+                items={judetSelectItems}
               />
             </Grid>
 

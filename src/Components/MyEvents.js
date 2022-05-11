@@ -42,6 +42,7 @@ function MyEventPage() {
   const email = window.localStorage.getItem("email");
   const event = window.localStorage.getItem("eveniment");
   const date = window.localStorage.getItem("dataeveniment");
+  const judet = window.localStorage.getItem("judet");
   const [loader, setLoader] = useState(true);
   const [box, setBox] = useState(false);
   const [noData, setNoData] = useState(false);
@@ -70,6 +71,7 @@ function MyEventPage() {
       data: {
         email: email,
         event: event,
+        judet: judet,
         date: date,
       },
     })
@@ -136,26 +138,26 @@ function MyEventPage() {
         }
       });
   }
-  function GetElements(event) {
-    axios({
-      method: "GET",
-      url: "/elements",
-    })
-      .then((response) => {
-        //console.log(response.data.results);
-        setData(response.data.results);
-        console.log(data);
-      })
-      .catch((error) => {
-        if (error.response) {
-          console.log(error.response);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        }
-      });
+  // function GetElements(event) {
+  //   axios({
+  //     method: "GET",
+  //     url: "/elements",
+  //   })
+  //     .then((response) => {
+  //       //console.log(response.data.results);
+  //       setData(response.data.results);
+  //       console.log(data);
+  //     })
+  //     .catch((error) => {
+  //       if (error.response) {
+  //         console.log(error.response);
+  //         console.log(error.response.status);
+  //         console.log(error.response.headers);
+  //       }
+  //     });
 
-    event.preventDefault();
-  }
+  //   event.preventDefault();
+  // }
 
   const DeleteEvent = (item) => {
     setLoader(true);
@@ -205,6 +207,7 @@ function MyEventPage() {
         date: window.localStorage.getItem("dataeveniment"),
         nrguests: window.localStorage.getItem("invitati"),
         location: window.localStorage.getItem("locatie"),
+        judet: window.localStorage.getItem("judet"),
         budget: window.localStorage.getItem("buget"),
         liveband: window.localStorage.getItem("liveband"),
         artisticmoment: window.localStorage.getItem("momentartistic"),
@@ -245,6 +248,7 @@ function MyEventPage() {
     //handleClickToOpen();
     window.localStorage.setItem("eveniment", event.EventType);
     window.localStorage.setItem("locatie", event.Location);
+    window.localStorage.setItem("judet", event.Judet);
     window.localStorage.setItem("invitati", event.NumberGuests);
     window.localStorage.setItem("buget", event.Budget);
     window.localStorage.setItem("momentartistic", event.ArtisticMoment);
@@ -324,7 +328,7 @@ function MyEventPage() {
                       {item.RowKey}
                     </TableCell>
                     <TableCell onClick={() => myClick(item)}>
-                      {item.Location != "" && item.Location}
+                      {item.Location !== "" && item.Location}
 
                       {item.Location == "" && (
                         <Button
@@ -447,6 +451,9 @@ function MyEventPage() {
                             }}
                           >
                             {location}
+                          </Typography>
+                          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                            județul {judet}
                           </Typography>
                         </CardContent>
                         <CardActions

@@ -26,6 +26,12 @@ import * as Yup from "yup";
 import FirstHeader from "./FirstHeader";
 import Footer from "./Footer";
 function SingUp() {
+  const CryptoJS = require("crypto-js");
+
+  const encrypt = (text) => {
+    return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(text));
+  };
+
   const history = useHistory();
 
   const [openSucces, setOpenSucces] = useState(false);
@@ -49,7 +55,7 @@ function SingUp() {
     const data = {
       name: values.name,
       email: values.email,
-      password: values.password,
+      password: encrypt(values.password),
     };
     console.log(data);
     axios({

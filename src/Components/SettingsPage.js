@@ -21,6 +21,14 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
 function SettingsPage() {
+  const CryptoJS = require("crypto-js");
+
+  const encrypt = (text) => {
+    return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(text));
+  };
+  const decrypt = (data) => {
+    return CryptoJS.enc.Base64.parse(data).toString(CryptoJS.enc.Utf8);
+  };
   const email = window.localStorage.getItem("email");
   const name = window.localStorage.getItem("nume");
   const date = window.localStorage.getItem("data");
@@ -62,11 +70,11 @@ function SettingsPage() {
     setLoading(true);
     axios({
       method: "POST",
-      url: "/updateprofile",
+      url: "/changepassword",
       data: {
         email: email,
         name: name,
-        password: newpassword,
+        newpassword: encrypt(newpassword),
         date: date,
         location: location,
         phonenumber: phonenumber,
@@ -74,7 +82,8 @@ function SettingsPage() {
     })
       .then((response) => {
         console.log(response.data);
-        window.localStorage.setItem("parola", newpassword);
+        console.log(decrypt(encrypt(newpassword)));
+        window.localStorage.setItem("parola", decrypt(encrypt(newpassword)));
         setLoading(false);
         setOpenSuccesPassword(true);
         setTimeout(window.location.reload(false), 3000);
@@ -90,6 +99,9 @@ function SettingsPage() {
           // console.log(error.response.status)
           // console.log(error.response.headers)
         }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }
 

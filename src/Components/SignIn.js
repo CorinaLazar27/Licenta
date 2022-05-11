@@ -25,6 +25,16 @@ import * as Yup from "yup";
 import FirstHeader from "./FirstHeader";
 
 function SingIn() {
+  const CryptoJS = require("crypto-js");
+
+  const encrypt = (text) => {
+    return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(text));
+  };
+
+  const decrypt = (data) => {
+    return CryptoJS.enc.Base64.parse(data).toString(CryptoJS.enc.Utf8);
+  };
+
   const history = useHistory();
   const [openError, setOpenError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -55,7 +65,7 @@ function SingIn() {
     setLoading(true);
     const data = {
       email: values.email,
-      password: values.password,
+      password: encrypt(values.password),
     };
     console.log(data);
     axios({
@@ -69,9 +79,9 @@ function SingIn() {
         setLoading(false);
         window.localStorage.setItem("nume", res.Name);
         window.localStorage.setItem("data", res.Date);
-        window.localStorage.setItem("parola", res.Password);
-        window.localStorage.setItem("locatieprofil", res.Location);
-        window.localStorage.setItem("numartelefon", res.Phone);
+        window.localStorage.setItem("parola", decrypt(res.Password));
+        // window.localStorage.setItem("locatieprofil", res.Location);
+        // window.localStorage.setItem("numartelefon", res.Phone);
         window.localStorage.setItem("email", res.PartitionKey);
         if (res != "Utilizator sau parola gresit") history.push("/homepage");
       })

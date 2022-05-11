@@ -6,6 +6,7 @@ from flask_cors import CORS
 from datetime import date, datetime
 from azure.cosmosdb.table.tableservice import TableService
 from azure.cosmosdb.table.models import Entity
+from matplotlib.cbook import flatten
 import pandas as pd
 from azure.cosmosdb.table.tableservice import TableService
 import numpy as np
@@ -116,6 +117,7 @@ def postform():
     date = request.json.get("date", None)
     nrguests = request.json.get("nrguests", None)
     location = request.json.get("location", None)
+    judet = request.json.get("judet", None)
     budget = request.json.get("budget", None)
     liveband = request.json.get("liveband", None)
     artisticmoment = request.json.get("artisticmoment", None)
@@ -131,6 +133,7 @@ def postform():
     print(date)
     print(nrguests)
     print(location)
+    print(judet)
     print(budget)
     print(liveband)
     print(artisticmoment)
@@ -147,6 +150,7 @@ def postform():
             u'EventType': event,
             u'NumberGuests': nrguests,
             u'Location': location,
+            u'Judet': judet,
             u'Budget': budget,
             u'LiveBand': liveband,
             u'ArtisticMoment': artisticmoment,
@@ -170,31 +174,33 @@ def changepassword():
     print(email)
     print(newpassword)
     task = {u'PartitionKey': email,
-            u'RowKey': name,
-            u'Password': newpassword}
+            u'RowKey': email,
+            u'Password': newpassword,
+            u'Name': name}
     table_client.update_entity(task)
     return "Done"
 
 
-@app.route('/updateprofile', methods=["POST"])
-def updateprofile():
-    table_client = table_service.get_table_client(table_name="Login")
-    email = request.json.get("email", None)
-    name = request.json.get("name", None)
-    password = request.json.get("password", None)
-    date = request.json.get("date", None)
-    location = request.json.get("location", None)
-    phonenumber = request.json.get("phonenumber", None)
+# @app.route('/updateprofile', methods=["POST"])
+# def updateprofile():
+#     table_client = table_service.get_table_client(table_name="Login")
+#     email = request.json.get("email", None)
+#     name = request.json.get("name", None)
+#     password = request.json.get("password", None)
+#     date = request.json.get("date", None)
+#     location = request.json.get("location", None)
+#     phonenumber = request.json.get("phonenumber", None)
 
-    task = {u'PartitionKey': email,
-            u'RowKey': name,
-            u'Password': password,
-            u'Date': date,
-            u'Location': location,
-            u'Phone': phonenumber}
+#     task = {u'PartitionKey': email,
+#             u'RowKey': email,
+#             u'Password': password,
+#             u'Date': date,
+#             u'Location': location,
+#             u'Phone': phonenumber,
+#             u'Name': name}
 
-    table_client.update_entity(task)
-    return "Done"
+#     table_client.update_entity(task)
+#     return "Done"
 
 
 @app.route('/updateform', methods=["POST"])
@@ -204,6 +210,7 @@ def updateform():
     date = request.json.get("date", None)
     nrguests = request.json.get("nrguests", None)
     location = request.json.get("location", None)
+    judet = request.json.get("judet", None)
     budget = request.json.get("budget", None)
     liveband = request.json.get("liveband", None)
     artisticmoment = request.json.get("artisticmoment", None)
@@ -219,6 +226,7 @@ def updateform():
     print(date)
     print(nrguests)
     print(location)
+    print(judet)
     print(budget)
     print(liveband)
     print(artisticmoment)
@@ -235,6 +243,7 @@ def updateform():
             u'EventType': event,
             u'NumberGuests': nrguests,
             u'Location': location,
+            u'Judet': judet,
             u'Budget': budget,
             u'LiveBand': liveband,
             u'ArtisticMoment': artisticmoment,
@@ -260,65 +269,65 @@ def deleteevent():
     return "Done"
 
 
-@app.route('/postoptionsinvitation', methods=["POST"])
-def postoptionsinvitation():
-    emailOrganizer = request.json.get("emailOrganizer", None)
-    email = request.json.get("email", None)
-    name = request.json.get("name", None)
-    age = request.json.get("age", None)
-    location = request.json.get("location", None)
-    organizerOpinion = request.json.get("organizerOpinion", None)
-    drinksOpinion = request.json.get("drinksOpinion", None)
-    cakesOpinion = request.json.get("cakesOpinion", None)
-    fruitsOpinion = request.json.get("fruitsOpinion", None)
-    appetizerOpinion = request.json.get("appetizerOpinion", None)
-    maincourseOpinion = request.json.get("maincourseOpinion", None)
-    type2Opinion = request.json.get("type2Opinion", None)
-    musicOpinion = request.json.get("musicOpinion", None)
-    print(email)
-    print(name)
-    print(age)
-    print(location)
-    print(organizerOpinion)
-    print(drinksOpinion)
-    print(cakesOpinion)
-    print(fruitsOpinion)
-    print(appetizerOpinion)
-    print(maincourseOpinion)
-    print(type2Opinion)
-    print(musicOpinion)
+# @app.route('/postoptionsinvitation', methods=["POST"])
+# def postoptionsinvitation():
+#     emailOrganizer = request.json.get("emailOrganizer", None)
+#     email = request.json.get("email", None)
+#     name = request.json.get("name", None)
+#     age = request.json.get("age", None)
+#     location = request.json.get("location", None)
+#     organizerOpinion = request.json.get("organizerOpinion", None)
+#     drinksOpinion = request.json.get("drinksOpinion", None)
+#     cakesOpinion = request.json.get("cakesOpinion", None)
+#     fruitsOpinion = request.json.get("fruitsOpinion", None)
+#     appetizerOpinion = request.json.get("appetizerOpinion", None)
+#     maincourseOpinion = request.json.get("maincourseOpinion", None)
+#     type2Opinion = request.json.get("type2Opinion", None)
+#     musicOpinion = request.json.get("musicOpinion", None)
+#     print(email)
+#     print(name)
+#     print(age)
+#     print(location)
+#     print(organizerOpinion)
+#     print(drinksOpinion)
+#     print(cakesOpinion)
+#     print(fruitsOpinion)
+#     print(appetizerOpinion)
+#     print(maincourseOpinion)
+#     print(type2Opinion)
+#     print(musicOpinion)
 
-    table_client = table_service.get_table_client(
-        table_name="InvitationOpinion")
+#     table_client = table_service.get_table_client(
+#         table_name="InvitationOpinion")
 
-    OrganizerToStr = ','.join([str(elem) for elem in organizerOpinion])
-    DrinkToStr = ','.join([str(elem) for elem in drinksOpinion])
-    CakesToStr = ','.join([str(elem) for elem in cakesOpinion])
-    FruitsToStr = ','.join([str(elem) for elem in fruitsOpinion])
-    AppetizerToStr = ','.join([str(elem) for elem in appetizerOpinion])
-    MainCourseToStr = ','.join([str(elem) for elem in maincourseOpinion])
-    Type2ToStr = ','.join([str(elem) for elem in type2Opinion])
-    MusicToStr = ','.join([str(elem) for elem in musicOpinion])
+#     OrganizerToStr = ','.join([str(elem) for elem in organizerOpinion])
+#     DrinkToStr = ','.join([str(elem) for elem in drinksOpinion])
+#     CakesToStr = ','.join([str(elem) for elem in cakesOpinion])
+#     FruitsToStr = ','.join([str(elem) for elem in fruitsOpinion])
+#     AppetizerToStr = ','.join([str(elem) for elem in appetizerOpinion])
+#     MainCourseToStr = ','.join([str(elem) for elem in maincourseOpinion])
+#     Type2ToStr = ','.join([str(elem) for elem in type2Opinion])
+#     MusicToStr = ','.join([str(elem) for elem in musicOpinion])
 
-    task = {u'PartitionKey': emailOrganizer,
-            u'RowKey': email,
-            u'Name': name,
-            u'Age': age,
-            u'Location': location,
-            u'Organizer_opinion': OrganizerToStr,
-            u'Drinks_opinion': DrinkToStr,
-            u'Cakes_opinion': CakesToStr,
-            u'Fruits_opinion': FruitsToStr,
-            u'Appetizer_opinion': AppetizerToStr,
-            u'Main_course_opinion': MainCourseToStr,
-            u'Type2_opinion': Type2ToStr,
-            u'Music_opinion': MusicToStr,
-            }
-    table_client.create_entity(entity=task)
-    return "Done"
+#     task = {u'PartitionKey': emailOrganizer,
+#             u'RowKey': email,
+#             u'Name': name,
+#             u'Age': age,
+#             u'Location': location,
+#             u'Organizer_opinion': OrganizerToStr,
+#             u'Drinks_opinion': DrinkToStr,
+#             u'Cakes_opinion': CakesToStr,
+#             u'Fruits_opinion': FruitsToStr,
+#             u'Appetizer_opinion': AppetizerToStr,
+#             u'Main_course_opinion': MainCourseToStr,
+#             u'Type2_opinion': Type2ToStr,
+#             u'Music_opinion': MusicToStr,
+#             }
+#     table_client.create_entity(entity=task)
+#     return "Done"
 
 
-countRating = 100
+countRating = 150
 
 
 @app.route('/ratingChestionar', methods=["POST"])
@@ -715,9 +724,9 @@ def get_recommendations(email, date, indices, cosine_sim2, table):
     email_indices = [i[0] for i in sim_scores]
     print("email_indices")
     print(table['Location'].iloc[email_indices])
-
+    print(table['Location'].iloc[email_indices].unique())
     # Return the top 3 most similar locations
-    return table['Location'].iloc[email_indices]
+    return table['Location'].iloc[email_indices].unique()
 
 
 @app.route('/getRecomandations', methods=["POST"])
@@ -726,10 +735,12 @@ def getRecomandations():
     event = request.json.get("event", None)
     date = request.json.get("date", None)
     email = request.json.get("email", None)
+    judet = request.json.get("judet", None)
     print(event)
     print(date)
     print(email)
-    fq = 'EventType eq \'' + event + '\' '
+    print(judet)
+    fq = 'EventType eq \'' + event + '\' and Judet eq \'' + judet + '\' '
     ts = set_table_service()
     table_form = get_dataframe_from_table_storage_table(
         table_service=ts, filter_query=fq)
@@ -757,7 +768,7 @@ def getRecomandations():
         email, date, indices, cosine_sim2, table_form)
     print("recomandation")
     print(recomandation)
-    return recomandation.to_dict()
+    return dict(enumerate(recomandation.flatten(), 1))
 
 
 if __name__ == '__main__':
