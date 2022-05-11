@@ -1,4 +1,3 @@
-import { FC } from "react";
 import { TextField } from "@mui/material";
 import { useField } from "formik";
 import DatePicker from "@mui/lab/DatePicker";
@@ -12,6 +11,7 @@ export const FormikDatePicker = (props) => {
       onChange={(e) => helpers.setValue(e)}
       mask="__.__.____"
       disabled={props.readOnly ?? false}
+      inputFormat="dd.MM.yyyy"
       renderInput={(params) => (
         <TextField
           {...params}
