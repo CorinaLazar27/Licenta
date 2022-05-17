@@ -167,18 +167,19 @@ const Header = (props) => {
                       </ListItemIcon>
                       <Typography variant="h6">Evenimentele mele</Typography>
                     </MenuItem>
-                    {/* <MenuItem
+                    <MenuItem
                       onClick={() => {
                         setAnchor(null);
+                        history.push("/invitatipage");
+                        history.go(0);
                       }}
                       component={Link}
-                      to="/profilepage"
                     >
                       <ListItemIcon>
                         <AccountCircleIcon />
                       </ListItemIcon>
-                      <Typography variant="h6"> Profil</Typography>
-                    </MenuItem> */}
+                      <Typography variant="h6"> Contacte</Typography>
+                    </MenuItem>
                     <MenuItem
                       onClick={() => setAnchor(null)}
                       component={Link}
@@ -238,15 +239,18 @@ const Header = (props) => {
                     <EventIcon />
                     Evenimentele mele
                   </Button>
-                  {/* <Button
+                  <Button
                     variant="text"
                     component={Link}
-                    to="/profilepage"
+                    onClick={() => {
+                      history.push("/invitatipage");
+                      history.go(0);
+                    }}
                     color="default"
                   >
                     <AccountCircleIcon />
-                    Profil
-                  </Button> */}
+                    Contacte
+                  </Button>
 
                   <Button
                     variant="text"

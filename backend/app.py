@@ -123,10 +123,10 @@ def postform():
     artisticmoment = request.json.get("artisticmoment", None)
     photographer = request.json.get("photographer", None)
     videorecording = request.json.get("videorecording", None)
-    candybar = request.json.get("candybar", None)
-    fruitsbar = request.json.get("fruitsbar", None)
-    drinks = request.json.get("drinks", None)
-    ringdance = request.json.get("ringdance", None)
+    # candybar = request.json.get("candybar", None)
+    # fruitsbar = request.json.get("fruitsbar", None)
+    # drinks = request.json.get("drinks", None)
+    # ringdance = request.json.get("ringdance", None)
 
     print(email)
     print(event)
@@ -139,10 +139,10 @@ def postform():
     print(artisticmoment)
     print(photographer)
     print(videorecording)
-    print(candybar)
-    print(fruitsbar)
-    print(drinks)
-    print(ringdance)
+    # print(candybar)
+    # print(fruitsbar)
+    # print(drinks)
+    # print(ringdance)
     table_client = table_service.get_table_client(table_name="Form")
 
     task = {u'PartitionKey': email,
@@ -156,12 +156,53 @@ def postform():
             u'ArtisticMoment': artisticmoment,
             u'Photographer': photographer,
             u'VideoRecording': videorecording,
-            u'CandyBar': candybar,
-            u'FruitsBar': fruitsbar,
-            u'Drinks': drinks,
-            u'RingDance': ringdance
+            # u'CandyBar': candybar,
+            # u'FruitsBar': fruitsbar,
+            # u'Drinks': drinks,
+            # u'RingDance': ringdance
             }
     table_client.create_entity(entity=task)
+    return "Done"
+
+
+@app.route('/invitationList', methods=["POST"])
+def invitationList():
+    email = request.json.get("email", None)
+    formValues = request.json.get("formValues", None)
+    table_client = table_service.get_table_client(table_name="Invitati")
+    print(formValues)
+    for index in range(len(formValues)):
+        task = {u'PartitionKey': email,
+                u'RowKey': formValues[index]["emailInvitat"],
+                u'NumeInvitat': formValues[index]["numeInvitat"],
+                }
+        table_client.create_entity(entity=task)
+
+    return "Done"
+
+
+@app.route('/getInvitati', methods=["POST"])
+def getInvitati():
+    email = request.json.get("email", None)
+    table_client = table_service.get_table_client(table_name="Invitati")
+    tasks = table_client.query_entities(
+        query_filter='PartitionKey eq \'' + email + '\'')
+    lst = list(tasks)
+    print(lst)
+    return jsonify(results=lst)
+
+
+@app.route('/deleteinvitat', methods=["POST"])
+def deleteInvitat():
+    table_client = table_service.get_table_client(table_name="Invitati")
+
+    email = request.json.get("email", None)
+    emailInvitat = request.json.get("emailInvitat", None)
+    print(email)
+    print(emailInvitat)
+
+    table_client.delete_entity(email, emailInvitat)
+
     return "Done"
 
 
@@ -216,10 +257,10 @@ def updateform():
     artisticmoment = request.json.get("artisticmoment", None)
     photographer = request.json.get("photographer", None)
     videorecording = request.json.get("videorecording", None)
-    candybar = request.json.get("candybar", None)
-    fruitsbar = request.json.get("fruitsbar", None)
-    drinks = request.json.get("drinks", None)
-    ringdance = request.json.get("ringdance", None)
+    # candybar = request.json.get("candybar", None)
+    # fruitsbar = request.json.get("fruitsbar", None)
+    # drinks = request.json.get("drinks", None)
+    # ringdance = request.json.get("ringdance", None)
 
     print(email)
     print(event)
@@ -232,10 +273,10 @@ def updateform():
     print(artisticmoment)
     print(photographer)
     print(videorecording)
-    print(candybar)
-    print(fruitsbar)
-    print(drinks)
-    print(ringdance)
+    # print(candybar)
+    # print(fruitsbar)
+    # print(drinks)
+    # print(ringdance)
     table_client = table_service.get_table_client(table_name="Form")
 
     task = {u'PartitionKey': email,
@@ -249,10 +290,10 @@ def updateform():
             u'ArtisticMoment': artisticmoment,
             u'Photographer': photographer,
             u'VideoRecording': videorecording,
-            u'CandyBar': candybar,
-            u'FruitsBar': fruitsbar,
-            u'Drinks': drinks,
-            u'RingDance': ringdance
+            # u'CandyBar': candybar,
+            # u'FruitsBar': fruitsbar,
+            # u'Drinks': drinks,
+            # u'RingDance': ringdance
             }
     table_client.update_entity(task)
     return "Done"
@@ -260,12 +301,25 @@ def updateform():
 
 @app.route('/deleteevent', methods=["POST"])
 def deleteevent():
-    table_client = table_service.get_table_client(table_name="Form")
+    table_client_form = table_service.get_table_client(table_name="Form")
+    table_client_aperitiv = table_service.get_table_client(
+        table_name="AperitivRating")
+    table_client_type1 = table_service.get_table_client(
+        table_name="Type1Rating")
+    table_client_type2 = table_service.get_table_client(
+        table_name="Type2Rating")
+    table_client_music = table_service.get_table_client(
+        table_name="MusicRating")
     email = request.json.get("email", None)
     date = request.json.get("date", None)
     print(email)
     print(date)
-    table_client.delete_entity(email, date)
+
+    table_client_aperitiv.delete_entity(email, Data=date)
+    # table_client_type1.delete_entity(email, Data=date)
+    # table_client_type2.delete_entity(email, Data=date)
+    # table_client_music.delete_entity(email, Data=date)
+    # table_client_form.delete_entity(email, date)
     return "Done"
 
 
@@ -327,7 +381,7 @@ def deleteevent():
 #     return "Done"
 
 
-countRating = 150
+countRating = 300
 
 
 @app.route('/ratingChestionar', methods=["POST"])
@@ -704,7 +758,7 @@ def clean_data(x):
 
 
 def create_all(x):
-    return "".join(x['NumberGuests']) + '|' + ''.join(x['Budget']) + '|' + "".join(x['Drinks']) + '|' + "".join(x['RingDance'])
+    return "".join(x['NumberGuests']) + '|' + ''.join(x['Budget'])
 
 
 def get_recommendations(email, date, indices, cosine_sim2, table):
@@ -744,7 +798,7 @@ def getRecomandations():
     ts = set_table_service()
     table_form = get_dataframe_from_table_storage_table(
         table_service=ts, filter_query=fq)
-    features = ['NumberGuests', 'Budget', 'Drinks', 'RingDance']
+    features = ['NumberGuests', 'Budget']
     print(table_form[features])
     for feature in features:
         table_form[feature] = table_form[feature].apply(clean_data)

@@ -142,15 +142,17 @@ function RegisterEventPage() {
     "Vaslui",
     "Vrancea",
   ];
-  const ringDanceSelectItems = ["Dominant", "Restrâns", "Fără"];
-  const drinksSelectItems = ["Băuturi la masă", "Bartman"];
+  // const ringDanceSelectItems = ["Dominant", "Restrâns", "Fără"];
+  // const drinksSelectItems = ["Băuturi la masă", "Bartman"];
 
   const ValidationsForm = Yup.object().shape({
     event: Yup.string().required("Trebuie aleasă o opțiune!"),
     nrguests: Yup.number()
       .typeError("Introdu doar cifre!")
-      .required("Alege numărul invitațiilor"),
-    budget: Yup.number().typeError("Introdu doar cifre!"),
+      .required("Introdu numărul aproximativ al invitațiilor"),
+    budget: Yup.number()
+      .typeError("Introdu doar cifre!")
+      .required("Introdu bugetul aproximativ alocat evenimentului"),
     judet: Yup.string().required("Trebuie aleasă o opțiune!"),
   });
 
@@ -231,10 +233,10 @@ function RegisterEventPage() {
           artisticMoment: "",
           photographer: "",
           videoRecording: "",
-          candyBar: "",
-          fruitsBar: "",
-          drinks: "",
-          ringDance: "",
+          // candyBar: "",
+          // fruitsBar: "",
+          // drinks: "",
+          // ringDance: "",
         }}
         validationSchema={ValidationsForm}
         onSubmit={(values) => {
@@ -248,6 +250,7 @@ function RegisterEventPage() {
             columnSpacing={3}
             rowSpacing={5}
             sx={{
+              marginTop: "5vh",
               paddingTop: "5em",
               paddingLeft: "5em",
               paddingRight: "5em",
@@ -255,7 +258,7 @@ function RegisterEventPage() {
           >
             <Grid item xs={12}>
               <Typography style={{ fontSize: size }}>
-                Înregistrează un eveniment
+                Creează un eveniment
               </Typography>
             </Grid>
             <Grid item xs={columns}>
@@ -270,7 +273,7 @@ function RegisterEventPage() {
               <FormikSelectSimple
                 id="judet"
                 name="judet"
-                label="Judet eveniment*"
+                label="Județ eveniment*"
                 items={judetSelectItems}
               />
             </Grid>
@@ -293,13 +296,13 @@ function RegisterEventPage() {
             </Grid>
 
             <Grid item xs={columns}>
+              <FormikTextField id="budget" label="Buget (LEI)*" name="budget" />
+            </Grid>
+            <Grid item xs={columns}>
               <FormikTextField id="location" label="Locație" name="location" />
             </Grid>
 
-            <Grid item xs={columns}>
-              <FormikTextField id="budget" label="Buget (LEI)" name="budget" />
-            </Grid>
-
+            {/* 
             <Grid item xs={columns}>
               <Box
                 sx={{
@@ -329,9 +332,11 @@ function RegisterEventPage() {
                   </RadioGroup>
                 </FormLabel>
               </Box>
-            </Grid>
-
+            </Grid> */}
             <Grid item xs={columns}>
+              <FormikTextField id="muzică" label="Muzică" name="liveBand" />
+            </Grid>
+            {/* <Grid item xs={columns}>
               <Box
                 sx={{
                   border: "2px solid",
@@ -360,8 +365,15 @@ function RegisterEventPage() {
                   </RadioGroup>
                 </FormLabel>
               </Box>
+            </Grid> */}
+            <Grid item xs={columns}>
+              <FormikTextField
+                id="artisticMoment"
+                label="Moment artistic"
+                name="artisticMoment"
+              />
             </Grid>
-
+            {/* 
             <Grid item xs={columns}>
               <Box
                 sx={{
@@ -391,8 +403,22 @@ function RegisterEventPage() {
                   </RadioGroup>
                 </FormLabel>
               </Box>
+            </Grid> */}
+            <Grid item xs={columns}>
+              <FormikTextField
+                id="photographer"
+                label="Fotograf"
+                name="photographer"
+              />
             </Grid>
-
+            <Grid item xs={columns}>
+              <FormikTextField
+                id="videoRecording"
+                label="Înregistrare video"
+                name="videoRecording"
+              />
+            </Grid>
+            {/* 
             <Grid item xs={columns}>
               <Box
                 sx={{
@@ -422,8 +448,8 @@ function RegisterEventPage() {
                   </RadioGroup>
                 </FormLabel>
               </Box>
-            </Grid>
-
+            </Grid> */}
+            {/* 
             <Grid item xs={columns}>
               <Box
                 sx={{
@@ -501,7 +527,7 @@ function RegisterEventPage() {
                 label="Ring de dans"
                 items={ringDanceSelectItems}
               />
-            </Grid>
+            </Grid> */}
 
             <Grid item xs={12}>
               <LoadingButton

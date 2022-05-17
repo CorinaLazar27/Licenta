@@ -20,10 +20,10 @@ function EditFormPage() {
   const location = window.localStorage.getItem("locatie");
   const judet = window.localStorage.getItem("judet");
   const date = window.localStorage.getItem("dataeveniment");
-  const ringDance = window.localStorage.getItem("ringdans");
-  const drinks = window.localStorage.getItem("bauturi");
-  const fruitsbar = window.localStorage.getItem("fruitsbar");
-  const candybar = window.localStorage.getItem("candybar");
+  // const ringDance = window.localStorage.getItem("ringdans");
+  // const drinks = window.localStorage.getItem("bauturi");
+  // const fruitsbar = window.localStorage.getItem("fruitsbar");
+  // const candybar = window.localStorage.getItem("candybar");
   const video = window.localStorage.getItem("video");
   const photographer = window.localStorage.getItem("fotograf");
   const artisticmoment = window.localStorage.getItem("momentartistic");
@@ -52,23 +52,23 @@ function EditFormPage() {
       document.getElementById("judet").readOnly = true;
       document.getElementById("budget").readOnly = true;
       document.getElementById("numberofguests").readOnly = true;
-      document.getElementById("liveband").disabled = true;
+      document.getElementById("liveband").readOnly = true;
       document.getElementById("liveband").style.backgroundColor = "#e4e6e9";
-      document.getElementById("artisticmoment").disabled = true;
+      document.getElementById("artisticmoment").readOnly = true;
       document.getElementById("artisticmoment").style.backgroundColor =
         "#e4e6e9";
-      document.getElementById("photographer").disabled = true;
+      document.getElementById("photographer").readOnly = true;
       document.getElementById("photographer").style.backgroundColor = "#e4e6e9";
-      document.getElementById("video").disabled = true;
+      document.getElementById("video").readOnly = true;
       document.getElementById("video").style.backgroundColor = "#e4e6e9";
-      document.getElementById("candybar").disabled = true;
-      document.getElementById("candybar").style.backgroundColor = "#e4e6e9";
-      document.getElementById("fruitsbar").disabled = true;
-      document.getElementById("fruitsbar").style.backgroundColor = "#e4e6e9";
-      document.getElementById("drinks").disabled = true;
-      document.getElementById("drinks").style.backgroundColor = "#e4e6e9";
-      document.getElementById("ringDance").disabled = true;
-      document.getElementById("ringDance").style.backgroundColor = "#e4e6e9";
+      // document.getElementById("candybar").readOnly = true;
+      // document.getElementById("candybar").style.backgroundColor = "#e4e6e9";
+      // document.getElementById("fruitsbar").readOnly = true;
+      // document.getElementById("fruitsbar").style.backgroundColor = "#e4e6e9";
+      // document.getElementById("drinks").readOnly = true;
+      // document.getElementById("drinks").style.backgroundColor = "#e4e6e9";
+      // document.getElementById("ringDance").readOnly = true;
+      // document.getElementById("ringDance").style.backgroundColor = "#e4e6e9";
       document.getElementById("editButton").textContent = "Editează";
 
       UpdateForm();
@@ -77,22 +77,22 @@ function EditFormPage() {
       document.getElementById("judet").readOnly = false;
       document.getElementById("budget").readOnly = false;
       document.getElementById("numberofguests").readOnly = false;
-      document.getElementById("liveband").disabled = false;
+      document.getElementById("liveband").readOnly = false;
       document.getElementById("liveband").style.backgroundColor = "white";
-      document.getElementById("artisticmoment").disabled = false;
+      document.getElementById("artisticmoment").readOnly = false;
       document.getElementById("artisticmoment").style.backgroundColor = "white";
-      document.getElementById("photographer").disabled = false;
+      document.getElementById("photographer").readOnly = false;
       document.getElementById("photographer").style.backgroundColor = "white";
-      document.getElementById("video").disabled = false;
+      document.getElementById("video").readOnly = false;
       document.getElementById("video").style.backgroundColor = "white";
-      document.getElementById("candybar").disabled = false;
-      document.getElementById("candybar").style.backgroundColor = "white";
-      document.getElementById("fruitsbar").disabled = false;
-      document.getElementById("fruitsbar").style.backgroundColor = "white";
-      document.getElementById("drinks").disabled = false;
-      document.getElementById("drinks").style.backgroundColor = "white";
-      document.getElementById("ringDance").disabled = false;
-      document.getElementById("ringDance").style.backgroundColor = "white";
+      // document.getElementById("candybar").readOnly = false;
+      // document.getElementById("candybar").style.backgroundColor = "white";
+      // document.getElementById("fruitsbar").readOnly = false;
+      // document.getElementById("fruitsbar").style.backgroundColor = "white";
+      // document.getElementById("drinks").readOnly = false;
+      // document.getElementById("drinks").style.backgroundColor = "white";
+      // document.getElementById("ringDance").readOnly = false;
+      // document.getElementById("ringDance").style.backgroundColor = "white";
       document.getElementById("editButton").textContent = "Salvează schimbări";
     }
   }
@@ -114,10 +114,10 @@ function EditFormPage() {
         artisticmoment: window.localStorage.getItem("momentartistic"),
         photographer: window.localStorage.getItem("fotograf"),
         videorecording: window.localStorage.getItem("video"),
-        candybar: window.localStorage.getItem("candybar"),
-        fruitsbar: window.localStorage.getItem("fruitsbar"),
-        drinks: window.localStorage.getItem("bauturi"),
-        ringdance: window.localStorage.getItem("ringdans"),
+        // candybar: window.localStorage.getItem("candybar"),
+        // fruitsbar: window.localStorage.getItem("fruitsbar"),
+        // drinks: window.localStorage.getItem("bauturi"),
+        // ringdance: window.localStorage.getItem("ringdans"),
       },
     })
       .then((response) => {
@@ -160,6 +160,7 @@ function EditFormPage() {
             alignItems: "flex-start",
             justifyContent: "left",
             margin: "2rem",
+            marginTop: "5vh",
           }}
         >
           <Button
@@ -249,9 +250,9 @@ function EditFormPage() {
             <div className="row gx-3 mb-3">
               <div className="col-md-6">
                 <label className="small mb-1" htmlFor="liveband">
-                  Trupă live
+                  Muzică
                 </label>
-                {/* <input
+                <input
                   className="form-control"
                   id="liveband"
                   defaultValue={liveband}
@@ -259,8 +260,8 @@ function EditFormPage() {
                     window.localStorage.setItem("liveband", event.target.value)
                   }
                   readOnly
-                /> */}
-                <select
+                />
+                {/* <select
                   name="liveband"
                   id="liveband"
                   disabled="true"
@@ -273,15 +274,36 @@ function EditFormPage() {
                   <option value=""></option>
                   <option value="Da">Da</option>
                   <option value="Nu">Nu</option>
-                </select>
+                </select> */}
+                {/* <input
+                  className="form-control"
+                  id="location"
+                  type="text"
+                  defaultValue={location}
+                  onChange={(event) =>
+                    window.localStorage.setItem("locatie", event.target.value)
+                  }
+                  readOnly
+                /> */}
               </div>
 
               <div className="col-md-6">
                 <label className="small mb-1" htmlFor="artisticmoment">
                   Moment artistic
                 </label>
-
-                <select
+                <input
+                  className="form-control"
+                  id="artisticmoment"
+                  defaultValue={artisticmoment}
+                  onChange={(event) =>
+                    window.localStorage.setItem(
+                      "momentartistic",
+                      event.target.value
+                    )
+                  }
+                  readOnly
+                />
+                {/* <select
                   name="artisticmoment"
                   id="artisticmoment"
                   disabled="true"
@@ -297,7 +319,7 @@ function EditFormPage() {
                   <option value=""></option>
                   <option value="Da">Da</option>
                   <option value="Nu">Nu</option>
-                </select>
+                </select> */}
               </div>
             </div>
 
@@ -306,7 +328,7 @@ function EditFormPage() {
                 <label className="small mb-1" htmlFor="photographer">
                   Fotograf
                 </label>
-                {/* <input
+                <input
                   className="form-control"
                   id="photographer"
                   defaultValue={photographer}
@@ -314,8 +336,8 @@ function EditFormPage() {
                     window.localStorage.setItem("fotograf", event.target.value)
                   }
                   readOnly
-                /> */}
-                <select
+                />
+                {/* <select
                   name="photographer"
                   id="photographer"
                   disabled="true"
@@ -328,14 +350,14 @@ function EditFormPage() {
                   <option value=""></option>
                   <option value="Da">Da</option>
                   <option value="Nu">Nu</option>
-                </select>
+                </select> */}
               </div>
 
               <div className="col-md-6">
                 <label className="small mb-1" htmlFor="video">
                   Inregistrare video
                 </label>
-                {/* <input
+                <input
                   className="form-control"
                   id="video"
                   name="birthday"
@@ -344,8 +366,8 @@ function EditFormPage() {
                     window.localStorage.setItem("video", event.target.value)
                   }
                   readOnly
-                /> */}
-                <select
+                />
+                {/* <select
                   name="video"
                   id="video"
                   disabled="true"
@@ -358,15 +380,15 @@ function EditFormPage() {
                   <option value=""></option>
                   <option value="Da">Da</option>
                   <option value="Nu">Nu</option>
-                </select>
+                </select> */}
               </div>
             </div>
 
             <div className="row gx-3 mb-3">
               <div className="col-md-6">
-                <label className="small mb-1" htmlFor="candybar">
+                {/* <label className="small mb-1" htmlFor="candybar">
                   Candy Bar
-                </label>
+                </label> */}
                 {/* <input
                   className="form-control"
                   id="candybar"
@@ -376,7 +398,7 @@ function EditFormPage() {
                   }
                   readOnly
                 /> */}
-                <select
+                {/* <select
                   name="candybar"
                   id="candybar"
                   disabled="true"
@@ -389,13 +411,13 @@ function EditFormPage() {
                   <option value=""></option>
                   <option value="Da">Da</option>
                   <option value="Nu">Nu</option>
-                </select>
+                </select> */}
               </div>
 
               <div className="col-md-6">
-                <label className="small mb-1" htmlFor="fruitsbar">
+                {/* <label className="small mb-1" htmlFor="fruitsbar">
                   Bar cu fructe
-                </label>
+                </label> */}
                 {/* <input
                   className="form-control"
                   id="fruitsbar"
@@ -407,7 +429,7 @@ function EditFormPage() {
                   readOnly
                 /> */}
 
-                <select
+                {/* <select
                   name="fruitsbar"
                   id="fruitsbar"
                   disabled="true"
@@ -423,15 +445,15 @@ function EditFormPage() {
                   <option value=""></option>
                   <option value="Da">Da</option>
                   <option value="Nu">Nu</option>
-                </select>
+                </select> */}
               </div>
             </div>
 
             <div className="row gx-3 mb-3">
               <div className="col-md-6">
-                <label className="small mb-1" htmlFor="drinks">
+                {/* <label className="small mb-1" htmlFor="drinks">
                   Băuturi
-                </label>
+                </label> */}
                 {/* <input
                   className="form-control"
                   id="drinks"
@@ -441,7 +463,7 @@ function EditFormPage() {
                   }
                   readOnly
                 /> */}
-                <select
+                {/* <select
                   name="drinks"
                   id="drinks"
                   disabled="true"
@@ -454,14 +476,14 @@ function EditFormPage() {
                   <option value=""></option>
                   <option value="Băuturi la masă">Băuturi la masă</option>
                   <option value="Bartman">Bartman</option>
-                </select>
+                </select> */}
               </div>
 
-              <div className="col-md-6">
+              {/* <div className="col-md-6">
                 <label className="small mb-1" htmlFor="ringDance">
                   Ring dans
-                </label>
-                {/* <input
+                </label> */}
+              {/* <input
                   className="form-control"
                   id="ringDance"
                   name="ringDance"
@@ -471,7 +493,7 @@ function EditFormPage() {
                   }
                   readOnly
                 /> */}
-                <select
+              {/* <select
                   name="ringDance"
                   id="ringDance"
                   disabled="true"
@@ -485,8 +507,8 @@ function EditFormPage() {
                   <option value="Dominant">Dominant</option>
                   <option value="Restrâns">Restrâns</option>
                   <option value="Fără">Fără</option>
-                </select>
-              </div>
+                </select> */}
+              {/* </div> */}
             </div>
           </form>
           <Button

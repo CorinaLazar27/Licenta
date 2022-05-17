@@ -213,10 +213,10 @@ function MyEventPage() {
         artisticmoment: window.localStorage.getItem("momentartistic"),
         photographer: window.localStorage.getItem("fotograf"),
         videorecording: window.localStorage.getItem("video"),
-        candybar: window.localStorage.getItem("candybar"),
-        fruitsbar: window.localStorage.getItem("fruitsbar"),
-        drinks: window.localStorage.getItem("bauturi"),
-        ringdance: window.localStorage.getItem("ringdans"),
+        // candybar: window.localStorage.getItem("candybar"),
+        // fruitsbar: window.localStorage.getItem("fruitsbar"),
+        // drinks: window.localStorage.getItem("bauturi"),
+        // ringdance: window.localStorage.getItem("ringdans"),
       },
     })
       .then((response) => {
@@ -256,10 +256,10 @@ function MyEventPage() {
     window.localStorage.setItem("video", event.VideoRecording);
     window.localStorage.setItem("candybar", event.CandyBar);
     window.localStorage.setItem("fruitsbar", event.FruitsBar);
-    window.localStorage.setItem("bauturi", event.Drinks);
-    window.localStorage.setItem("ringdans", event.RingDance);
-    window.localStorage.setItem("dataeveniment", event.RowKey);
-    window.localStorage.setItem("liveband", event.LiveBand);
+    // window.localStorage.setItem("bauturi", event.Drinks);
+    // window.localStorage.setItem("ringdans", event.RingDance);
+    // window.localStorage.setItem("dataeveniment", event.RowKey);
+    // window.localStorage.setItem("liveband", event.LiveBand);
   }
 
   const Alert = React.forwardRef(function Alert(props, ref) {
