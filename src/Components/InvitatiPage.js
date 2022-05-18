@@ -27,21 +27,21 @@ import Checkbox from "@mui/material/Checkbox";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import OverlayLoader from "./OverlayLoader";
+
 function InvitatiPage() {
   const history = useHistory();
   const [formValues, setFormValues] = useState([
     { emailInvitat: "", numeInvitat: "" },
   ]);
-  const [invitatiSalvati, setInvitatiSalvati] = useState([
-    { emailInvitat: "ana@yahoo.com", numeInvitat: "Ana Maria" },
-  ]);
+  const [invitatiSalvati, setInvitatiSalvati] = useState([]);
+
   const [data, setData] = useState([{}]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [openError, setOpenError] = useState(false);
   const email = window.localStorage.getItem("email");
   const [loader, setLoader] = useState(true);
-
+  const [empty, setEmpty] = useState(false);
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
@@ -93,18 +93,15 @@ function InvitatiPage() {
 
   let addFormFields = () => {
     setFormValues([...formValues, { emailInvitat: "", numeInvitat: "" }]);
-    console.log(formValues);
   };
 
   let removeFormFields = (i) => {
     let newFormValues = [...formValues];
     newFormValues.splice(i, 1);
     setFormValues(newFormValues);
-    console.log(formValues);
   };
 
   async function removeFormInv(i) {
-    console.log(invitatiSalvati[i].emailInvitat);
     let newFormValues = [...invitatiSalvati];
     newFormValues.splice(i, 1);
     setInvitatiSalvati(newFormValues);
@@ -136,8 +133,8 @@ function InvitatiPage() {
       });
   }
 
-  function GetInvitati() {
-    axios({
+  async function GetInvitati() {
+    await axios({
       method: "POST",
       url: "/getInvitati",
       data: {
@@ -145,22 +142,11 @@ function InvitatiPage() {
       },
     })
       .then((response) => {
-        // console.log(response.data.results);
+        console.log(response.data.results);
+        if (response.data.results.length == 0) setEmpty(true);
+        else setInvitatiSalvati(response.data.results);
 
-        response.data.results.forEach(function (item, index) {
-          console.log(item.NumeInvitat, item.RowKey);
-          setInvitatiSalvati([
-            ...invitatiSalvati,
-            {
-              emailInvitat: item.RowKey,
-              numeInvitat: item.NumeInvitat,
-            },
-          ]);
-        });
-        setData(response.data.results);
-        console.log(data);
-
-        console.log(invitatiSalvati);
+        console.log("invitatiSalvati", invitatiSalvati);
       })
       .catch((error) => {
         if (error.response) {
@@ -244,88 +230,92 @@ function InvitatiPage() {
         <Grid item xs={12} sx={{ padding: "2vh" }}>
           <Grid container rowSpacing={3}>
             <Grid item xs={12}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell padding="checkbox"></TableCell>
-                    <TableCell> Nume </TableCell>
-                    <TableCell> Email </TableCell>
-                    <TableCell> Ștergere</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {invitatiSalvati.map((element, index) => {
-                    return (
-                      <>
-                        <TableRow
-                          sx={{
-                            backgroundColor: "#fffdf3",
-                          }}
-                        >
-                          <TableCell />
-                          <TableCell>
-                            <TextField
-                              fullWidth
-                              name="numeInvitat"
-                              value={element.numeInvitat || ""}
-                              variant="standard"
-                              onChange={(e) => handleChange(index, e)}
-                              readOnly
-                            />
-                          </TableCell>
+              {!empty ? (
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell padding="checkbox"></TableCell>
+                      <TableCell> Nume </TableCell>
+                      <TableCell> Email </TableCell>
+                      <TableCell> Ștergere</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {invitatiSalvati.map((element, index) => {
+                      console.log(element);
+                      return (
+                        <>
+                          {element.numeInvitat != "" ? (
+                            <TableRow
+                              sx={{
+                                backgroundColor: "#fffdf3",
+                              }}
+                            >
+                              <TableCell />
+                              <TableCell>
+                                <TextField
+                                  fullWidth
+                                  name="numeInvitat"
+                                  value={element.NumeInvitat || ""}
+                                  variant="standard"
+                                  onChange={(e) => handleChange(index, e)}
+                                  readOnly
+                                />
+                              </TableCell>
 
-                          <TableCell>
-                            <TextField
-                              fullWidth
-                              type="email"
-                              name="emailInvitat"
-                              value={element.emailInvitat || ""}
-                              variant="standard"
-                              onChange={(e) => handleChange(index, e)}
-                              required
-                              readOnly
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <Button
-                              startIcon={<DeleteOutlineIcon />}
-                              onClick={() => removeFormInv(index)}
-                            ></Button>
-                          </TableCell>
-                        </TableRow>
-                      </>
-                    );
-                  })}
-                  {formValues.map((element, index) => {
-                    return (
-                      <>
-                        {index ? (
-                          <TableRow>
-                            <TableCell />
-                            <TableCell>
-                              <TextField
-                                fullWidth
-                                name="numeInvitat"
-                                value={element.numeInvitat || ""}
-                                variant="standard"
-                                onChange={(e) => handleChange(index, e)}
-                                required
-                              />
-                            </TableCell>
+                              <TableCell>
+                                <TextField
+                                  fullWidth
+                                  type="email"
+                                  name="emailInvitat"
+                                  value={element.RowKey || ""}
+                                  variant="standard"
+                                  onChange={(e) => handleChange(index, e)}
+                                  required
+                                  readOnly
+                                />
+                              </TableCell>
+                              <TableCell>
+                                <Button
+                                  startIcon={<DeleteOutlineIcon />}
+                                  onClick={() => removeFormInv(index)}
+                                ></Button>
+                              </TableCell>
+                            </TableRow>
+                          ) : null}
+                        </>
+                      );
+                    })}
+                    {formValues.map((element, index) => {
+                      return (
+                        <>
+                          {index ? (
+                            <TableRow>
+                              <TableCell />
+                              <TableCell>
+                                <TextField
+                                  fullWidth
+                                  name="numeInvitat"
+                                  value={element.numeInvitat || ""}
+                                  variant="standard"
+                                  onChange={(e) => handleChange(index, e)}
+                                  required
+                                />
+                              </TableCell>
 
-                            <TableCell>
-                              <TextField
-                                fullWidth
-                                type="email"
-                                name="emailInvitat"
-                                value={element.emailInvitat || ""}
-                                variant="standard"
-                                onChange={(e) => handleChange(index, e)}
-                                required
-                              />
-                            </TableCell>
-                            <TableCell>
-                              {/* <Checkbox
+                              <TableCell>
+                                <TextField
+                                  fullWidth
+                                  type="email"
+                                  name="emailInvitat"
+                                  value={element.emailInvitat || ""}
+                                  variant="standard"
+                                  onChange={(e) => handleChange(index, e)}
+                                  required
+                                />
+                              </TableCell>
+                              <TableCell>
+                                {/* <Checkbox
                               sx={{
                                 alignSelf: "center",
                                 justifyContent: "center",
@@ -333,20 +323,21 @@ function InvitatiPage() {
                               defaultChecked={"false"}
                             /> */}
 
-                              <Button
-                                startIcon={<DeleteOutlineIcon />}
-                                onClick={() => removeFormFields(index)}
-                              >
-                                Șterge
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        ) : null}
-                      </>
-                    );
-                  })}
-                </TableBody>
-              </Table>
+                                <Button
+                                  startIcon={<DeleteOutlineIcon />}
+                                  onClick={() => removeFormFields(index)}
+                                >
+                                  Șterge
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          ) : null}
+                        </>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              ) : null}
               <Grid
                 item
                 xs={12}
@@ -362,7 +353,10 @@ function InvitatiPage() {
                     float: "right",
                   }}
                   startIcon={<AddIcon />}
-                  onClick={() => addFormFields()}
+                  onClick={() => {
+                    setEmpty(false);
+                    addFormFields();
+                  }}
                 >
                   Adaugă contact
                 </Button>

@@ -32,6 +32,11 @@ import Header from "./Header";
 import { Tooltip } from "@material-ui/core";
 import MuiAlert from "@mui/material/Alert";
 import { LoadingButton } from "@mui/lab";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import background from "../Image/homePage.png";
+import Footer from "./Footer";
+import AssistantIcon from "@mui/icons-material/Assistant";
+import RecommendIcon from "@mui/icons-material/Recommend";
 
 function MyEventPage() {
   const history = useHistory();
@@ -63,7 +68,7 @@ function MyEventPage() {
     GetMyEvents();
   }, []);
 
-  function GetLocationRecomandation() {
+  function GetRecomandation(type) {
     setNoRecomandations(false);
     axios({
       method: "POST",
@@ -73,6 +78,7 @@ function MyEventPage() {
         event: event,
         judet: judet,
         date: date,
+        type: type,
       },
     })
       .then((response) => {
@@ -123,6 +129,7 @@ function MyEventPage() {
         setLoader(false);
         setLoad(false);
         setData(response.data.results);
+        console.log("ASTA VREAU", response.data.results);
         console.log(response.data.results.length);
         console.log(response.data.results.location);
         if (response.data.results.length === 0) setNoData(true);
@@ -138,26 +145,6 @@ function MyEventPage() {
         }
       });
   }
-  // function GetElements(event) {
-  //   axios({
-  //     method: "GET",
-  //     url: "/elements",
-  //   })
-  //     .then((response) => {
-  //       //console.log(response.data.results);
-  //       setData(response.data.results);
-  //       console.log(data);
-  //     })
-  //     .catch((error) => {
-  //       if (error.response) {
-  //         console.log(error.response);
-  //         console.log(error.response.status);
-  //         console.log(error.response.headers);
-  //       }
-  //     });
-
-  //   event.preventDefault();
-  // }
 
   const DeleteEvent = (item) => {
     setLoader(true);
@@ -190,7 +177,7 @@ function MyEventPage() {
   function chooseLocation() {
     setLoader(true);
     setBox(true);
-    GetLocationRecomandation();
+    GetRecomandation("Fotograf");
   }
 
   const [loading, setLoading] = useState(false);
@@ -210,9 +197,9 @@ function MyEventPage() {
         judet: window.localStorage.getItem("judet"),
         budget: window.localStorage.getItem("buget"),
         liveband: window.localStorage.getItem("liveband"),
-        artisticmoment: window.localStorage.getItem("momentartistic"),
+        // artisticmoment: window.localStorage.getItem("momentartistic"),
         photographer: window.localStorage.getItem("fotograf"),
-        videorecording: window.localStorage.getItem("video"),
+        // videorecording: window.localStorage.getItem("video"),
         // candybar: window.localStorage.getItem("candybar"),
         // fruitsbar: window.localStorage.getItem("fruitsbar"),
         // drinks: window.localStorage.getItem("bauturi"),
@@ -246,20 +233,20 @@ function MyEventPage() {
     setDateForDelete(event.RowKey);
     console.log(dateForDelete);
     //handleClickToOpen();
-    window.localStorage.setItem("eveniment", event.EventType);
-    window.localStorage.setItem("locatie", event.Location);
+    window.localStorage.setItem("eveniment", event.TipEveniment);
+    window.localStorage.setItem("locatie", event.Restaurant);
     window.localStorage.setItem("judet", event.Judet);
-    window.localStorage.setItem("invitati", event.NumberGuests);
-    window.localStorage.setItem("buget", event.Budget);
-    window.localStorage.setItem("momentartistic", event.ArtisticMoment);
-    window.localStorage.setItem("fotograf", event.Photographer);
-    window.localStorage.setItem("video", event.VideoRecording);
-    window.localStorage.setItem("candybar", event.CandyBar);
-    window.localStorage.setItem("fruitsbar", event.FruitsBar);
+    window.localStorage.setItem("invitati", event.NumarInvitati);
+    window.localStorage.setItem("buget", event.Buget);
+    window.localStorage.setItem("momentartistic", event.MomentArtistic);
+    window.localStorage.setItem("fotograf", event.Fotograf);
+    window.localStorage.setItem("video", event.InregistrareVideo);
+    // window.localStorage.setItem("candybar", event.CandyBar);
+    // window.localStorage.setItem("fruitsbar", event.FruitsBar);
     // window.localStorage.setItem("bauturi", event.Drinks);
     // window.localStorage.setItem("ringdans", event.RingDance);
-    // window.localStorage.setItem("dataeveniment", event.RowKey);
-    // window.localStorage.setItem("liveband", event.LiveBand);
+    window.localStorage.setItem("dataeveniment", event.RowKey);
+    window.localStorage.setItem("liveband", event.Muzica);
   }
 
   const Alert = React.forwardRef(function Alert(props, ref) {
@@ -284,53 +271,85 @@ function MyEventPage() {
         justifyContent: "center",
         alignItems: "center",
         textAlign: "center",
+        backgroundImage: `url("${background}")`,
       }}
     >
-      <Grid container rowSpacing={5}>
-        {!noData && !load && (
-          <Grid item xs={12}>
-            <h3>Evenimentele mele</h3>
-          </Grid>
-        )}
-        {noData && !load && (
-          <Grid item xs={12}>
-            <h3>Nu există evenimente!</h3>
-          </Grid>
-        )}
-        {!noData && !load && (
-          <Grid
-            item
-            xs={12}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Table sx={{ maxWidth: "80vw" }}>
-              <TableHead>
-                <TableRow>
-                  <TableCell padding="checkbox"></TableCell>
-                  <TableCell> Tipul evenimentului </TableCell>
-                  <TableCell> Data </TableCell>
-                  <TableCell> Restaurant </TableCell>
-                  <TableCell> Actiuni</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data.map((item) => (
+      <Header />
+      <Footer />
+      <Box
+        sx={{
+          background: "rgb(255, 255, 255,1)",
+          boxShadow: "2px 4px 6px rgba(0, 0, 0, 1)",
+          padding: "4rem",
+          textAlign: "center",
+        }}
+      >
+        <Grid container rowSpacing={5}>
+          {!noData && !load && (
+            <Grid item xs={12}>
+              <h3>Evenimentele mele</h3>
+            </Grid>
+          )}
+          {noData && !load && (
+            <Grid item xs={12}>
+              <h3>Nu există evenimente!</h3>
+            </Grid>
+          )}
+          {!noData && !load && (
+            <Grid
+              item
+              xs={12}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Table>
+                <TableHead>
                   <TableRow>
                     <TableCell padding="checkbox"></TableCell>
-                    <TableCell onClick={() => myClick(item)}>
-                      {item.EventType}
+                    <TableCell
+                      sx={{
+                        textAlign: "left",
+                      }}
+                    >
+                      {" "}
+                      Tipul evenimentului{" "}
                     </TableCell>
-                    <TableCell onClick={() => myClick(item)}>
-                      {item.RowKey}
+                    <TableCell
+                      sx={{
+                        textAlign: "left",
+                      }}
+                    >
+                      {" "}
+                      Data{" "}
                     </TableCell>
-                    <TableCell onClick={() => myClick(item)}>
-                      {item.Location !== "" && item.Location}
+                    {/* <TableCell> Restaurant </TableCell> */}
+                    <TableCell
+                      sx={{
+                        textAlign: "center",
+                      }}
+                    >
+                      {" "}
+                      Actiuni
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data.map((item) => (
+                    <TableRow>
+                      <TableCell padding="checkbox"></TableCell>
+                      <TableCell onClick={() => myClick(item)}>
+                        {item.TipEveniment}
+                      </TableCell>
+                      <TableCell onClick={() => myClick(item)}>
+                        {item.RowKey}
+                      </TableCell>
+                      {/* <TableCell onClick={() => myClick(item)}>
+                        {item.Restaurant !== "" && item.Restaurant}
 
-                      {item.Location == "" && (
+                        {item.Restaurant == "" && (
                         <Button
                           onClick={() => {
                             setOpenInputText(true);
@@ -340,121 +359,199 @@ function MyEventPage() {
                           Alege
                         </Button>
                       )}
-                    </TableCell>
-                    <TableCell>
-                      <Tooltip title="Anulare eveniment">
                         <Button
-                          sx={{ minWidth: "2px" }}
                           onClick={() => {
-                            myClick(item);
-                            // setSure(false);
-                            // setOpenDialogDelete(true);
+                            setOpenInputText(true);
+                            chooseLocation();
+                          }}
+                        >
+                          <RemoveRedEyeIcon />
+                        </Button>
+                      </TableCell> */}
+                      <TableCell>
+                        <Tooltip title="Anulare eveniment">
+                          <Button
+                            sx={{ minWidth: "2px" }}
+                            onClick={() => {
+                              myClick(item);
+                              // setSure(false);
+                              // setOpenDialogDelete(true);
 
-                            // if (sure == true)
-                            DeleteEvent(item);
-                          }}
-                        >
-                          <DeleteIcon />
-                        </Button>
-                      </Tooltip>
-                      <Tooltip title="Editeaza eveniment">
-                        <Button
-                          sx={{ minWidth: "2px" }}
-                          onClick={() => {
-                            myClick(item);
-                            history.push("/editformpage");
-                          }}
-                        >
-                          <EditIcon />
-                        </Button>
-                      </Tooltip>
+                              // if (sure == true)
+                              DeleteEvent(item);
+                            }}
+                          >
+                            <DeleteIcon />
+                          </Button>
+                        </Tooltip>
+                        <Tooltip title="Editeaza eveniment">
+                          <Button
+                            sx={{ minWidth: "2px" }}
+                            onClick={() => {
+                              myClick(item);
+                              history.push("/editformpage");
+                            }}
+                          >
+                            <EditIcon />
+                          </Button>
+                        </Tooltip>
 
-                      <Tooltip title="Trimite formular la invitați">
-                        <Button
-                          sx={{ minWidth: "2px" }}
-                          onClick={() => {
-                            myClick(item);
-                            history.push("/sendinvitationspage");
-                          }}
-                        >
-                          <ForwardToInboxIcon />
-                        </Button>
-                      </Tooltip>
-                      <Tooltip title="Vizualizeaza rezultate formular">
-                        <Button
-                          sx={{ minWidth: "2px" }}
-                          onClick={() => {
-                            myClick(item);
-                            history.push("/resultpage");
-                            history.go(0);
-                          }}
-                        >
-                          <ContentPasteSearchIcon />
-                        </Button>
-                      </Tooltip>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Grid>
-        )}
-        {!load && (
-          <Grid
-            item
-            xs={12}
-            sx={{
-              marginTop: "5vh",
-            }}
-          >
-            <Button
-              variant="contained"
-              onClick={() => {
-                history.push("/registerevent");
-                history.go(0);
+                        <Tooltip title="Trimite formular la invitați">
+                          <Button
+                            sx={{ minWidth: "2px" }}
+                            onClick={() => {
+                              myClick(item);
+                              history.push("/sendinvitationspage");
+                            }}
+                          >
+                            <ForwardToInboxIcon />
+                          </Button>
+                        </Tooltip>
+                        <Tooltip title="Vizualizeaza rezultate formular">
+                          <Button
+                            sx={{ minWidth: "2px" }}
+                            onClick={() => {
+                              myClick(item);
+                              history.push("/resultpage");
+                              history.go(0);
+                            }}
+                          >
+                            <RecommendIcon />
+                          </Button>
+                        </Tooltip>
+
+                        <Tooltip title="Vezi recomandări">
+                          <Button
+                            sx={{ minWidth: "2px" }}
+                            onClick={() => {
+                              myClick(item);
+                              history.push("/recommandpage");
+                              history.go(0);
+                            }}
+                          >
+                            <AssistantIcon />
+                          </Button>
+                        </Tooltip>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Grid>
+          )}
+          {!load && (
+            <Grid
+              item
+              xs={12}
+              sx={{
+                marginTop: "5vh",
               }}
             >
-              Adaugă un eveniment
-            </Button>
-          </Grid>
-        )}
-        {box && !loader && (
-          <Grid item xs={12}>
-            <Box sx={{ border: 2 }}>
-              <label> Alții au ales ... </label>
-              <Grid
-                container
-                sx={{ justifyContent: "center", marginBottom: "2vh" }}
+              <Button
+                variant="contained"
+                onClick={() => {
+                  history.push("/registerevent");
+                  history.go(0);
+                }}
               >
-                {noRecomandations && (
-                  <h6>
-                    Nu există recomandări pentru evenimentul dumneavoastră..
-                  </h6>
-                )}
+                Adaugă un eveniment
+              </Button>
+            </Grid>
+          )}
+          {box && !loader && (
+            <Grid item xs={12}>
+              <Box sx={{ border: 2 }}>
+                <label> Alții au ales ... </label>
+                <Grid
+                  container
+                  sx={{ justifyContent: "center", marginBottom: "2vh" }}
+                >
+                  {noRecomandations && (
+                    <h6>
+                      Nu există recomandări pentru evenimentul dumneavoastră..
+                    </h6>
+                  )}
 
-                {locationsRecomanded.map((location) => {
-                  if (location !== "")
-                    return (
+                  {locationsRecomanded.map((location) => {
+                    if (location !== "")
+                      return (
+                        <Card
+                          style={{
+                            backgroundColor: "#F5F4F2",
+                            color: "black",
+                            minHeight: "10vh",
+                            minWidth: "10vw",
+                            marginRight: "2vw",
+                          }}
+                        >
+                          <CardContent>
+                            <Typography
+                              sx={{
+                                color: "black",
+                              }}
+                            >
+                              {location}
+                            </Typography>
+                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                              județul {judet}
+                            </Typography>
+                          </CardContent>
+                          <CardActions
+                            sx={{
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <LoadingButton
+                              loading={loading}
+                              onClick={() => {
+                                window.localStorage.setItem(
+                                  "locatie",
+                                  location
+                                );
+                                UpdateForm();
+                              }}
+                              style={{
+                                color: "white",
+                                backgroundColor: "purple",
+                                height: "5vh",
+                                width: "5vw",
+                              }}
+                            >
+                              Alege
+                            </LoadingButton>
+                          </CardActions>
+                        </Card>
+                      );
+                  })}
+
+                  {openInputText && (
+                    <Grid
+                      container
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: "2vh",
+                      }}
+                    >
                       <Card
                         style={{
                           backgroundColor: "#F5F4F2",
                           color: "black",
                           minHeight: "10vh",
                           minWidth: "10vw",
-                          marginRight: "2vw",
+                          marginLeft: "3vw",
                         }}
                       >
                         <CardContent>
-                          <Typography
-                            sx={{
-                              color: "black",
-                            }}
-                          >
-                            {location}
-                          </Typography>
-                          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                            județul {judet}
-                          </Typography>
+                          <TextField
+                            variant="outlined"
+                            label="Altă opțiune"
+                            size="small"
+                            value={restaurant}
+                            onChange={(e) => setRestaurant(e.target.value)}
+                          ></TextField>
                         </CardContent>
                         <CardActions
                           sx={{
@@ -465,7 +562,10 @@ function MyEventPage() {
                           <LoadingButton
                             loading={loading}
                             onClick={() => {
-                              window.localStorage.setItem("locatie", location);
+                              window.localStorage.setItem(
+                                "locatie",
+                                restaurant
+                              );
                               UpdateForm();
                             }}
                             style={{
@@ -479,65 +579,50 @@ function MyEventPage() {
                           </LoadingButton>
                         </CardActions>
                       </Card>
-                    );
-                })}
-
-                {openInputText && (
+                    </Grid>
+                  )}
                   <Grid
                     container
                     sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginTop: "2vh",
+                      marginTop: "3vh",
                     }}
                   >
-                    <Card
-                      style={{
-                        backgroundColor: "#F5F4F2",
-                        color: "black",
-                        minHeight: "10vh",
-                        minWidth: "10vw",
-                        marginLeft: "3vw",
-                      }}
-                    >
-                      <CardContent>
-                        <TextField
-                          variant="outlined"
-                          label="Altă opțiune"
-                          size="small"
-                          value={restaurant}
-                          onChange={(e) => setRestaurant(e.target.value)}
-                        ></TextField>
-                      </CardContent>
-                      <CardActions
-                        sx={{ justifyContent: "center", alignItems: "center" }}
+                    <Grid item xs={3}>
+                      Vezi și..
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Button
+                        variant="outlined"
+                        onClick={() => {
+                          setLoader(true);
+                          setBox(true);
+                          GetRecomandation("Muzica");
+                        }}
                       >
-                        <LoadingButton
-                          loading={loading}
-                          onClick={() => {
-                            window.localStorage.setItem("locatie", restaurant);
-                            UpdateForm();
-                          }}
-                          style={{
-                            color: "white",
-                            backgroundColor: "purple",
-                            height: "5vh",
-                            width: "5vw",
-                          }}
-                        >
-                          Alege
-                        </LoadingButton>
-                      </CardActions>
-                    </Card>
+                        Vezi recomandări pentru muzică
+                      </Button>
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Button
+                        variant="outlined"
+                        onClick={() => {
+                          setLoader(true);
+                          setBox(true);
+                          GetRecomandation("Fotograf");
+                        }}
+                      >
+                        {" "}
+                        Vezi recomandări pentru fotograf
+                      </Button>
+                    </Grid>
                   </Grid>
-                )}
-              </Grid>
-            </Box>
-          </Grid>
-        )}
-      </Grid>
-      <Header />
+                </Grid>
+              </Box>
+            </Grid>
+          )}
+        </Grid>
+      </Box>
+
       {loader && <OverlayLoader />}
 
       <Snackbar

@@ -18,6 +18,11 @@ import login14 from "../Image/login14.jpg";
 import login15 from "../Image/login15.jpg";
 import login16 from "../Image/login16.jpg";
 import login17 from "../Image/login17.jpg";
+
+import login1 from "../Image/1.jpg";
+import login2 from "../Image/2.jpg";
+import login3 from "../Image/3.jpg";
+import login4 from "../Image/4.jpg";
 import { Container } from "@mui/material";
 import { Box } from "@mui/system";
 import * as Yup from "yup";
@@ -77,9 +82,9 @@ function SingIn() {
         const res = response.data;
         console.log(response);
         setLoading(false);
-        window.localStorage.setItem("nume", res.Name);
-        window.localStorage.setItem("data", res.Date);
-        window.localStorage.setItem("parola", decrypt(res.Password));
+        window.localStorage.setItem("nume", res.Nume);
+        // window.localStorage.setItem("data", res.Date);
+        window.localStorage.setItem("parola", decrypt(res.Parola));
         // window.localStorage.setItem("locatieprofil", res.Location);
         // window.localStorage.setItem("numartelefon", res.Phone);
         window.localStorage.setItem("email", res.PartitionKey);
@@ -135,8 +140,8 @@ function SingIn() {
   return (
     <Container
       sx={{
-        // backgroundImage: `url("${login16}")`,
-        // backgroundSize: "cover",
+        backgroundImage: `url("${login1}")`,
+        backgroundSize: "cover",
         display: "flex",
         minHeight: "100vh",
         minWidth: "100vw",
@@ -152,7 +157,7 @@ function SingIn() {
           boxShadow: "2px 4px 6px rgba(0, 0, 0, 1)",
           padding: "4rem",
           textAlign: "center",
-          minWidth: "40vw",
+          maxWidth: "70vh",
         }}
       >
         <Typography style={{ fontSize: size }}>Intră în cont!</Typography>
@@ -202,7 +207,13 @@ function SingIn() {
           </Form>
         </Formik>
 
-        <Typography>sau</Typography>
+        <Typography
+          style={{
+            margin: "1vh",
+          }}
+        >
+          sau
+        </Typography>
 
         <FacebookLogin
           appId="4917522175029919"
@@ -216,7 +227,11 @@ function SingIn() {
         >
           Conectează-te cu Facebook
         </FacebookLogin>
-        <Typography>
+        <Typography
+          style={{
+            margin: "1vh",
+          }}
+        >
           <a href="/sign-up"> Nu ai cont? Creeaza unul!</a>
         </Typography>
       </Box>

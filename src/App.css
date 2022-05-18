@@ -540,10 +540,15 @@ input[type="submit"]:hover {
 }
 
 .Container{
-  max-width: false;
+
   display: flex;
   text-align: center;
   align-items: center;
   justify-content: center;
   position: relative;
+  min-height: 100vh;
+  background-image: url("../src/Image/homePage.png");
 }
+
+
+

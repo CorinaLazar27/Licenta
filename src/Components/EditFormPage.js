@@ -49,18 +49,18 @@ function EditFormPage() {
       document.getElementById("editButton").textContent === "Salvează schimbări"
     ) {
       document.getElementById("location").readOnly = true;
-      document.getElementById("judet").readOnly = true;
+      // document.getElementById("judet").readOnly = true;
       document.getElementById("budget").readOnly = true;
       document.getElementById("numberofguests").readOnly = true;
       document.getElementById("liveband").readOnly = true;
       document.getElementById("liveband").style.backgroundColor = "#e4e6e9";
-      document.getElementById("artisticmoment").readOnly = true;
-      document.getElementById("artisticmoment").style.backgroundColor =
-        "#e4e6e9";
+      // document.getElementById("artisticmoment").readOnly = true;
+      // document.getElementById("artisticmoment").style.backgroundColor =
+      //   "#e4e6e9";
       document.getElementById("photographer").readOnly = true;
-      document.getElementById("photographer").style.backgroundColor = "#e4e6e9";
-      document.getElementById("video").readOnly = true;
-      document.getElementById("video").style.backgroundColor = "#e4e6e9";
+      // document.getElementById("photographer").style.backgroundColor = "#e4e6e9";
+      // document.getElementById("video").readOnly = true;
+      // document.getElementById("video").style.backgroundColor = "#e4e6e9";
       // document.getElementById("candybar").readOnly = true;
       // document.getElementById("candybar").style.backgroundColor = "#e4e6e9";
       // document.getElementById("fruitsbar").readOnly = true;
@@ -74,17 +74,17 @@ function EditFormPage() {
       UpdateForm();
     } else {
       document.getElementById("location").readOnly = false;
-      document.getElementById("judet").readOnly = false;
+      // document.getElementById("judet").readOnly = false;
       document.getElementById("budget").readOnly = false;
       document.getElementById("numberofguests").readOnly = false;
       document.getElementById("liveband").readOnly = false;
       document.getElementById("liveband").style.backgroundColor = "white";
-      document.getElementById("artisticmoment").readOnly = false;
-      document.getElementById("artisticmoment").style.backgroundColor = "white";
+      // document.getElementById("artisticmoment").readOnly = false;
+      // document.getElementById("artisticmoment").style.backgroundColor = "white";
       document.getElementById("photographer").readOnly = false;
-      document.getElementById("photographer").style.backgroundColor = "white";
-      document.getElementById("video").readOnly = false;
-      document.getElementById("video").style.backgroundColor = "white";
+      // document.getElementById("photographer").style.backgroundColor = "white";
+      // document.getElementById("video").readOnly = false;
+      // document.getElementById("video").style.backgroundColor = "white";
       // document.getElementById("candybar").readOnly = false;
       // document.getElementById("candybar").style.backgroundColor = "white";
       // document.getElementById("fruitsbar").readOnly = false;
@@ -148,8 +148,7 @@ function EditFormPage() {
       <Header />
       <Box
         sx={{
-          minWidth: "100vw",
-          marginTop: "4rem",
+          minWidth: "90vw",
         }}
       >
         <Grid
@@ -159,8 +158,7 @@ function EditFormPage() {
             display: "flex",
             alignItems: "flex-start",
             justifyContent: "left",
-            margin: "2rem",
-            marginTop: "5vh",
+            margin: "1vh",
           }}
         >
           <Button
@@ -177,91 +175,98 @@ function EditFormPage() {
             Înapoi
           </Button>
         </Grid>
-        <div className="card-header">
-          {event} {date}
-        </div>
-        <div className="card-body">
-          <form>
-            <div className="row gx-3 mb-3">
-              <div className="col-md-6">
-                <label className="small mb-1" htmlFor="location">
-                  Locație
-                </label>
-                <input
-                  className="form-control"
-                  id="location"
-                  type="text"
-                  defaultValue={location}
-                  onChange={(event) =>
-                    window.localStorage.setItem("locatie", event.target.value)
-                  }
-                  readOnly
-                />
+        <Box sx={{ backgroundColor: "white" }}>
+          <div className="card-header">
+            {event} {date}
+          </div>
+          <div className="card-body">
+            <form>
+              <div className="row gx-3 mb-3">
+                <div className="col-md-6">
+                  <label className="small mb-1" htmlFor="judet">
+                    Judet
+                  </label>
+                  <input
+                    className="form-control"
+                    id="judet"
+                    defaultValue={judet}
+                    readOnly
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="small mb-1" htmlFor="budget">
+                    Buget
+                  </label>
+                  <input
+                    className="form-control"
+                    id="budget"
+                    type="number"
+                    name="budget"
+                    defaultValue={budget}
+                    onChange={(event) =>
+                      window.localStorage.setItem("buget", event.target.value)
+                    }
+                    readOnly
+                  />
+                </div>
               </div>
 
-              <div className="col-md-6">
-                <label className="small mb-1" htmlFor="budget">
-                  Buget
-                </label>
-                <input
-                  className="form-control"
-                  id="budget"
-                  type="number"
-                  name="budget"
-                  defaultValue={budget}
-                  onChange={(event) =>
-                    window.localStorage.setItem("buget", event.target.value)
-                  }
-                  readOnly
-                />
-              </div>
-            </div>
+              <div className="row gx-3 mb-3">
+                <div className="col-md-6">
+                  <label className="small mb-1" htmlFor="location">
+                    Locație
+                  </label>
+                  <input
+                    className="form-control"
+                    id="location"
+                    type="text"
+                    defaultValue={location}
+                    onChange={(event) =>
+                      window.localStorage.setItem("locatie", event.target.value)
+                    }
+                    readOnly
+                  />
+                </div>
 
-            <div className="row gx-3 mb-3">
-              <div className="col-md-6">
-                <label className="small mb-1" htmlFor="judet">
-                  Judet
-                </label>
-                <input
-                  className="form-control"
-                  id="judet"
-                  defaultValue={judet}
-                  readOnly
-                />
+                <div className="col-md-6">
+                  <label className="small mb-1" htmlFor="numberofguests">
+                    Număr invitați
+                  </label>
+                  <input
+                    className="form-control"
+                    id="numberofguests"
+                    type="number"
+                    defaultValue={guests}
+                    onChange={(event) =>
+                      window.localStorage.setItem(
+                        "invitati",
+                        event.target.value
+                      )
+                    }
+                    readOnly
+                  />
+                </div>
               </div>
 
-              <div className="col-md-6">
-                <label className="small mb-1" htmlFor="numberofguests">
-                  Număr invitați
-                </label>
-                <input
-                  className="form-control"
-                  id="numberofguests"
-                  type="number"
-                  defaultValue={guests}
-                  onChange={(event) =>
-                    window.localStorage.setItem("invitati", event.target.value)
-                  }
-                  readOnly
-                />
-              </div>
-            </div>
-
-            <div className="row gx-3 mb-3">
-              <div className="col-md-6">
-                <label className="small mb-1" htmlFor="liveband">
-                  Muzică
-                </label>
-                <input
-                  className="form-control"
-                  id="liveband"
-                  defaultValue={liveband}
-                  onChange={(event) =>
-                    window.localStorage.setItem("liveband", event.target.value)
-                  }
-                  readOnly
-                />
-                {/* <select
+              <div className="row gx-3 mb-3">
+                <div className="col-md-6">
+                  <label className="small mb-1" htmlFor="liveband">
+                    Muzică
+                  </label>
+                  <input
+                    className="form-control"
+                    id="liveband"
+                    defaultValue={liveband}
+                    onChange={(event) =>
+                      window.localStorage.setItem(
+                        "liveband",
+                        event.target.value
+                      )
+                    }
+                    readOnly
+                  />
+                  {/* <select
                   name="liveband"
                   id="liveband"
                   disabled="true"
@@ -275,7 +280,7 @@ function EditFormPage() {
                   <option value="Da">Da</option>
                   <option value="Nu">Nu</option>
                 </select> */}
-                {/* <input
+                  {/* <input
                   className="form-control"
                   id="location"
                   type="text"
@@ -285,10 +290,25 @@ function EditFormPage() {
                   }
                   readOnly
                 /> */}
-              </div>
+                </div>
 
-              <div className="col-md-6">
-                <label className="small mb-1" htmlFor="artisticmoment">
+                <div className="col-md-6">
+                  <label className="small mb-1" htmlFor="photographer">
+                    Fotograf
+                  </label>
+                  <input
+                    className="form-control"
+                    id="photographer"
+                    defaultValue={photographer}
+                    onChange={(event) =>
+                      window.localStorage.setItem(
+                        "fotograf",
+                        event.target.value
+                      )
+                    }
+                    readOnly
+                  />
+                  {/* <label className="small mb-1" htmlFor="artisticmoment">
                   Moment artistic
                 </label>
                 <input
@@ -302,8 +322,8 @@ function EditFormPage() {
                     )
                   }
                   readOnly
-                />
-                {/* <select
+                /> */}
+                  {/* <select
                   name="artisticmoment"
                   id="artisticmoment"
                   disabled="true"
@@ -320,12 +340,12 @@ function EditFormPage() {
                   <option value="Da">Da</option>
                   <option value="Nu">Nu</option>
                 </select> */}
+                </div>
               </div>
-            </div>
 
-            <div className="row gx-3 mb-3">
-              <div className="col-md-6">
-                <label className="small mb-1" htmlFor="photographer">
+              <div className="row gx-3 mb-3">
+                <div className="col-md-6">
+                  {/* <label className="small mb-1" htmlFor="photographer">
                   Fotograf
                 </label>
                 <input
@@ -336,8 +356,8 @@ function EditFormPage() {
                     window.localStorage.setItem("fotograf", event.target.value)
                   }
                   readOnly
-                />
-                {/* <select
+                /> */}
+                  {/* <select
                   name="photographer"
                   id="photographer"
                   disabled="true"
@@ -351,10 +371,10 @@ function EditFormPage() {
                   <option value="Da">Da</option>
                   <option value="Nu">Nu</option>
                 </select> */}
-              </div>
+                </div>
 
-              <div className="col-md-6">
-                <label className="small mb-1" htmlFor="video">
+                <div className="col-md-6">
+                  {/* <label className="small mb-1" htmlFor="video">
                   Inregistrare video
                 </label>
                 <input
@@ -366,8 +386,8 @@ function EditFormPage() {
                     window.localStorage.setItem("video", event.target.value)
                   }
                   readOnly
-                />
-                {/* <select
+                /> */}
+                  {/* <select
                   name="video"
                   id="video"
                   disabled="true"
@@ -381,15 +401,15 @@ function EditFormPage() {
                   <option value="Da">Da</option>
                   <option value="Nu">Nu</option>
                 </select> */}
+                </div>
               </div>
-            </div>
 
-            <div className="row gx-3 mb-3">
-              <div className="col-md-6">
-                {/* <label className="small mb-1" htmlFor="candybar">
+              <div className="row gx-3 mb-3">
+                <div className="col-md-6">
+                  {/* <label className="small mb-1" htmlFor="candybar">
                   Candy Bar
                 </label> */}
-                {/* <input
+                  {/* <input
                   className="form-control"
                   id="candybar"
                   defaultValue={candybar}
@@ -398,7 +418,7 @@ function EditFormPage() {
                   }
                   readOnly
                 /> */}
-                {/* <select
+                  {/* <select
                   name="candybar"
                   id="candybar"
                   disabled="true"
@@ -412,13 +432,13 @@ function EditFormPage() {
                   <option value="Da">Da</option>
                   <option value="Nu">Nu</option>
                 </select> */}
-              </div>
+                </div>
 
-              <div className="col-md-6">
-                {/* <label className="small mb-1" htmlFor="fruitsbar">
+                <div className="col-md-6">
+                  {/* <label className="small mb-1" htmlFor="fruitsbar">
                   Bar cu fructe
                 </label> */}
-                {/* <input
+                  {/* <input
                   className="form-control"
                   id="fruitsbar"
                   name="fruitsbar"
@@ -429,7 +449,7 @@ function EditFormPage() {
                   readOnly
                 /> */}
 
-                {/* <select
+                  {/* <select
                   name="fruitsbar"
                   id="fruitsbar"
                   disabled="true"
@@ -446,15 +466,15 @@ function EditFormPage() {
                   <option value="Da">Da</option>
                   <option value="Nu">Nu</option>
                 </select> */}
+                </div>
               </div>
-            </div>
 
-            <div className="row gx-3 mb-3">
-              <div className="col-md-6">
-                {/* <label className="small mb-1" htmlFor="drinks">
+              <div className="row gx-3 mb-3">
+                <div className="col-md-6">
+                  {/* <label className="small mb-1" htmlFor="drinks">
                   Băuturi
                 </label> */}
-                {/* <input
+                  {/* <input
                   className="form-control"
                   id="drinks"
                   defaultValue={drinks}
@@ -463,7 +483,7 @@ function EditFormPage() {
                   }
                   readOnly
                 /> */}
-                {/* <select
+                  {/* <select
                   name="drinks"
                   id="drinks"
                   disabled="true"
@@ -477,13 +497,13 @@ function EditFormPage() {
                   <option value="Băuturi la masă">Băuturi la masă</option>
                   <option value="Bartman">Bartman</option>
                 </select> */}
-              </div>
+                </div>
 
-              {/* <div className="col-md-6">
+                {/* <div className="col-md-6">
                 <label className="small mb-1" htmlFor="ringDance">
                   Ring dans
                 </label> */}
-              {/* <input
+                {/* <input
                   className="form-control"
                   id="ringDance"
                   name="ringDance"
@@ -493,7 +513,7 @@ function EditFormPage() {
                   }
                   readOnly
                 /> */}
-              {/* <select
+                {/* <select
                   name="ringDance"
                   id="ringDance"
                   disabled="true"
@@ -508,28 +528,29 @@ function EditFormPage() {
                   <option value="Restrâns">Restrâns</option>
                   <option value="Fără">Fără</option>
                 </select> */}
-              {/* </div> */}
-            </div>
-          </form>
-          <Button
-            id="editButton"
-            variant="contained"
-            sx={{
-              backgroundColor: "green",
-              hover: {
-                "&:hover": {
-                  backgroundColor: "red",
+                {/* </div> */}
+              </div>
+            </form>
+            <Button
+              id="editButton"
+              variant="contained"
+              sx={{
+                backgroundColor: "green",
+                hover: {
+                  "&:hover": {
+                    backgroundColor: "red",
+                  },
                 },
-              },
-            }}
-            onClick={() => {
-              UnblockInputs();
-            }}
-          >
-            Editează
-          </Button>
-          {loader && <OverlayLoader />}
-        </div>
+              }}
+              onClick={() => {
+                UnblockInputs();
+              }}
+            >
+              Editează
+            </Button>
+            {loader && <OverlayLoader />}
+          </div>
+        </Box>
         <Snackbar
           open={openError}
           autoHideDuration={3000}

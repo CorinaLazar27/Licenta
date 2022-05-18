@@ -21,6 +21,7 @@ import {
   BarSeries,
 } from "@devexpress/dx-react-chart-material-ui";
 import { Box } from "@mui/system";
+import background from "../Image/homePage.png";
 
 function ResultPage() {
   const history = useHistory();
@@ -124,16 +125,28 @@ function ResultPage() {
     <Container
       maxWidth={false}
       sx={{
-        postion: "absolute",
         display: "flex",
         alignItems: "center",
         textAlign: "center",
         minHeigth: "100vh",
+        justifyContent: "center",
+        backgroundImage: `url("${background}")`,
       }}
     >
       <Header />
       {loader && <OverlayLoader />}
-      <Grid container sx={{ marginTop: "10vh", marginBottom: "5vh" }}>
+      <Grid
+        container
+        sx={{
+          marginTop: "10vh",
+          marginBottom: "5vh",
+          maxWidth: "85vw",
+          display: "flex",
+          minHeigth: "100vh",
+          justifyContent: "center",
+          alignSelf: "center",
+        }}
+      >
         <Grid
           item
           xs={12}
@@ -141,7 +154,7 @@ function ResultPage() {
             display: "flex",
             alignItems: "flex-start",
             justifyContent: "left",
-            margin: "2rem",
+            marginBottom: "5vh",
           }}
         >
           {!load && (
@@ -247,12 +260,22 @@ function ResultPage() {
                     </Grid>
                   )}
                   {!error && !load && (
-                    <Grid item xs={columns}>
+                    <Grid
+                      item
+                      xs={columns - 1}
+                      sx={{
+                        margin: "1vh",
+                      }}
+                    >
                       <label>Rating aperitive</label>
-                      <Paper>
+                      <Paper
+                        sx={{
+                          marginLeft: "1vh",
+                        }}
+                      >
                         <Chart
                           data={dataAperitive}
-                          sx={{ backgroundColor: "white" }}
+                          sx={{ backgroundColor: "#e9e9e9" }}
                         >
                           <ArgumentAxis />
                           <ValueAxis max={3} />
@@ -268,12 +291,18 @@ function ResultPage() {
                     </Grid>
                   )}
                   {!error && !load && (
-                    <Grid item xs={columns}>
+                    <Grid
+                      item
+                      xs={columns - 1}
+                      sx={{
+                        margin: "1vh",
+                      }}
+                    >
                       <label>Rating fel 1</label>
                       <Paper>
                         <Chart
                           data={dataType1}
-                          sx={{ backgroundColor: "white" }}
+                          sx={{ backgroundColor: "#e9e9e9" }}
                         >
                           <ArgumentAxis />
                           <ValueAxis max={5} />
@@ -288,12 +317,18 @@ function ResultPage() {
                     </Grid>
                   )}
                   {!error && !load && (
-                    <Grid item xs={columns}>
+                    <Grid
+                      item
+                      xs={columns - 1}
+                      sx={{
+                        margin: "1vh",
+                      }}
+                    >
                       <label>Rating fel 2</label>
                       <Paper>
                         <Chart
                           data={dataType2}
-                          sx={{ backgroundColor: "white" }}
+                          sx={{ backgroundColor: "#e9e9e9" }}
                         >
                           <ArgumentAxis />
                           <ValueAxis max={5} />
@@ -307,12 +342,18 @@ function ResultPage() {
                     </Grid>
                   )}
                   {!error && !load && (
-                    <Grid item xs={columns}>
+                    <Grid
+                      item
+                      xs={columns - 1}
+                      sx={{
+                        margin: "1vh",
+                      }}
+                    >
                       <label>Rating muzica</label>
                       <Paper>
                         <Chart
                           data={dataMusic}
-                          sx={{ backgroundColor: "white" }}
+                          sx={{ backgroundColor: "#e9e9e9" }}
                         >
                           <ArgumentAxis />
                           <ValueAxis max={5} />

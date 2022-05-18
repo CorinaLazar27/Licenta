@@ -12,6 +12,7 @@ import SettingsPage from "./Components/SettingsPage";
 import SendInvitationsPage from "./Components/SendInvitationsPage";
 import EditFormPage from "./Components/EditFormPage";
 import ResultPage from "./Components/ResultPage";
+import RecommendPage from "./Components/RecommendPage";
 function App() {
   return (
     <Router>
@@ -24,6 +25,7 @@ function App() {
         <Route exact path="/myeventpage" component={MyEventPage} />
         <Route exact path="/invitatipage" component={InvitatiPage} />
         <Route exact path="/settingspage" component={SettingsPage} />
+        <Route exact path="/recommandpage" component={RecommendPage} />
         <Route
           exact
           path="/sendinvitationspage"

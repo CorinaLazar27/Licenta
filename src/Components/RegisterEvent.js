@@ -220,89 +220,105 @@ function RegisterEventPage() {
           Eroare la crearea evenimentului!
         </Alert>
       </Snackbar>
-
-      <Formik
-        initialValues={{
-          event: "",
-          date: new Date(),
-          nrguests: "",
-          location: "",
-          judet: "",
-          budget: "",
-          liveBand: "",
-          artisticMoment: "",
-          photographer: "",
-          videoRecording: "",
-          // candyBar: "",
-          // fruitsBar: "",
-          // drinks: "",
-          // ringDance: "",
-        }}
-        validationSchema={ValidationsForm}
-        onSubmit={(values) => {
-          values.date = values.date.toLocaleDateString();
-          FormOptions(values);
+      <Box
+        sx={{
+          backgroundColor: "white",
+          maxWidth: "80vw",
         }}
       >
-        <Form>
-          <Grid
-            container
-            columnSpacing={3}
-            rowSpacing={5}
+        <Formik
+          initialValues={{
+            event: "",
+            date: new Date(),
+            nrguests: "",
+            location: "",
+            judet: "",
+            budget: "",
+            liveBand: "",
+            artisticMoment: "",
+            photographer: "",
+            videoRecording: "",
+            // candyBar: "",
+            // fruitsBar: "",
+            // drinks: "",
+            // ringDance: "",
+          }}
+          validationSchema={ValidationsForm}
+          onSubmit={(values) => {
+            values.date = values.date.toLocaleDateString();
+            FormOptions(values);
+          }}
+        >
+          <Form
             sx={{
-              marginTop: "5vh",
-              paddingTop: "5em",
-              paddingLeft: "5em",
-              paddingRight: "5em",
+              backgroundColor: "white",
             }}
           >
-            <Grid item xs={12}>
-              <Typography style={{ fontSize: size }}>
-                Creează un eveniment
-              </Typography>
-            </Grid>
-            <Grid item xs={columns}>
-              <FormikSelectSimple
-                id="event"
-                name="event"
-                label="Tip eveniment*"
-                items={eventsSelectItems}
-              />
-            </Grid>
-            <Grid item xs={columns}>
-              <FormikSelectSimple
-                id="judet"
-                name="judet"
-                label="Județ eveniment*"
-                items={judetSelectItems}
-              />
-            </Grid>
-
-            <Grid item xs={columns}>
-              <FormikTextField
-                id="nrguests"
-                label="Număr invitați*"
-                name="nrguests"
-              />
-            </Grid>
-            <Grid item xs={columns}>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <FormikDatePicker
-                  name="date"
-                  label="Data evenimentului*"
-                  variant="standard"
+            <Grid
+              container
+              columnSpacing={3}
+              rowSpacing={5}
+              sx={{
+                paddingTop: "1vh",
+                paddingLeft: "2vw",
+                paddingRight: "2vw",
+              }}
+            >
+              <Grid item xs={12}>
+                <Typography style={{ fontSize: size }}>
+                  Creează un eveniment
+                </Typography>
+              </Grid>
+              <Grid item xs={columns}>
+                <FormikSelectSimple
+                  id="event"
+                  name="event"
+                  label="Tip eveniment*"
+                  items={eventsSelectItems}
                 />
-              </LocalizationProvider>
-            </Grid>
+              </Grid>
+              <Grid item xs={columns}>
+                <FormikSelectSimple
+                  id="judet"
+                  name="judet"
+                  label="Județ eveniment*"
+                  items={judetSelectItems}
+                />
+              </Grid>
 
-            <Grid item xs={columns}>
-              <FormikTextField id="budget" label="Buget (LEI)*" name="budget" />
-            </Grid>
-            <Grid item xs={columns}>
-              <FormikTextField id="location" label="Locație" name="location" />
-            </Grid>
+              <Grid item xs={columns}>
+                <FormikTextField
+                  id="nrguests"
+                  label="Număr invitați*"
+                  name="nrguests"
+                />
+              </Grid>
+              <Grid item xs={columns}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <FormikDatePicker
+                    name="date"
+                    label="Data evenimentului*"
+                    variant="standard"
+                  />
+                </LocalizationProvider>
+              </Grid>
 
-            {/* 
+              <Grid item xs={columns}>
+                <FormikTextField
+                  id="budget"
+                  label="Buget (LEI)*"
+                  name="budget"
+                />
+              </Grid>
+              <Grid item xs={columns}>
+                <FormikTextField
+                  id="location"
+                  label="Locație"
+                  name="location"
+                />
+              </Grid>
+
+              {/* 
             <Grid item xs={columns}>
               <Box
                 sx={{
@@ -333,10 +349,10 @@ function RegisterEventPage() {
                 </FormLabel>
               </Box>
             </Grid> */}
-            <Grid item xs={columns}>
-              <FormikTextField id="muzică" label="Muzică" name="liveBand" />
-            </Grid>
-            {/* <Grid item xs={columns}>
+              <Grid item xs={columns}>
+                <FormikTextField id="muzică" label="Muzică" name="liveBand" />
+              </Grid>
+              {/* <Grid item xs={columns}>
               <Box
                 sx={{
                   border: "2px solid",
@@ -366,14 +382,14 @@ function RegisterEventPage() {
                 </FormLabel>
               </Box>
             </Grid> */}
-            <Grid item xs={columns}>
+              {/* <Grid item xs={columns}>
               <FormikTextField
                 id="artisticMoment"
                 label="Moment artistic"
                 name="artisticMoment"
               />
-            </Grid>
-            {/* 
+            </Grid> */}
+              {/* 
             <Grid item xs={columns}>
               <Box
                 sx={{
@@ -404,21 +420,21 @@ function RegisterEventPage() {
                 </FormLabel>
               </Box>
             </Grid> */}
-            <Grid item xs={columns}>
-              <FormikTextField
-                id="photographer"
-                label="Fotograf"
-                name="photographer"
-              />
-            </Grid>
-            <Grid item xs={columns}>
+              <Grid item xs={columns}>
+                <FormikTextField
+                  id="photographer"
+                  label="Fotograf"
+                  name="photographer"
+                />
+              </Grid>
+              {/* <Grid item xs={columns}>
               <FormikTextField
                 id="videoRecording"
                 label="Înregistrare video"
                 name="videoRecording"
               />
-            </Grid>
-            {/* 
+            </Grid> */}
+              {/* 
             <Grid item xs={columns}>
               <Box
                 sx={{
@@ -449,7 +465,7 @@ function RegisterEventPage() {
                 </FormLabel>
               </Box>
             </Grid> */}
-            {/* 
+              {/* 
             <Grid item xs={columns}>
               <Box
                 sx={{
@@ -529,29 +545,29 @@ function RegisterEventPage() {
               />
             </Grid> */}
 
-            <Grid item xs={12}>
-              <LoadingButton
-                loading={loading}
-                type="submit"
-                variant="contained"
-                sx={{
-                  backgroundColor: "green",
-                  hover: {
-                    "&:hover": {
-                      backgroundColor: "red",
+              <Grid item xs={12}>
+                <LoadingButton
+                  loading={loading}
+                  type="submit"
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "green",
+                    hover: {
+                      "&:hover": {
+                        backgroundColor: "red",
+                      },
                     },
-                  },
 
-                  marginBottom: "3vh",
-                }}
-              >
-                Înregistrează
-              </LoadingButton>
+                    marginBottom: "3vh",
+                  }}
+                >
+                  Înregistrează
+                </LoadingButton>
+              </Grid>
             </Grid>
-          </Grid>
-        </Form>
-      </Formik>
-
+          </Form>
+        </Formik>
+      </Box>
       <Dialog open={open} onClose={handleToClose}>
         <DialogTitle>{"Vreti sa invitati oamenii acum?"}</DialogTitle>
 

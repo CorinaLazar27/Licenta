@@ -13,6 +13,22 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
+import Dialog from "@material-ui/core/Dialog";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import Checkbox from "@mui/material/Checkbox";
+import Avatar from "@mui/material/Avatar";
+import axios from "axios";
+import OverlayLoader from "./OverlayLoader";
+
 function SendInvitationsPage() {
   const history = useHistory();
   const email = window.localStorage.getItem("email");
@@ -37,9 +53,15 @@ function SendInvitationsPage() {
     "\n" +
     "Mulțumesc foarte mult!";
   const [loading, setLoading] = useState(false);
-
+  const [openDialogDelete, setOpenDialogDelete] = useState(false);
   const [formValues, setFormValues] = useState([{ emailInvitat: "" }]);
+  const [empty, setEmpty] = useState(false);
+  const [invitatiSalvati, setInvitatiSalvati] = useState([]);
+  const [loader, setLoader] = useState(false);
 
+  const handleToClose = () => {
+    setOpenDialogDelete(false);
+  };
   let handleChange = (i, e) => {
     let newFormValues = [...formValues];
     newFormValues[i][e.target.name] = e.target.value;
@@ -94,6 +116,51 @@ function SendInvitationsPage() {
       });
   }
 
+  const [checked, setChecked] = useState([]);
+  const [mailChecked, setMailChecked] = useState([]);
+
+  const handleToggle = (value) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
+  };
+
+  async function GetInvitati() {
+    await axios({
+      method: "POST",
+      url: "/getInvitati",
+      data: {
+        email: email,
+      },
+    })
+      .then((response) => {
+        console.log(response.data.results);
+        if (response.data.results.length == 0) setEmpty(true);
+        else setInvitatiSalvati(response.data.results);
+
+        console.log("invitatiSalvati", invitatiSalvati);
+        setOpenDialogDelete(true);
+      })
+      .catch((error) => {
+        if (error.response) {
+          // setLoader(false);
+          // setLoad(false);
+          // setNoData(true);
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        }
+      })
+      .finally(() => setLoader(false));
+  }
+
   return (
     <Container
       maxWidth={false}
@@ -125,6 +192,56 @@ function SendInvitationsPage() {
         </Alert>
       </Snackbar>
       <Header />
+      {loader && <OverlayLoader />}
+      <Dialog open={openDialogDelete} onClose={handleToClose}>
+        <DialogTitle>{"Alegeți invitații pentru acest eveniment"}</DialogTitle>
+        <DialogContent
+          sx={{
+            backgroundColor: "white",
+          }}
+        >
+          <List>
+            {invitatiSalvati.map((value, index) => {
+              const labelId = `checkbox-list-secondary-label-${value}`;
+
+              return (
+                <ListItem
+                  key={value}
+                  secondaryAction={
+                    <Checkbox
+                      onChange={handleToggle(value)}
+                      checked={checked.indexOf(value) !== -1}
+                    />
+                  }
+                >
+                  <ListItemButton>
+                    <ListItemText
+                      sx={{ color: "black" }}
+                      id={labelId}
+                      primary={value.NumeInvitat}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              );
+            })}
+          </List>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            autoFocus
+            onClick={() => {
+              // handleToClose();
+              console.log(checked);
+              checked.map((element) => {
+                console.log(element.NumeInvitat);
+                console.log(element.RowKey);
+              });
+            }}
+          >
+            Alege
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Grid container sx={{ marginTop: "10vh", minHeight: "40vh" }}>
         <Grid
           item
@@ -148,6 +265,28 @@ function SendInvitationsPage() {
             }}
           >
             Înapoi
+          </Button>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: "1rem",
+          }}
+        >
+          <Button
+            sx={{
+              fontSize: "2vw",
+            }}
+            variant="contained"
+            onClick={() => {
+              GetInvitati();
+            }}
+          >
+            Alege invitați
           </Button>
         </Grid>
         <Grid item xs={12} sx={{ padding: "2vh" }}>

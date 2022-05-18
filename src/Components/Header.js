@@ -16,7 +16,7 @@ import {
 
 import { useTheme, makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { ThemeProvider, createTheme } from "@material-ui/core/styles";
 import { Paper, Container } from "@material-ui/core";
 import { green, orange } from "@material-ui/core/colors";
 
@@ -76,7 +76,7 @@ const Header = (props) => {
   const handleMenu = (event) => {
     setAnchor(event.currentTarget);
   };
-  const themecolor = createMuiTheme({
+  const themecolor = createTheme({
     typography: {
       h1: {
         fontSize: "3rem",
@@ -104,7 +104,7 @@ const Header = (props) => {
                 color="textSecondary"
                 className={classes.title}
               >
-                EP
+                Dream Events
               </Typography>
               {isMobile ? (
                 <>

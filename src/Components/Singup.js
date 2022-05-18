@@ -10,7 +10,7 @@ import MuiAlert from "@mui/material/Alert";
 import { LoadingButton } from "@mui/lab";
 import Tooltip from "@mui/material/Tooltip";
 import login from "../Image/login.jpg";
-import login1 from "../Image/login1.jpg";
+import login1 from "../Image/1.jpg";
 import login2 from "../Image/login2.jpg";
 import login3 from "../Image/login3.jpg";
 import login4 from "../Image/login4.jpg";
@@ -119,8 +119,8 @@ function SingUp() {
   return (
     <Container
       sx={{
-        // backgroundImage: `url("${login16}")`,
-        // backgroundSize: "cover",
+        backgroundImage: `url("${login1}")`,
+        backgroundSize: "cover",
         display: "flex",
         minHeight: "100vh",
         minWidth: "100vw",
@@ -136,7 +136,7 @@ function SingUp() {
           boxShadow: "2px 4px 6px rgba(0, 0, 0, 1)",
           padding: "4rem",
           textAlign: "center",
-          minWidth: "40vw",
+          maxWidth: "70vh",
         }}
       >
         <Snackbar

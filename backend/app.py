@@ -85,8 +85,10 @@ def register1():
     print(name)
     print(password)
     print(date)
-    task = {u'PartitionKey': email, u'RowKey': email, u'Name': name,
-            u'Password': password, u'Date': date}
+    task = {u'PartitionKey': email, u'RowKey': email, u'Nume': name,
+            u'Parola': password,
+            #  u'Date': date
+            }
     table_client.create_entity(entity=task)
     return "Done"
 
@@ -104,7 +106,7 @@ def login():
     print(tasks)
 
     for task in tasks:
-        if task['Password'] == password:
+        if task['Parola'] == password:
             return jsonify(task)
         else:
             return 'Parola sau utilizator gresit', 401
@@ -120,9 +122,9 @@ def postform():
     judet = request.json.get("judet", None)
     budget = request.json.get("budget", None)
     liveband = request.json.get("liveband", None)
-    artisticmoment = request.json.get("artisticmoment", None)
+    # artisticmoment = request.json.get("artisticmoment", None)
     photographer = request.json.get("photographer", None)
-    videorecording = request.json.get("videorecording", None)
+    # videorecording = request.json.get("videorecording", None)
     # candybar = request.json.get("candybar", None)
     # fruitsbar = request.json.get("fruitsbar", None)
     # drinks = request.json.get("drinks", None)
@@ -136,9 +138,9 @@ def postform():
     print(judet)
     print(budget)
     print(liveband)
-    print(artisticmoment)
+    # print(artisticmoment)
     print(photographer)
-    print(videorecording)
+    # print(videorecording)
     # print(candybar)
     # print(fruitsbar)
     # print(drinks)
@@ -147,15 +149,15 @@ def postform():
 
     task = {u'PartitionKey': email,
             u'RowKey': date,
-            u'EventType': event,
-            u'NumberGuests': nrguests,
-            u'Location': location,
+            u'TipEveniment': event,
+            u'NumarInvitati': nrguests,
+            u'Restaurant': location,
             u'Judet': judet,
-            u'Budget': budget,
-            u'LiveBand': liveband,
-            u'ArtisticMoment': artisticmoment,
-            u'Photographer': photographer,
-            u'VideoRecording': videorecording,
+            u'Buget': budget,
+            u'Muzica': liveband,
+            # u'MomentArtistic': artisticmoment,
+            u'Fotograf': photographer,
+            # u'InregistrareVideo': videorecording,
             # u'CandyBar': candybar,
             # u'FruitsBar': fruitsbar,
             # u'Drinks': drinks,
@@ -304,22 +306,17 @@ def deleteevent():
     table_client_form = table_service.get_table_client(table_name="Form")
     table_client_aperitiv = table_service.get_table_client(
         table_name="AperitivRating")
-    table_client_type1 = table_service.get_table_client(
-        table_name="Type1Rating")
-    table_client_type2 = table_service.get_table_client(
-        table_name="Type2Rating")
-    table_client_music = table_service.get_table_client(
-        table_name="MusicRating")
+
     email = request.json.get("email", None)
     date = request.json.get("date", None)
     print(email)
     print(date)
 
-    table_client_aperitiv.delete_entity(email, Data=date)
-    # table_client_type1.delete_entity(email, Data=date)
-    # table_client_type2.delete_entity(email, Data=date)
-    # table_client_music.delete_entity(email, Data=date)
-    # table_client_form.delete_entity(email, date)
+    # table_client_aperitiv.delete_entity(email, Data=date)
+    # # table_client_type1.delete_entity(email, Data=date)
+    # # table_client_type2.delete_entity(email, Data=date)
+    # # table_client_music.delete_entity(email, Data=date)
+    table_client_form.delete_entity(email, date)
     return "Done"
 
 
@@ -758,29 +755,23 @@ def clean_data(x):
 
 
 def create_all(x):
-    return "".join(x['NumberGuests']) + '|' + ''.join(x['Budget'])
+    return "".join(x['NumarInvitati']) + '|' + ''.join(x['Buget'])
 
 
-def get_recommendations(email, date, indices, cosine_sim2, table):
+def get_recommendations(email, date, type, indices, cosine_sim2, table):
     # Get the index of the user that matches the title
     idx = indices[email, date]
-
     # Get the pairwsie similarity scores of all locations with that user
     sim_scores = list(enumerate(cosine_sim2[idx]))
-
     # Sort the locations based on the similarity scores
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-
     # Get the scores of the 10 most similar locations
-    sim_scores = sim_scores[1:4]
-
+    sim_scores = sim_scores[1:6]
     # Get the movie indices
     email_indices = [i[0] for i in sim_scores]
-    print("email_indices")
-    print(table['Location'].iloc[email_indices])
-    print(table['Location'].iloc[email_indices].unique())
+
     # Return the top 3 most similar locations
-    return table['Location'].iloc[email_indices].unique()
+    return table[type].iloc[email_indices].unique()
 
 
 @app.route('/getRecomandations', methods=["POST"])
@@ -790,15 +781,16 @@ def getRecomandations():
     date = request.json.get("date", None)
     email = request.json.get("email", None)
     judet = request.json.get("judet", None)
+    type = request.json.get("type", None)
     print(event)
     print(date)
     print(email)
     print(judet)
-    fq = 'EventType eq \'' + event + '\' and Judet eq \'' + judet + '\' '
+    fq = 'TipEveniment eq \'' + event + '\' and Judet eq \'' + judet + '\' '
     ts = set_table_service()
     table_form = get_dataframe_from_table_storage_table(
         table_service=ts, filter_query=fq)
-    features = ['NumberGuests', 'Budget']
+    features = ['NumarInvitati', 'Buget']
     print(table_form[features])
     for feature in features:
         table_form[feature] = table_form[feature].apply(clean_data)
@@ -810,17 +802,9 @@ def getRecomandations():
     table_form = table_form.reset_index()
     indices = pd.Series(
         table_form.index, index=table_form[['PartitionKey', 'RowKey']])
-    print("indices")
-    print(indices[email, date])
-
-    indices1 = pd.Series(
-        table_form.index, index=table_form['RowKey'])
-    print("indices1")
-    print(indices1)
 
     recomandation = get_recommendations(
-        email, date, indices, cosine_sim2, table_form)
-    print("recomandation")
+        email, date, type, indices, cosine_sim2, table_form)
     print(recomandation)
     return dict(enumerate(recomandation.flatten(), 1))
 

@@ -19,7 +19,7 @@ import { Container, Grid, Box, Button, TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-
+import background from "../Image/homePage.png";
 function SettingsPage() {
   const CryptoJS = require("crypto-js");
 
@@ -133,6 +133,7 @@ function SettingsPage() {
         alignItems: "flex-start",
         justifyContent: "center",
         textAlign: "center",
+        backgroundImage: `url("${background}")`,
       }}
     >
       <Snackbar
