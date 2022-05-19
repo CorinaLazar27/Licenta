@@ -19,7 +19,7 @@ import login15 from "../Image/login15.jpg";
 import login16 from "../Image/login16.jpg";
 import login17 from "../Image/login17.jpg";
 
-import login1 from "../Image/1.jpg";
+import login1 from "../Image/1.9.jpg";
 import login2 from "../Image/2.jpg";
 import login3 from "../Image/3.jpg";
 import login4 from "../Image/4.jpg";

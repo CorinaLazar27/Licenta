@@ -305,13 +305,17 @@ function MyEventPage() {
                 alignItems: "center",
               }}
             >
-              <Table>
+              <Table
+                sx={{
+                  maxWidth: "70vw",
+                }}
+              >
                 <TableHead>
                   <TableRow>
                     <TableCell padding="checkbox"></TableCell>
                     <TableCell
                       sx={{
-                        textAlign: "left",
+                        textAlign: "center",
                       }}
                     >
                       {" "}
@@ -319,7 +323,7 @@ function MyEventPage() {
                     </TableCell>
                     <TableCell
                       sx={{
-                        textAlign: "left",
+                        textAlign: "center",
                       }}
                     >
                       {" "}
@@ -332,7 +336,30 @@ function MyEventPage() {
                       }}
                     >
                       {" "}
-                      Actiuni
+                      Invitați
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        textAlign: "center",
+                      }}
+                    >
+                      {" "}
+                      Statistici
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        textAlign: "center",
+                      }}
+                    >
+                      {" "}
+                      Recomandări
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        textAlign: "center",
+                      }}
+                    >
+                      {" "}
                     </TableCell>
                   </TableRow>
                 </TableHead>
@@ -340,10 +367,20 @@ function MyEventPage() {
                   {data.map((item) => (
                     <TableRow>
                       <TableCell padding="checkbox"></TableCell>
-                      <TableCell onClick={() => myClick(item)}>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                        }}
+                        onClick={() => myClick(item)}
+                      >
                         {item.TipEveniment}
                       </TableCell>
-                      <TableCell onClick={() => myClick(item)}>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                        }}
+                        onClick={() => myClick(item)}
+                      >
                         {item.RowKey}
                       </TableCell>
                       {/* <TableCell onClick={() => myClick(item)}>
@@ -368,7 +405,76 @@ function MyEventPage() {
                           <RemoveRedEyeIcon />
                         </Button>
                       </TableCell> */}
-                      <TableCell>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                        }}
+                      >
+                        <Tooltip title="Trimite formular la invitați">
+                          <Button
+                            sx={{ minWidth: "2px" }}
+                            onClick={() => {
+                              myClick(item);
+                              history.push("/sendinvitationspage");
+                            }}
+                          >
+                            <ForwardToInboxIcon />
+                          </Button>
+                        </Tooltip>
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                        }}
+                      >
+                        {" "}
+                        <Tooltip title="Vizualizeaza rezultate formular">
+                          <Button
+                            sx={{ minWidth: "2px" }}
+                            onClick={() => {
+                              myClick(item);
+                              history.push("/resultpage");
+                              history.go(0);
+                            }}
+                          >
+                            <RecommendIcon />
+                          </Button>
+                        </Tooltip>
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                        }}
+                      >
+                        <Tooltip title="Vezi recomandări">
+                          <Button
+                            sx={{ minWidth: "2px" }}
+                            onClick={() => {
+                              myClick(item);
+                              history.push("/recommandpage");
+                              history.go(0);
+                            }}
+                          >
+                            <AssistantIcon />
+                          </Button>
+                        </Tooltip>
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                        }}
+                      >
+                        <Tooltip title="Editeaza eveniment">
+                          <Button
+                            sx={{ minWidth: "2px" }}
+                            onClick={() => {
+                              myClick(item);
+                              history.push("/editformpage");
+                            }}
+                          >
+                            <EditIcon />
+                          </Button>
+                        </Tooltip>
                         <Tooltip title="Anulare eveniment">
                           <Button
                             sx={{ minWidth: "2px" }}
@@ -382,54 +488,6 @@ function MyEventPage() {
                             }}
                           >
                             <DeleteIcon />
-                          </Button>
-                        </Tooltip>
-                        <Tooltip title="Editeaza eveniment">
-                          <Button
-                            sx={{ minWidth: "2px" }}
-                            onClick={() => {
-                              myClick(item);
-                              history.push("/editformpage");
-                            }}
-                          >
-                            <EditIcon />
-                          </Button>
-                        </Tooltip>
-
-                        <Tooltip title="Trimite formular la invitați">
-                          <Button
-                            sx={{ minWidth: "2px" }}
-                            onClick={() => {
-                              myClick(item);
-                              history.push("/sendinvitationspage");
-                            }}
-                          >
-                            <ForwardToInboxIcon />
-                          </Button>
-                        </Tooltip>
-                        <Tooltip title="Vizualizeaza rezultate formular">
-                          <Button
-                            sx={{ minWidth: "2px" }}
-                            onClick={() => {
-                              myClick(item);
-                              history.push("/resultpage");
-                              history.go(0);
-                            }}
-                          >
-                            <RecommendIcon />
-                          </Button>
-                        </Tooltip>
-
-                        <Tooltip title="Vezi recomandări">
-                          <Button
-                            sx={{ minWidth: "2px" }}
-                            onClick={() => {
-                              myClick(item);
-                              history.push("/recommandpage");
-                              history.go(0);
-                            }}
-                          >
-                            <AssistantIcon />
                           </Button>
                         </Tooltip>
                       </TableCell>

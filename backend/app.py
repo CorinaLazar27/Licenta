@@ -47,26 +47,26 @@ def elementsform():
     return jsonify(results=lst)
 
 
-@app.route('/register', methods=["POST"])
-def register():
-    name = request.json.get("name", None)
-    email = request.json.get("email", None)
-    password = request.json.get("password", None)
-   # current dateTime
-    now = datetime.now()
+# @app.route('/register', methods=["POST"])
+# def register():
+#     name = request.json.get("name", None)
+#     email = request.json.get("email", None)
+#     password = request.json.get("password", None)
+#    # current dateTime
+#     now = datetime.now()
 
-# convert to date String
-    date = now.strftime("%d/%m/%Y")
-    print('Date String:', date)
-    table_client = table_service.get_table_client(table_name="Login")
-    print(email)
-    print(name)
-    print(password)
-    print(date)
-    task = {u'PartitionKey': email, u'RowKey': name,
-            u'Password': password, u'Date': date}
-    table_client.create_entity(entity=task)
-    return "Done"
+# # convert to date String
+#     date = now.strftime("%d/%m/%Y")
+#     print('Date String:', date)
+#     table_client = table_service.get_table_client(table_name="Login")
+#     print(email)
+#     print(name)
+#     print(password)
+#     print(date)
+#     task = {u'PartitionKey': email, u'RowKey': name,
+#             u'Password': password, u'Date': date}
+#     table_client.create_entity(entity=task)
+#     return "Done"
 
 
 @app.route('/register1', methods=["POST"])
@@ -74,20 +74,15 @@ def register1():
     name = request.json.get("name", None)
     email = request.json.get("email", None)
     password = request.json.get("password", None)
-   # current dateTime
-    now = datetime.now()
 
-# convert to date String
-    date = now.strftime("%d/%m/%Y")
-    print('Date String:', date)
     table_client = table_service.get_table_client(table_name="Login")
     print(email)
     print(name)
     print(password)
-    print(date)
+
     task = {u'PartitionKey': email, u'RowKey': email, u'Nume': name,
             u'Parola': password,
-            #  u'Date': date
+
             }
     table_client.create_entity(entity=task)
     return "Done"
@@ -122,13 +117,7 @@ def postform():
     judet = request.json.get("judet", None)
     budget = request.json.get("budget", None)
     liveband = request.json.get("liveband", None)
-    # artisticmoment = request.json.get("artisticmoment", None)
     photographer = request.json.get("photographer", None)
-    # videorecording = request.json.get("videorecording", None)
-    # candybar = request.json.get("candybar", None)
-    # fruitsbar = request.json.get("fruitsbar", None)
-    # drinks = request.json.get("drinks", None)
-    # ringdance = request.json.get("ringdance", None)
 
     print(email)
     print(event)
@@ -138,13 +127,8 @@ def postform():
     print(judet)
     print(budget)
     print(liveband)
-    # print(artisticmoment)
     print(photographer)
-    # print(videorecording)
-    # print(candybar)
-    # print(fruitsbar)
-    # print(drinks)
-    # print(ringdance)
+
     table_client = table_service.get_table_client(table_name="Form")
 
     task = {u'PartitionKey': email,
@@ -155,13 +139,7 @@ def postform():
             u'Judet': judet,
             u'Buget': budget,
             u'Muzica': liveband,
-            # u'MomentArtistic': artisticmoment,
             u'Fotograf': photographer,
-            # u'InregistrareVideo': videorecording,
-            # u'CandyBar': candybar,
-            # u'FruitsBar': fruitsbar,
-            # u'Drinks': drinks,
-            # u'RingDance': ringdance
             }
     table_client.create_entity(entity=task)
     return "Done"
@@ -170,15 +148,31 @@ def postform():
 @app.route('/invitationList', methods=["POST"])
 def invitationList():
     email = request.json.get("email", None)
+    date = request.json.get("date", None)
     formValues = request.json.get("formValues", None)
+    oldValues = request.json.get("oldValues", None)
     table_client = table_service.get_table_client(table_name="Invitati")
-    print(formValues)
+    print("NEW", formValues)
+    print("OLD", oldValues)
     for index in range(len(formValues)):
-        task = {u'PartitionKey': email,
+        task = {u'PartitionKey': email+"-"+date,
                 u'RowKey': formValues[index]["emailInvitat"],
                 u'NumeInvitat': formValues[index]["numeInvitat"],
+                u'ConfirmarePrezenta': formValues[index]["confirmarePrezenta"],
+                u'NumarPersoane': formValues[index]["numarPersoane"],
                 }
         table_client.create_entity(entity=task)
+
+    if(len(oldValues) != 0):
+        for index in range(len(oldValues)):
+            task = {u'PartitionKey': email+"-"+date,
+                    u'RowKey': oldValues[index]["RowKey"],
+                    u'NumeInvitat': oldValues[index]["NumeInvitat"],
+                    u'ConfirmarePrezenta': oldValues[index]["ConfirmarePrezenta"],
+                    u'NumarPersoane': oldValues[index]["NumarPersoane"],
+                    }
+            print("done")
+            table_client.update_entity(task)
 
     return "Done"
 
@@ -186,9 +180,10 @@ def invitationList():
 @app.route('/getInvitati', methods=["POST"])
 def getInvitati():
     email = request.json.get("email", None)
+    date = request.json.get("date", None)
     table_client = table_service.get_table_client(table_name="Invitati")
     tasks = table_client.query_entities(
-        query_filter='PartitionKey eq \'' + email + '\'')
+        query_filter='PartitionKey eq \'' + email+"-"+date + '\'')
     lst = list(tasks)
     print(lst)
     return jsonify(results=lst)
@@ -199,11 +194,33 @@ def deleteInvitat():
     table_client = table_service.get_table_client(table_name="Invitati")
 
     email = request.json.get("email", None)
+    date = request.json.get("date", None)
     emailInvitat = request.json.get("emailInvitat", None)
+
     print(email)
     print(emailInvitat)
 
-    table_client.delete_entity(email, emailInvitat)
+    table_client.delete_entity(email+"-"+date, emailInvitat)
+
+    return "Done"
+
+
+@app.route('/updateinvitat', methods=["POST"])
+def updateInvitat():
+
+    email = request.json.get("email", None)
+    date = request.json.get("date", None)
+    formValues = request.json.get("formValues", None)
+    table_client = table_service.get_table_client(table_name="Invitati")
+    print(formValues)
+    for index in range(len(formValues)):
+        task = {u'PartitionKey': email+"-"+date,
+                u'RowKey': formValues[index]["emailInvitat"],
+                u'NumeInvitat': formValues[index]["numeInvitat"],
+                u'ConfirmarePrezenta': formValues[index]["confirmarePrezenta"],
+                }
+
+    table_client.update_entity(task)
 
     return "Done"
 
@@ -222,28 +239,6 @@ def changepassword():
             u'Name': name}
     table_client.update_entity(task)
     return "Done"
-
-
-# @app.route('/updateprofile', methods=["POST"])
-# def updateprofile():
-#     table_client = table_service.get_table_client(table_name="Login")
-#     email = request.json.get("email", None)
-#     name = request.json.get("name", None)
-#     password = request.json.get("password", None)
-#     date = request.json.get("date", None)
-#     location = request.json.get("location", None)
-#     phonenumber = request.json.get("phonenumber", None)
-
-#     task = {u'PartitionKey': email,
-#             u'RowKey': email,
-#             u'Password': password,
-#             u'Date': date,
-#             u'Location': location,
-#             u'Phone': phonenumber,
-#             u'Name': name}
-
-#     table_client.update_entity(task)
-#     return "Done"
 
 
 @app.route('/updateform', methods=["POST"])
@@ -274,11 +269,7 @@ def updateform():
     print(liveband)
     print(artisticmoment)
     print(photographer)
-    print(videorecording)
-    # print(candybar)
-    # print(fruitsbar)
-    # print(drinks)
-    # print(ringdance)
+
     table_client = table_service.get_table_client(table_name="Form")
 
     task = {u'PartitionKey': email,
@@ -289,13 +280,7 @@ def updateform():
             u'Judet': judet,
             u'Budget': budget,
             u'LiveBand': liveband,
-            u'ArtisticMoment': artisticmoment,
             u'Photographer': photographer,
-            u'VideoRecording': videorecording,
-            # u'CandyBar': candybar,
-            # u'FruitsBar': fruitsbar,
-            # u'Drinks': drinks,
-            # u'RingDance': ringdance
             }
     table_client.update_entity(task)
     return "Done"
@@ -304,78 +289,13 @@ def updateform():
 @app.route('/deleteevent', methods=["POST"])
 def deleteevent():
     table_client_form = table_service.get_table_client(table_name="Form")
-    table_client_aperitiv = table_service.get_table_client(
-        table_name="AperitivRating")
-
     email = request.json.get("email", None)
     date = request.json.get("date", None)
     print(email)
     print(date)
 
-    # table_client_aperitiv.delete_entity(email, Data=date)
-    # # table_client_type1.delete_entity(email, Data=date)
-    # # table_client_type2.delete_entity(email, Data=date)
-    # # table_client_music.delete_entity(email, Data=date)
     table_client_form.delete_entity(email, date)
     return "Done"
-
-
-# @app.route('/postoptionsinvitation', methods=["POST"])
-# def postoptionsinvitation():
-#     emailOrganizer = request.json.get("emailOrganizer", None)
-#     email = request.json.get("email", None)
-#     name = request.json.get("name", None)
-#     age = request.json.get("age", None)
-#     location = request.json.get("location", None)
-#     organizerOpinion = request.json.get("organizerOpinion", None)
-#     drinksOpinion = request.json.get("drinksOpinion", None)
-#     cakesOpinion = request.json.get("cakesOpinion", None)
-#     fruitsOpinion = request.json.get("fruitsOpinion", None)
-#     appetizerOpinion = request.json.get("appetizerOpinion", None)
-#     maincourseOpinion = request.json.get("maincourseOpinion", None)
-#     type2Opinion = request.json.get("type2Opinion", None)
-#     musicOpinion = request.json.get("musicOpinion", None)
-#     print(email)
-#     print(name)
-#     print(age)
-#     print(location)
-#     print(organizerOpinion)
-#     print(drinksOpinion)
-#     print(cakesOpinion)
-#     print(fruitsOpinion)
-#     print(appetizerOpinion)
-#     print(maincourseOpinion)
-#     print(type2Opinion)
-#     print(musicOpinion)
-
-#     table_client = table_service.get_table_client(
-#         table_name="InvitationOpinion")
-
-#     OrganizerToStr = ','.join([str(elem) for elem in organizerOpinion])
-#     DrinkToStr = ','.join([str(elem) for elem in drinksOpinion])
-#     CakesToStr = ','.join([str(elem) for elem in cakesOpinion])
-#     FruitsToStr = ','.join([str(elem) for elem in fruitsOpinion])
-#     AppetizerToStr = ','.join([str(elem) for elem in appetizerOpinion])
-#     MainCourseToStr = ','.join([str(elem) for elem in maincourseOpinion])
-#     Type2ToStr = ','.join([str(elem) for elem in type2Opinion])
-#     MusicToStr = ','.join([str(elem) for elem in musicOpinion])
-
-#     task = {u'PartitionKey': emailOrganizer,
-#             u'RowKey': email,
-#             u'Name': name,
-#             u'Age': age,
-#             u'Location': location,
-#             u'Organizer_opinion': OrganizerToStr,
-#             u'Drinks_opinion': DrinkToStr,
-#             u'Cakes_opinion': CakesToStr,
-#             u'Fruits_opinion': FruitsToStr,
-#             u'Appetizer_opinion': AppetizerToStr,
-#             u'Main_course_opinion': MainCourseToStr,
-#             u'Type2_opinion': Type2ToStr,
-#             u'Music_opinion': MusicToStr,
-#             }
-#     table_client.create_entity(entity=task)
-#     return "Done"
 
 
 countRating = 300
