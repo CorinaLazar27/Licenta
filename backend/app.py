@@ -118,6 +118,7 @@ def postform():
     budget = request.json.get("budget", None)
     liveband = request.json.get("liveband", None)
     photographer = request.json.get("photographer", None)
+    opinie = request.json.get("opinie", None)
 
     print(email)
     print(event)
@@ -128,6 +129,7 @@ def postform():
     print(budget)
     print(liveband)
     print(photographer)
+    print(opinie)
 
     table_client = table_service.get_table_client(table_name="Form")
 
@@ -140,9 +142,75 @@ def postform():
             u'Buget': budget,
             u'Muzica': liveband,
             u'Fotograf': photographer,
+            u'Opinie': opinie,
             }
     table_client.create_entity(entity=task)
     return "Done"
+
+
+@app.route('/postOpinii', methods=["POST"])
+def postOpinii():
+    email = request.json.get("email", None)
+    name = request.json.get("name", None)
+    event = request.json.get("event", None)
+    date = request.json.get("date", None)
+    judet = request.json.get("judet", None)
+    liveband = request.json.get("liveband", None)
+    photographer = request.json.get("photographer", None)
+    location = request.json.get("location", None)
+    opiniiMuzica = request.json.get("opiniiMuzica", None)
+    opiniiRestaurant = request.json.get("opiniiRestaurant", None)
+    opiniiFotograf = request.json.get("opiniiFotograf", None)
+    ratingMuzica = request.json.get("ratingMuzica", None)
+    ratingRestaurant = request.json.get("ratingRestaurant", None)
+    ratingFotograf = request.json.get("ratingFotograf", None)
+
+    print(email)
+    print(event)
+    print(date)
+    print(location)
+    print(judet)
+    print(liveband)
+    print(photographer)
+    print(opiniiMuzica)
+    print(opiniiRestaurant)
+    print(opiniiFotograf)
+    print(ratingMuzica)
+    print(ratingRestaurant)
+    print(ratingFotograf)
+
+    table_client = table_service.get_table_client(table_name="OpiniiFinale")
+
+    task = {u'PartitionKey': email,
+            u'RowKey': date,
+            u'Nume': name,
+            u'TipEveniment': event,
+            u'Judet': judet,
+            u'Restaurant': location,
+            u'Muzica': liveband,
+            u'Fotograf': photographer,
+            u'OpiniiRestaurant': opiniiRestaurant,
+            u'OpiniiMuzica': opiniiMuzica,
+            u'OpiniiFotograf': opiniiFotograf,
+            u'RatingRestaurant': ratingRestaurant,
+            u'RatingMuzica': ratingMuzica,
+            u'RatingFotograf': ratingFotograf,
+
+            }
+    table_client.create_entity(entity=task)
+    return "Done"
+
+
+@app.route('/getOpinii', methods=["POST"])
+def getOpinii():
+    judet = request.json.get("judet", None)
+
+    table_client = table_service.get_table_client(table_name="OpiniiFinale")
+    tasks = table_client.query_entities(
+        query_filter='Judet eq \'' + judet + '\'')
+    lst = list(tasks)
+    print(lst)
+    return jsonify(results=lst)
 
 
 @app.route('/invitationList', methods=["POST"])
@@ -156,10 +224,10 @@ def invitationList():
     print("OLD", oldValues)
     for index in range(len(formValues)):
         task = {u'PartitionKey': email+"-"+date,
-                u'RowKey': formValues[index]["emailInvitat"],
-                u'NumeInvitat': formValues[index]["numeInvitat"],
-                u'ConfirmarePrezenta': formValues[index]["confirmarePrezenta"],
-                u'NumarPersoane': formValues[index]["numarPersoane"],
+                u'RowKey': formValues[index]["EmailInvitat"],
+                u'NumeInvitat': formValues[index]["NumeInvitat"],
+                u'ConfirmarePrezenta': formValues[index]["ConfirmarePrezenta"],
+                u'NumarPersoane': formValues[index]["NumarPersoane"],
                 }
         table_client.create_entity(entity=task)
 
@@ -195,11 +263,12 @@ def deleteInvitat():
 
     email = request.json.get("email", None)
     date = request.json.get("date", None)
-    emailInvitat = request.json.get("emailInvitat", None)
+    emailInvitat = request.json.get("EmailInvitat", None)
 
     print(email)
+    print(date)
     print(emailInvitat)
-
+    print("aaa"+email+"-"+date+"aaa")
     table_client.delete_entity(email+"-"+date, emailInvitat)
 
     return "Done"
@@ -251,13 +320,8 @@ def updateform():
     judet = request.json.get("judet", None)
     budget = request.json.get("budget", None)
     liveband = request.json.get("liveband", None)
-    artisticmoment = request.json.get("artisticmoment", None)
     photographer = request.json.get("photographer", None)
-    videorecording = request.json.get("videorecording", None)
-    # candybar = request.json.get("candybar", None)
-    # fruitsbar = request.json.get("fruitsbar", None)
-    # drinks = request.json.get("drinks", None)
-    # ringdance = request.json.get("ringdance", None)
+    opinie = request.json.get("opinie", None)
 
     print(email)
     print(event)
@@ -267,20 +331,21 @@ def updateform():
     print(judet)
     print(budget)
     print(liveband)
-    print(artisticmoment)
     print(photographer)
+    print(opinie)
 
     table_client = table_service.get_table_client(table_name="Form")
 
     task = {u'PartitionKey': email,
             u'RowKey': date,
-            u'EventType': event,
-            u'NumberGuests': nrguests,
-            u'Location': location,
+            u'TipEveniment': event,
+            u'NumarInvitati': nrguests,
+            u'Restaurant': location,
             u'Judet': judet,
-            u'Budget': budget,
-            u'LiveBand': liveband,
-            u'Photographer': photographer,
+            u'Buget': budget,
+            u'Muzica': liveband,
+            u'Fotograf': photographer,
+            u'Opinie': opinie,
             }
     table_client.update_entity(task)
     return "Done"

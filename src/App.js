@@ -7,7 +7,7 @@ import SingUp from "./Components/Singup";
 import HomePage from "./Components/HomePage";
 import RegisterEventPage from "./Components/RegisterEvent";
 import MyEventPage from "./Components/MyEvents";
-import InvitatiPage from "./Components/InvitatiPage";
+import OpiniiPage from "./Components/OpiniiPage";
 import SettingsPage from "./Components/SettingsPage";
 import SendInvitationsPage from "./Components/SendInvitationsPage";
 import EditFormPage from "./Components/EditFormPage";
@@ -23,7 +23,7 @@ function App() {
         <Route exact path="/homepage" component={HomePage} />
         <Route exact path="/registerevent" component={RegisterEventPage} />
         <Route exact path="/myeventpage" component={MyEventPage} />
-        <Route exact path="/invitatipage" component={InvitatiPage} />
+        <Route exact path="/opiniipage" component={OpiniiPage} />
         <Route exact path="/settingspage" component={SettingsPage} />
         <Route exact path="/recommandpage" component={RecommendPage} />
         <Route

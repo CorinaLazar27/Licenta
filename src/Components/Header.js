@@ -32,12 +32,12 @@ import { useHistory } from "react-router-dom";
 // LOCAL-STYLING
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    backgroundColor: theme.palette.error.light,
-  },
-  menuButton: {
-    marginRight: theme.spacing(1),
-  },
+  // root: {
+  //   backgroundColor: theme.palette.error.light,
+  // },
+  // menuButton: {
+  //   marginRight: theme.spacing(1),
+  // },
   title: {
     flexGrow: 1,
   },
@@ -82,13 +82,11 @@ const Header = (props) => {
         fontSize: "3rem",
       },
     },
+
     palette: {
-      type: "dark",
+      // type: "dark",
       primary: {
         main: "#9575cd",
-      },
-      secondary: {
-        main: orange[400],
       },
     },
   });
@@ -101,7 +99,7 @@ const Header = (props) => {
               <Typography
                 variant="h5"
                 component="p"
-                color="textSecondary"
+                color="white"
                 className={classes.title}
               >
                 Dream Events
@@ -167,7 +165,7 @@ const Header = (props) => {
                       </ListItemIcon>
                       <Typography variant="h6">Evenimentele mele</Typography>
                     </MenuItem>
-                    <MenuItem
+                    {/* <MenuItem
                       onClick={() => {
                         setAnchor(null);
                         history.push("/invitatipage");
@@ -179,7 +177,7 @@ const Header = (props) => {
                         <AccountCircleIcon />
                       </ListItemIcon>
                       <Typography variant="h6"> Contacte</Typography>
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem
                       onClick={() => setAnchor(null)}
                       component={Link}
@@ -209,7 +207,7 @@ const Header = (props) => {
                     variant="text"
                     component={Link}
                     to="/homepage"
-                    color="default"
+                    style={{ color: "white" }}
                   >
                     <HomeIcon />
                     Pagina principală
@@ -222,7 +220,7 @@ const Header = (props) => {
                       history.push("/registerevent");
                       history.go(0);
                     }}
-                    color="default"
+                    style={{ color: "white" }}
                   >
                     <AddIcon />
                     Eveniment nou
@@ -235,11 +233,12 @@ const Header = (props) => {
                       history.go(0);
                     }}
                     color="default"
+                    style={{ color: "white" }}
                   >
                     <EventIcon />
                     Evenimentele mele
                   </Button>
-                  <Button
+                  {/* <Button
                     variant="text"
                     component={Link}
                     onClick={() => {
@@ -250,13 +249,14 @@ const Header = (props) => {
                   >
                     <AccountCircleIcon />
                     Contacte
-                  </Button>
+                  </Button> */}
 
                   <Button
                     variant="text"
                     component={Link}
                     to="/settingspage"
                     color="default"
+                    style={{ color: "white" }}
                   >
                     <SettingsIcon />
                     Setări
@@ -267,6 +267,7 @@ const Header = (props) => {
                     component={Link}
                     to="/sign-in"
                     color="default"
+                    style={{ color: "white" }}
                     onClick={() => window.localStorage.clear()}
                   >
                     <LogoutIcon />

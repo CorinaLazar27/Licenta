@@ -122,17 +122,7 @@ function ResultPage() {
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
   return (
-    <Container
-      maxWidth={false}
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        textAlign: "center",
-        minHeigth: "100vh",
-        justifyContent: "center",
-        backgroundImage: `url("${background}")`,
-      }}
-    >
+    <div className="Container">
       <Header />
       {loader && <OverlayLoader />}
       <Grid
@@ -159,8 +149,9 @@ function ResultPage() {
         >
           {!load && (
             <Button
-              sx={{
-                fontSize: "2vw",
+              style={{
+                color: "white",
+                backgroundColor: "#9575cd",
               }}
               startIcon={<ArrowBackIcon />}
               variant="contained"
@@ -194,7 +185,13 @@ function ResultPage() {
                   }}
                 >
                   {error && !load && (
-                    <Grid item xs={12}>
+                    <Grid
+                      item
+                      xs={12}
+                      sx={{
+                        minHeight: "35vh",
+                      }}
+                    >
                       <Typography style={{ fontSize: "2vh" }}>
                         {" "}
                         Încă nu sunt răspunsuri la chestionar!
@@ -373,7 +370,7 @@ function ResultPage() {
           )}
         </Grid>
       </Grid>
-    </Container>
+    </div>
   );
 }
 export default ResultPage;

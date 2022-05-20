@@ -38,6 +38,8 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import TableContainer from "@mui/material/TableContainer";
+import Paper from "@mui/material/Paper";
 
 import background from "../Image/homePage.png";
 
@@ -67,7 +69,14 @@ function SendInvitationsPage() {
   const [loading, setLoading] = useState(false);
   const [loadingMail, setLoadingMail] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-  const [formValues, setFormValues] = useState([{ emailInvitat: "" }]);
+  const [formValues, setFormValues] = useState([
+    {
+      EmailInvitat: "",
+      NumeInvitat: "",
+      ConfirmarePrezenta: false,
+      NumarPersoane: 1,
+    },
+  ]);
   const [empty, setEmpty] = useState(false);
   const [invitatiSalvati, setInvitatiSalvati] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -78,24 +87,34 @@ function SendInvitationsPage() {
 
   let handleChange = (i, e) => {
     let newFormValues = [...formValues];
-    newFormValues[i][e.target.name] = e.target.value;
+    if (e.target.name == "ConfirmarePrezenta")
+      newFormValues[i][e.target.name] = e.target.checked;
+    else newFormValues[i][e.target.name] = e.target.value;
+
     setFormValues(newFormValues);
   };
 
   let handleChangeOld = (i, e) => {
+    console.log("change", e.target.name);
+    console.log("value", e.target.value);
     let newFormValues = [...invitatiSalvati];
-    newFormValues[i][e.target.name] = e.target.value;
+    console.log("inainte", newFormValues);
+    if (e.target.name == "ConfirmarePrezenta")
+      newFormValues[i][e.target.name] = e.target.checked;
+    else newFormValues[i][e.target.name] = e.target.value;
+
     setInvitatiSalvati(newFormValues);
+    console.log(invitatiSalvati);
   };
 
   let addFormFields = () => {
     setFormValues([
       ...formValues,
       {
-        emailInvitat: "",
-        numeInvitat: "",
-        confirmarePrezenta: false,
-        numarPersoane: 1,
+        EmailInvitat: "",
+        NumeInvitat: "",
+        ConfirmarePrezenta: false,
+        NumarPersoane: 1,
       },
     ]);
   };
@@ -151,7 +170,7 @@ function SendInvitationsPage() {
         if (response.data.results.length == 0) setEmpty(true);
         else setInvitatiSalvati(response.data.results);
 
-        console.log("invitatiSalvati", invitatiSalvati);
+        // console.log("invitatiSalvati", invitatiSalvati);
       })
       .catch((error) => {
         if (error.response) {
@@ -165,18 +184,20 @@ function SendInvitationsPage() {
       })
       .finally(() => setLoader(false));
   }
-  async function removeFormInv(i) {
+  function removeFormInv(i) {
     let newFormValues = [...invitatiSalvati];
-    newFormValues.splice(i, 1);
+    // newFormValues.splice(i, 1);
     setInvitatiSalvati(newFormValues);
+    console.log("console.log", invitatiSalvati[i].RowKey);
 
     setLoader(true);
-    await axios({
+    axios({
       method: "POST",
       url: "/deleteinvitat",
       data: {
         email: email,
-        emailInvitat: invitatiSalvati[i].emailInvitat,
+        date: data,
+        EmailInvitat: invitatiSalvati[i].RowKey,
       },
     })
       .then((response) => {
@@ -198,10 +219,14 @@ function SendInvitationsPage() {
   }
 
   const [open, setOpen] = useState(false);
+
   async function SendInvitati() {
     let formVal = formValues.slice(1);
+
     console.log("aaaA", formVal);
+
     console.log("bbbb", invitatiSalvati);
+
     setLoading(true);
 
     await axios({
@@ -242,14 +267,13 @@ function SendInvitationsPage() {
     checked.map((element, index) => {
       // newMail.splice(index, 1);
       newMail.push(element.RowKey);
-
       console.log(element.NumeInvitat);
       console.log(element.RowKey);
     });
     setMail(newMail);
     console.log("MAAAIL", mail);
     var templateParams = {
-      emailInvitat: mail,
+      EmailInvitat: mail,
       name: nume,
       message: messageValue,
     };
@@ -278,8 +302,20 @@ function SendInvitationsPage() {
         });
     }
   }
+  const today = new Date();
+  const [past, setPast] = useState(false);
+  today.setHours(0, 0, 0, 0);
   useEffect(() => {
     GetInvitati();
+    const splitDate = data.split(".");
+
+    const dataEveniment = new Date(
+      splitDate[2],
+      splitDate[1] - 1,
+      splitDate[0]
+    );
+    // dataEveniment.setHours(0, 0, 0, 0);
+    if (dataEveniment < today) setPast(true);
   }, []);
 
   return (
@@ -420,167 +456,182 @@ function SendInvitationsPage() {
           <Grid item xs={12} sx={{ padding: "2vh" }}>
             <Grid container rowSpacing={3}>
               <Grid item xs={12}>
-                {!empty ? (
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell padding="checkbox"></TableCell>
-                        <TableCell
-                          sx={{
-                            textAlign: "center",
-                          }}
-                        >
-                          {" "}
-                          Nume{" "}
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            textAlign: "center",
-                          }}
-                        >
-                          {" "}
-                          Email{" "}
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            textAlign: "center",
-                          }}
-                        >
-                          {" "}
-                          Prezență confirmată{" "}
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            textAlign: "center",
-                          }}
-                        >
-                          {" "}
-                          Număr persoane{" "}
-                        </TableCell>
-                        <TableCell> </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {invitatiSalvati.map((element, index) => {
-                        console.log(element);
-                        return (
-                          <>
-                            {element.numeInvitat != "" ? (
-                              <TableRow
-                                sx={{
-                                  backgroundColor: "#fffdf3",
-                                }}
-                              >
-                                <TableCell>{index + 1}</TableCell>
-                                <TableCell>
-                                  <TextField
-                                    fullWidth
-                                    name="numeInvitat"
-                                    defaultValue={element.NumeInvitat || ""}
-                                    variant="standard"
-                                    onChange={(e) => handleChangeOld(index, e)}
-                                  />
-                                </TableCell>
+                {/*Evenimentul nu e trecut*/}
+                {!empty && !past ? (
+                  <TableContainer component={Paper}>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell padding="checkbox"></TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {" "}
+                            Nume{" "}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {" "}
+                            Email{" "}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {" "}
+                            Prezență confirmată{" "}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {" "}
+                            Număr persoane{" "}
+                          </TableCell>
+                          <TableCell> </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {invitatiSalvati.map((element, index) => {
+                          // console.log(element);
+                          return (
+                            <>
+                              {element.NumeInvitat != "" ? (
+                                <TableRow
+                                  sx={{
+                                    backgroundColor: "#fffdf3",
+                                  }}
+                                >
+                                  <TableCell>{index + 1}</TableCell>
+                                  <TableCell>
+                                    <TextField
+                                      fullWidth
+                                      name="NumeInvitat"
+                                      defaultValue={element.NumeInvitat || ""}
+                                      variant="standard"
+                                      onChange={(e) =>
+                                        handleChangeOld(index, e)
+                                      }
+                                    />
+                                  </TableCell>
 
-                                <TableCell>
-                                  <TextField
-                                    fullWidth
-                                    type="email"
-                                    name="emailInvitat"
-                                    defaultValue={element.RowKey || ""}
-                                    variant="standard"
-                                    onChange={(e) => handleChangeOld(index, e)}
-                                    required
-                                  />
-                                </TableCell>
-                                <TableCell
-                                  sx={{
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  <Checkbox
-                                    defaultChecked={element.ConfirmarePrezenta}
-                                    onChange={(e) => handleChangeOld(index, e)}
-                                  />
-                                </TableCell>
-                                <TableCell
-                                  sx={{
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  <TextField
-                                    type="number"
-                                    variant="filled"
-                                    defaultValue={element.NumarPersoane}
-                                    onChange={(e) => {
-                                      console.log(e);
-                                      handleChangeOld(index, e);
+                                  <TableCell>
+                                    <TextField
+                                      fullWidth
+                                      type="email"
+                                      name="EmailInvitat"
+                                      defaultValue={element.RowKey || ""}
+                                      variant="standard"
+                                      onChange={(e) =>
+                                        handleChangeOld(index, e)
+                                      }
+                                      required
+                                    />
+                                  </TableCell>
+                                  <TableCell
+                                    sx={{
+                                      textAlign: "center",
                                     }}
-                                  />
-                                </TableCell>
-                                <TableCell>
-                                  <Button
-                                    startIcon={<DeleteOutlineIcon />}
-                                    onClick={() => removeFormInv(index)}
-                                  ></Button>
-                                </TableCell>
-                              </TableRow>
-                            ) : null}
-                          </>
-                        );
-                      })}
-                      {formValues.map((element, index) => {
-                        return (
-                          <>
-                            {index ? (
-                              <TableRow>
-                                <TableCell />
-                                <TableCell>
-                                  <TextField
-                                    fullWidth
-                                    name="numeInvitat"
-                                    value={element.numeInvitat || ""}
-                                    variant="standard"
-                                    onChange={(e) => handleChange(index, e)}
-                                    required
-                                  />
-                                </TableCell>
+                                  >
+                                    <Checkbox
+                                      name="ConfirmarePrezenta"
+                                      defaultChecked={
+                                        element.ConfirmarePrezenta
+                                      }
+                                      onChange={(e) => {
+                                        console.log("value", e.target.checked);
+                                        handleChangeOld(index, e);
+                                      }}
+                                    />
+                                  </TableCell>
+                                  <TableCell
+                                    sx={{
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    <TextField
+                                      type="number"
+                                      name="NumarPersoane"
+                                      variant="filled"
+                                      defaultValue={element.NumarPersoane}
+                                      onChange={(e) => {
+                                        console.log(e);
+                                        handleChangeOld(index, e);
+                                      }}
+                                    />
+                                  </TableCell>
+                                  <TableCell>
+                                    <Button
+                                      startIcon={<DeleteOutlineIcon />}
+                                      onClick={() => removeFormInv(index)}
+                                    ></Button>
+                                  </TableCell>
+                                </TableRow>
+                              ) : null}
+                            </>
+                          );
+                        })}
+                        {formValues.map((element, index) => {
+                          return (
+                            <>
+                              {index ? (
+                                <TableRow>
+                                  <TableCell />
+                                  <TableCell>
+                                    <TextField
+                                      fullWidth
+                                      name="NumeInvitat"
+                                      value={element.NumeInvitat || ""}
+                                      variant="standard"
+                                      onChange={(e) => handleChange(index, e)}
+                                      required
+                                    />
+                                  </TableCell>
 
-                                <TableCell>
-                                  <TextField
-                                    fullWidth
-                                    type="email"
-                                    name="emailInvitat"
-                                    value={element.emailInvitat || ""}
-                                    variant="standard"
-                                    onChange={(e) => handleChange(index, e)}
-                                    required
-                                  />
-                                </TableCell>
-                                <TableCell
-                                  sx={{
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  <Checkbox
-                                    defaultChecked={false}
-                                    onChange={(e) => handleChange(index, e)}
-                                  />
-                                </TableCell>
-                                <TableCell
-                                  sx={{
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  <TextField
-                                    type="number"
-                                    variant="filled"
-                                    defaultValue={element.numarPersoane}
-                                    onChange={(e) => handleChange(index, e)}
-                                  />
-                                </TableCell>
-                                <TableCell>
-                                  {/* <Checkbox
+                                  <TableCell>
+                                    <TextField
+                                      fullWidth
+                                      type="email"
+                                      name="EmailInvitat"
+                                      value={element.EmailInvitat || ""}
+                                      variant="standard"
+                                      onChange={(e) => handleChange(index, e)}
+                                      required
+                                    />
+                                  </TableCell>
+                                  <TableCell
+                                    sx={{
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    <Checkbox
+                                      name="ConfirmarePrezenta"
+                                      defaultChecked={false}
+                                      onChange={(e) => handleChange(index, e)}
+                                    />
+                                  </TableCell>
+                                  <TableCell
+                                    sx={{
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    <TextField
+                                      type="number"
+                                      name="NumarPersoane"
+                                      variant="filled"
+                                      defaultValue={element.NumarPersoane}
+                                      onChange={(e) => handleChange(index, e)}
+                                    />
+                                  </TableCell>
+                                  <TableCell>
+                                    {/* <Checkbox
                               sx={{
                                 alignSelf: "center",
                                 justifyContent: "center",
@@ -588,18 +639,213 @@ function SendInvitationsPage() {
                               defaultChecked={"false"}
                             /> */}
 
-                                  <Button
-                                    startIcon={<DeleteOutlineIcon />}
-                                    onClick={() => removeFormFields(index)}
-                                  ></Button>
-                                </TableCell>
-                              </TableRow>
-                            ) : null}
-                          </>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
+                                    <Button
+                                      startIcon={<DeleteOutlineIcon />}
+                                      onClick={() => removeFormFields(index)}
+                                    ></Button>
+                                  </TableCell>
+                                </TableRow>
+                              ) : null}
+                            </>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                ) : null}
+                {/*Evenimentul  e trecut*/}
+                {!empty && past ? (
+                  <TableContainer component={Paper}>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell padding="checkbox"></TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {" "}
+                            Nume{" "}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {" "}
+                            Email{" "}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {" "}
+                            Prezență confirmată{" "}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {" "}
+                            Număr persoane{" "}
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {invitatiSalvati.map((element, index) => {
+                          // console.log(element);
+                          return (
+                            <>
+                              {element.NumeInvitat != "" ? (
+                                <TableRow
+                                  sx={{
+                                    backgroundColor: "#fffdf3",
+                                  }}
+                                >
+                                  <TableCell>{index + 1}</TableCell>
+                                  <TableCell>
+                                    <TextField
+                                      disabled
+                                      fullWidth
+                                      name="NumeInvitat"
+                                      defaultValue={element.NumeInvitat || ""}
+                                      variant="standard"
+                                      onChange={(e) =>
+                                        handleChangeOld(index, e)
+                                      }
+                                    />
+                                  </TableCell>
+
+                                  <TableCell>
+                                    <TextField
+                                      disabled
+                                      fullWidth
+                                      type="email"
+                                      name="EmailInvitat"
+                                      defaultValue={element.RowKey || ""}
+                                      variant="standard"
+                                      onChange={(e) =>
+                                        handleChangeOld(index, e)
+                                      }
+                                      required
+                                    />
+                                  </TableCell>
+                                  <TableCell
+                                    sx={{
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    <Checkbox
+                                      disabled
+                                      name="ConfirmarePrezenta"
+                                      defaultChecked={
+                                        element.ConfirmarePrezenta
+                                      }
+                                      onChange={(e) => {
+                                        console.log("value", e.target.checked);
+                                        handleChangeOld(index, e);
+                                      }}
+                                    />
+                                  </TableCell>
+                                  <TableCell
+                                    sx={{
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    <TextField
+                                      type="number"
+                                      disabled
+                                      name="NumarPersoane"
+                                      variant="filled"
+                                      defaultValue={element.NumarPersoane}
+                                      onChange={(e) => {
+                                        console.log(e);
+                                        handleChangeOld(index, e);
+                                      }}
+                                    />
+                                  </TableCell>
+                                </TableRow>
+                              ) : null}
+                            </>
+                          );
+                        })}
+                        {formValues.map((element, index) => {
+                          return (
+                            <>
+                              {index ? (
+                                <TableRow>
+                                  <TableCell />
+                                  <TableCell>
+                                    <TextField
+                                      fullWidth
+                                      name="NumeInvitat"
+                                      value={element.NumeInvitat || ""}
+                                      variant="standard"
+                                      onChange={(e) => handleChange(index, e)}
+                                      required
+                                    />
+                                  </TableCell>
+
+                                  <TableCell>
+                                    <TextField
+                                      fullWidth
+                                      type="email"
+                                      name="EmailInvitat"
+                                      value={element.EmailInvitat || ""}
+                                      variant="standard"
+                                      onChange={(e) => handleChange(index, e)}
+                                      required
+                                    />
+                                  </TableCell>
+                                  <TableCell
+                                    sx={{
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    <Checkbox
+                                      name="ConfirmarePrezenta"
+                                      defaultChecked={false}
+                                      onChange={(e) => handleChange(index, e)}
+                                    />
+                                  </TableCell>
+                                  <TableCell
+                                    sx={{
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    <TextField
+                                      type="number"
+                                      name="NumarPersoane"
+                                      variant="filled"
+                                      defaultValue={element.NumarPersoane}
+                                      onChange={(e) => handleChange(index, e)}
+                                    />
+                                  </TableCell>
+                                  <TableCell>
+                                    {/* <Checkbox
+                              sx={{
+                                alignSelf: "center",
+                                justifyContent: "center",
+                              }}
+                              defaultChecked={"false"}
+                            /> */}
+
+                                    <Button
+                                      startIcon={<DeleteOutlineIcon />}
+                                      onClick={() => removeFormFields(index)}
+                                    ></Button>
+                                  </TableCell>
+                                </TableRow>
+                              ) : null}
+                            </>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
                 ) : null}
                 <Grid
                   item
@@ -610,29 +856,33 @@ function SendInvitationsPage() {
                     alignItems: "center",
                   }}
                 >
-                  <Button
-                    sx={{
-                      float: "right",
-                    }}
-                    startIcon={<AddIcon />}
-                    onClick={() => {
-                      setEmpty(false);
-                      addFormFields();
-                    }}
-                  >
-                    Adaugă contact
-                  </Button>
+                  {!past && (
+                    <Button
+                      sx={{
+                        float: "right",
+                      }}
+                      startIcon={<AddIcon />}
+                      onClick={() => {
+                        setEmpty(false);
+                        addFormFields();
+                      }}
+                    >
+                      Adaugă contact
+                    </Button>
+                  )}
                 </Grid>
               </Grid>
               <Grid item xs={12}>
-                <LoadingButton
-                  loading={loading}
-                  onClick={() => SendInvitati()}
-                  // type="submit"
-                  variant="contained"
-                >
-                  Salvează lista
-                </LoadingButton>
+                {!past && (
+                  <LoadingButton
+                    type="submit"
+                    loading={loading}
+                    onClick={() => SendInvitati()}
+                    variant="contained"
+                  >
+                    Salvează lista
+                  </LoadingButton>
+                )}
               </Grid>
             </Grid>
           </Grid>
@@ -647,18 +897,20 @@ function SendInvitationsPage() {
               margin: "1rem",
             }}
           >
-            <Button
-              sx={{
-                fontSize: "2vw",
-              }}
-              type="submit"
-              variant="contained"
-              onClick={() => {
-                setOpenDialog(true);
-              }}
-            >
-              Trimite chestionar{" "}
-            </Button>
+            {!past && (
+              <Button
+                sx={{
+                  fontSize: "2vw",
+                }}
+                type="submit"
+                variant="contained"
+                onClick={() => {
+                  setOpenDialog(true);
+                }}
+              >
+                Trimite chestionar{" "}
+              </Button>
+            )}
           </Grid>
           <Grid item xs={12} sx={{ padding: "2vh" }}>
             {/* <form onSubmit={sendEmail}>
@@ -683,10 +935,10 @@ function SendInvitationsPage() {
                           fullWidth
                           id="inputinv"
                           type="email"
-                          name="emailInvitat"
+                          name="EmailInvitat"
                           label="Email"
                           variant="standard"
-                          value={element.emailInvitat || ""}
+                          value={element.EmailInvitat || ""}
                           onChange={(e) => handleChange(index, e)}
                           required
                         />

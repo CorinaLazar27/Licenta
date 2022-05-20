@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import logo from "../Image/logo.png";
+
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
@@ -192,7 +192,8 @@ function SettingsPage() {
         sx={{
           width: "100vw",
           padding: "2%",
-          marginTop: "10vh",
+          marginTop: "15vh",
+          backgroundColor: "white",
         }}
       >
         <Grid container rowSpacing={"10vh"}>

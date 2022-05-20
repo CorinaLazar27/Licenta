@@ -10,19 +10,9 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { LoadingButton } from "@mui/lab";
-import login10 from "../Image/login10.jpg";
-import login11 from "../Image/login11.jpg";
-import login12 from "../Image/login12.jpg";
-import login13 from "../Image/login13.jpg";
-import login14 from "../Image/login14.jpg";
-import login15 from "../Image/login15.jpg";
-import login16 from "../Image/login16.jpg";
-import login17 from "../Image/login17.jpg";
 
-import login1 from "../Image/1.9.jpg";
-import login2 from "../Image/2.jpg";
-import login3 from "../Image/3.jpg";
-import login4 from "../Image/4.jpg";
+import login1 from "../Image/abcd.png";
+
 import { Container } from "@mui/material";
 import { Box } from "@mui/system";
 import * as Yup from "yup";
@@ -83,12 +73,9 @@ function SingIn() {
         console.log(response);
         setLoading(false);
         window.localStorage.setItem("nume", res.Nume);
-        // window.localStorage.setItem("data", res.Date);
         window.localStorage.setItem("parola", decrypt(res.Parola));
-        // window.localStorage.setItem("locatieprofil", res.Location);
-        // window.localStorage.setItem("numartelefon", res.Phone);
         window.localStorage.setItem("email", res.PartitionKey);
-        if (res != "Utilizator sau parola gresit") history.push("/homepage");
+        history.push("/homepage");
       })
       .catch((error) => {
         if (error.response) {

@@ -94,6 +94,11 @@ function HomePage() {
           </Grid>
           <Grid item xs={12}>
             <Button
+              style={{
+                color: "white",
+                backgroundColor: "#9575cd",
+                borderColor: "white",
+              }}
               startIcon={<AddIcon />}
               sx={{ fontSize: size - 15 }}
               variant="outlined"
@@ -108,6 +113,11 @@ function HomePage() {
 
           <Grid item xs={12}>
             <Button
+              style={{
+                color: "white",
+                backgroundColor: "#9575cd",
+                borderColor: "white",
+              }}
               startIcon={<EventIcon />}
               variant="outlined"
               sx={{ fontSize: size - 15 }}

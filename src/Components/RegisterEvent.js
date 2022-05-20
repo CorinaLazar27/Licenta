@@ -62,17 +62,23 @@ function RegisterEventPage() {
         fruitsbar: values.fruitsBar,
         drinks: values.drinks,
         ringdance: values.ringDance,
+        opinie: false,
       },
     })
       .then((response) => {
         setLoading(false);
+        setOpen(true);
+        setTimeout(() => {
+          history.push("/myeventpage");
+          history.go(0);
+        }, 4000);
 
         const res = response.data;
         console.log(res);
         if (res == "Done") {
-          handleClickToOpen();
-          setDialogBox(true);
-          console.log(dialogBox);
+          // handleClickToOpen();
+          // setDialogBox(true);
+          // console.log(dialogBox);
         }
       })
       .catch((error) => {
@@ -218,6 +224,17 @@ function RegisterEventPage() {
       >
         <Alert onClose={handleClose} severity="error">
           Eroare la crearea evenimentului!
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="success">
+          Eveniment creat cu succes!
         </Alert>
       </Snackbar>
       <Box
@@ -547,16 +564,21 @@ function RegisterEventPage() {
 
               <Grid item xs={12}>
                 <LoadingButton
+                  style={{
+                    color: "white",
+                    backgroundColor: "#9575cd",
+                    borderColor: "white",
+                  }}
                   loading={loading}
                   type="submit"
                   variant="contained"
                   sx={{
-                    backgroundColor: "green",
-                    hover: {
-                      "&:hover": {
-                        backgroundColor: "red",
-                      },
-                    },
+                    // backgroundColor: "green",
+                    // hover: {
+                    //   "&:hover": {
+                    //     backgroundColor: "red",
+                    //   },
+                    // },
 
                     marginBottom: "3vh",
                   }}
@@ -568,7 +590,7 @@ function RegisterEventPage() {
           </Form>
         </Formik>
       </Box>
-      <Dialog open={open} onClose={handleToClose}>
+      {/* <Dialog open={open} onClose={handleToClose}>
         <DialogTitle>{"Vreti sa invitati oamenii acum?"}</DialogTitle>
 
         <DialogActions>
@@ -590,7 +612,7 @@ function RegisterEventPage() {
             Nu acum
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </div>
   );
 }

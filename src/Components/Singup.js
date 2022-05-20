@@ -9,17 +9,9 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { LoadingButton } from "@mui/lab";
 import Tooltip from "@mui/material/Tooltip";
-import login from "../Image/login.jpg";
-import login1 from "../Image/1.jpg";
-import login2 from "../Image/login2.jpg";
-import login3 from "../Image/login3.jpg";
-import login4 from "../Image/login4.jpg";
-import login5 from "../Image/login5.jpg";
-import login6 from "../Image/login6.jpg";
-import login7 from "../Image/login7.jpg";
-import login8 from "../Image/login8.jpeg";
-import login9 from "../Image/login9.jpg";
-import login16 from "../Image/login16.jpg";
+
+import login1 from "../Image/abcd.png";
+
 import { Container } from "@mui/material";
 import { Box } from "@mui/system";
 import * as Yup from "yup";
@@ -119,6 +111,11 @@ function SingUp() {
   return (
     <Container
       sx={{
+        display: "flex",
+        minHeight: "100vh",
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center",
         backgroundImage: `url("${login1}")`,
         backgroundSize: "cover",
         display: "flex",

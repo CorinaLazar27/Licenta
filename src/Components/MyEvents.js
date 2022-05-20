@@ -10,7 +10,7 @@ import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-
+import CloseIcon from "@mui/icons-material/Close";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import OverlayLoader from "./OverlayLoader";
@@ -37,6 +37,10 @@ import background from "../Image/homePage.png";
 import Footer from "./Footer";
 import AssistantIcon from "@mui/icons-material/Assistant";
 import RecommendIcon from "@mui/icons-material/Recommend";
+import PeopleIcon from "@mui/icons-material/People";
+import RateReviewIcon from "@mui/icons-material/RateReview";
+import Rating from "@mui/material/Rating";
+import { getOverlappingDaysInIntervals } from "date-fns";
 
 function MyEventPage() {
   const history = useHistory();
@@ -52,16 +56,25 @@ function MyEventPage() {
   const [box, setBox] = useState(false);
   const [noData, setNoData] = useState(false);
   const [load, setLoad] = useState(true);
-  const [restaurant, setRestaurant] = useState("");
+
   const [openDialogDelete, setOpenDialogDelete] = useState(false);
   const [sure, setSure] = useState(false);
-
+  const [openDialog, setOpenDialog] = useState(false);
   const [locationsRecomanded, setLocationsRecomanded] = useState([]);
   const [openInputText, setOpenInputText] = useState(false);
   const [noRecomandations, setNoRecomandations] = useState(false);
 
+  const [opiniiRestaurant, setOpiniiRestaurant] = useState("");
+  const [opiniiFotograf, setOpiniiFotograf] = useState("");
+  const [opiniiMuzica, setOpiniiMuzica] = useState("");
+
+  const [ratingRestaurant, setRatingRestaurant] = useState(0);
+  const [ratingMuzica, setRatingMuzica] = useState(0);
+  const [ratingFotograf, setRatingFotograf] = useState(0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
   const handleToClose = () => {
-    setOpenDialogDelete(false);
+    setOpenDialog(false);
   };
 
   useEffect(() => {
@@ -183,6 +196,7 @@ function MyEventPage() {
   const [loading, setLoading] = useState(false);
   const [openSuccesLocation, setOpenSuccesLocation] = useState(false);
   const [openErrorLocation, setOpenErrorLocation] = useState(false);
+
   function UpdateForm() {
     setLoading(true);
     axios({
@@ -197,13 +211,8 @@ function MyEventPage() {
         judet: window.localStorage.getItem("judet"),
         budget: window.localStorage.getItem("buget"),
         liveband: window.localStorage.getItem("liveband"),
-        // artisticmoment: window.localStorage.getItem("momentartistic"),
         photographer: window.localStorage.getItem("fotograf"),
-        // videorecording: window.localStorage.getItem("video"),
-        // candybar: window.localStorage.getItem("candybar"),
-        // fruitsbar: window.localStorage.getItem("fruitsbar"),
-        // drinks: window.localStorage.getItem("bauturi"),
-        // ringdance: window.localStorage.getItem("ringdans"),
+        opinie: window.localStorage.getItem("opinie"),
       },
     })
       .then((response) => {
@@ -229,24 +238,70 @@ function MyEventPage() {
       .finally(() => setLoading(false));
   }
 
+  function PostOpinii() {
+    // setLoading(true);
+    axios({
+      method: "POST",
+      url: "/postOpinii",
+      data: {
+        email: email,
+        event: event,
+        name: window.localStorage.getItem("nume"),
+        date: window.localStorage.getItem("dataeveniment"),
+        nrguests: window.localStorage.getItem("invitati"),
+        location: window.localStorage.getItem("locatie"),
+        judet: window.localStorage.getItem("judet"),
+        liveband: window.localStorage.getItem("liveband"),
+        photographer: window.localStorage.getItem("fotograf"),
+        opiniiFotograf: opiniiFotograf,
+        opiniiRestaurant: opiniiRestaurant,
+        opiniiMuzica: opiniiMuzica,
+        ratingFotograf: ratingFotograf,
+        ratingRestaurant: ratingRestaurant,
+        ratingMuzica: ratingMuzica,
+      },
+    })
+      .then((response) => {
+        const res = response.data;
+        console.log(res);
+        window.localStorage.setItem("opinie", "true");
+
+        setTimeout(UpdateForm(), 1500);
+        //setOpenSuccesLocation(true);
+        // setTimeout(() => {
+        //   history.push("/myeventpage");
+        //   history.go(0);
+        // }, 2000);
+        if (res == "Done") {
+          console.log("dONE");
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          // setOpenErrorLocation(true);
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        }
+      });
+    // .finally(() => setLoading(false));
+  }
+
   function myClick(event) {
     setDateForDelete(event.RowKey);
     console.log(dateForDelete);
-    //handleClickToOpen();
+
     window.localStorage.setItem("eveniment", event.TipEveniment);
     window.localStorage.setItem("locatie", event.Restaurant);
     window.localStorage.setItem("judet", event.Judet);
     window.localStorage.setItem("invitati", event.NumarInvitati);
     window.localStorage.setItem("buget", event.Buget);
-    window.localStorage.setItem("momentartistic", event.MomentArtistic);
+    // window.localStorage.setItem("momentartistic", event.MomentArtistic);
     window.localStorage.setItem("fotograf", event.Fotograf);
-    window.localStorage.setItem("video", event.InregistrareVideo);
-    // window.localStorage.setItem("candybar", event.CandyBar);
-    // window.localStorage.setItem("fruitsbar", event.FruitsBar);
-    // window.localStorage.setItem("bauturi", event.Drinks);
-    // window.localStorage.setItem("ringdans", event.RingDance);
+    // window.localStorage.setItem("video", event.InregistrareVideo);
     window.localStorage.setItem("dataeveniment", event.RowKey);
     window.localStorage.setItem("liveband", event.Muzica);
+    window.localStorage.setItem("opinie", event.Opinie);
   }
 
   const Alert = React.forwardRef(function Alert(props, ref) {
@@ -264,8 +319,6 @@ function MyEventPage() {
     <Container
       maxWidth={"100vw"}
       sx={{
-        // backgroundColor: "#FFD59E",
-        // backgroundSize: "cover",
         display: "flex",
         minHeight: "100vh",
         justifyContent: "center",
@@ -276,151 +329,219 @@ function MyEventPage() {
     >
       <Header />
       <Footer />
-      <Box
-        sx={{
-          background: "rgb(255, 255, 255,1)",
-          boxShadow: "2px 4px 6px rgba(0, 0, 0, 1)",
-          padding: "4rem",
-          textAlign: "center",
-        }}
-      >
-        <Grid container rowSpacing={5}>
-          {!noData && !load && (
-            <Grid item xs={12}>
-              <h3>Evenimentele mele</h3>
-            </Grid>
-          )}
-          {noData && !load && (
-            <Grid item xs={12}>
-              <h3>Nu există evenimente!</h3>
-            </Grid>
-          )}
-          {!noData && !load && (
-            <Grid
-              item
-              xs={12}
+      {!load && (
+        <Box
+          sx={{
+            background: "rgb(255, 255, 255,1)",
+            boxShadow: "2px 4px 6px rgba(0, 0, 0, 1)",
+            padding: "4rem",
+            textAlign: "center",
+          }}
+        >
+          <Dialog open={openDialog} onClose={handleToClose}>
+            <DialogTitle
               sx={{
                 display: "flex",
-                justifyContent: "center",
                 alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              <Table
+              <Grid
+                container
                 sx={{
-                  maxWidth: "70vw",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
-                <TableHead>
-                  <TableRow>
-                    <TableCell padding="checkbox"></TableCell>
-                    <TableCell
-                      sx={{
-                        textAlign: "center",
+                <Grid item xs={6}>
+                  {"Ce părere ai avut despre ..."}
+                </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    onClick={handleToClose}
+                    sx={{
+                      float: "right",
+                    }}
+                    float="right"
+                  >
+                    <CloseIcon />
+                  </Button>
+                </Grid>
+              </Grid>
+            </DialogTitle>
+            <DialogContent
+              sx={{
+                backgroundColor: "white",
+              }}
+            >
+              <form>
+                <Grid
+                  container
+                  rowSpacing={"2vh"}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Grid
+                    item
+                    xs={6}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <TextField
+                      label="Sala de evenimente"
+                      rows={3}
+                      multiline
+                      required
+                      onChange={(e) => setOpiniiRestaurant(e.target.value)}
+                    ></TextField>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={6}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Rating
+                      name="simple-controlled"
+                      value={ratingRestaurant}
+                      onChange={(event, newValue) => {
+                        setRatingRestaurant(newValue);
                       }}
-                    >
-                      {" "}
-                      Tipul evenimentului{" "}
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        textAlign: "center",
+                    />
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs={6}
+                    sx={{
+                      display: "flex",
+
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <TextField
+                      rows={3}
+                      label="Muzică"
+                      multiline
+                      required
+                      onChange={(e) => setOpiniiMuzica(e.target.value)}
+                    ></TextField>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={6}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Rating
+                      name="simple-controlled"
+                      value={ratingMuzica}
+                      onChange={(event, newValue) => {
+                        setRatingMuzica(newValue);
                       }}
-                    >
-                      {" "}
-                      Data{" "}
-                    </TableCell>
-                    {/* <TableCell> Restaurant </TableCell> */}
-                    <TableCell
-                      sx={{
-                        textAlign: "center",
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={6}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <TextField
+                      rows={3}
+                      label="Fotograf"
+                      multiline
+                      required
+                      onChange={(e) => setOpiniiFotograf(e.target.value)}
+                    ></TextField>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={6}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Rating
+                      name="simple-controlled"
+                      value={ratingFotograf}
+                      onChange={(event, newValue) => {
+                        setRatingFotograf(newValue);
                       }}
-                    >
-                      {" "}
-                      Invitați
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        textAlign: "center",
-                      }}
-                    >
-                      {" "}
-                      Statistici
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        textAlign: "center",
-                      }}
-                    >
-                      {" "}
-                      Recomandări
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        textAlign: "center",
-                      }}
-                    >
-                      {" "}
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {data.map((item) => (
+                    />
+                  </Grid>
+                  <LoadingButton
+                    autoFocus
+                    type="submit"
+                    onClick={() => {
+                      console.log(opiniiRestaurant);
+                      console.log(opiniiMuzica);
+                      console.log(opiniiFotograf);
+                      PostOpinii();
+                    }}
+                  >
+                    Trimite
+                  </LoadingButton>
+                </Grid>
+              </form>
+            </DialogContent>
+          </Dialog>
+
+          <Grid container rowSpacing={5}>
+            {!noData && !load && (
+              <Grid item xs={12}>
+                <h3>Evenimentele mele</h3>
+              </Grid>
+            )}
+            {noData && !load && (
+              <Grid item xs={12}>
+                <h3>Nu există evenimente!</h3>
+              </Grid>
+            )}
+            {!noData && !load && (
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Table
+                  sx={{
+                    maxWidth: "70vw",
+                  }}
+                >
+                  <TableHead>
                     <TableRow>
                       <TableCell padding="checkbox"></TableCell>
                       <TableCell
                         sx={{
                           textAlign: "center",
                         }}
-                        onClick={() => myClick(item)}
                       >
-                        {item.TipEveniment}
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                        onClick={() => myClick(item)}
-                      >
-                        {item.RowKey}
-                      </TableCell>
-                      {/* <TableCell onClick={() => myClick(item)}>
-                        {item.Restaurant !== "" && item.Restaurant}
-
-                        {item.Restaurant == "" && (
-                        <Button
-                          onClick={() => {
-                            setOpenInputText(true);
-                            chooseLocation();
-                          }}
-                        >
-                          Alege
-                        </Button>
-                      )}
-                        <Button
-                          onClick={() => {
-                            setOpenInputText(true);
-                            chooseLocation();
-                          }}
-                        >
-                          <RemoveRedEyeIcon />
-                        </Button>
-                      </TableCell> */}
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        <Tooltip title="Trimite formular la invitați">
-                          <Button
-                            sx={{ minWidth: "2px" }}
-                            onClick={() => {
-                              myClick(item);
-                              history.push("/sendinvitationspage");
-                            }}
-                          >
-                            <ForwardToInboxIcon />
-                          </Button>
-                        </Tooltip>
+                        {" "}
+                        Tipul evenimentului{" "}
                       </TableCell>
                       <TableCell
                         sx={{
@@ -428,258 +549,319 @@ function MyEventPage() {
                         }}
                       >
                         {" "}
-                        <Tooltip title="Vizualizeaza rezultate formular">
-                          <Button
-                            sx={{ minWidth: "2px" }}
-                            onClick={() => {
-                              myClick(item);
-                              history.push("/resultpage");
-                              history.go(0);
-                            }}
-                          >
-                            <RecommendIcon />
-                          </Button>
-                        </Tooltip>
+                        Data{" "}
                       </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        <Tooltip title="Vezi recomandări">
-                          <Button
-                            sx={{ minWidth: "2px" }}
-                            onClick={() => {
-                              myClick(item);
-                              history.push("/recommandpage");
-                              history.go(0);
-                            }}
-                          >
-                            <AssistantIcon />
-                          </Button>
-                        </Tooltip>
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        <Tooltip title="Editeaza eveniment">
-                          <Button
-                            sx={{ minWidth: "2px" }}
-                            onClick={() => {
-                              myClick(item);
-                              history.push("/editformpage");
-                            }}
-                          >
-                            <EditIcon />
-                          </Button>
-                        </Tooltip>
-                        <Tooltip title="Anulare eveniment">
-                          <Button
-                            sx={{ minWidth: "2px" }}
-                            onClick={() => {
-                              myClick(item);
-                              // setSure(false);
-                              // setOpenDialogDelete(true);
 
-                              // if (sure == true)
-                              DeleteEvent(item);
-                            }}
-                          >
-                            <DeleteIcon />
-                          </Button>
-                        </Tooltip>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                        }}
+                      >
+                        {" "}
+                        Invitați
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                        }}
+                      >
+                        {" "}
+                        Statistici
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                        }}
+                      >
+                        {" "}
+                        Recomandări
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                        }}
+                      >
+                        {" "}
                       </TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Grid>
-          )}
-          {!load && (
-            <Grid
-              item
-              xs={12}
-              sx={{
-                marginTop: "5vh",
-              }}
-            >
-              <Button
-                variant="contained"
-                onClick={() => {
-                  history.push("/registerevent");
-                  history.go(0);
+                  </TableHead>
+                  <TableBody>
+                    {data.map((item) => {
+                      const splitDate = item.RowKey.split(".");
+
+                      const dataEveniment = new Date(
+                        splitDate[2],
+                        splitDate[1] - 1,
+                        splitDate[0]
+                      );
+
+                      if (dataEveniment > today)
+                        //Evenimentul  nu e trecut
+                        return (
+                          <TableRow>
+                            <TableCell padding="checkbox"></TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                              onClick={() => myClick(item)}
+                            >
+                              {item.TipEveniment}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                              onClick={() => myClick(item)}
+                            >
+                              {item.RowKey}
+                            </TableCell>
+
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              <Tooltip title="Vezi invitații">
+                                <Button
+                                  sx={{ minWidth: "2px" }}
+                                  onClick={() => {
+                                    myClick(item);
+                                    history.push("/sendinvitationspage");
+                                  }}
+                                >
+                                  <PeopleIcon />
+                                </Button>
+                              </Tooltip>
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              {" "}
+                              <Tooltip title="Vizualizeaza rezultate chestionar">
+                                <Button
+                                  sx={{ minWidth: "2px" }}
+                                  onClick={() => {
+                                    myClick(item);
+                                    history.push("/resultpage");
+                                    history.go(0);
+                                  }}
+                                >
+                                  <RecommendIcon />
+                                </Button>
+                              </Tooltip>
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              <Tooltip title="Vezi recomandări">
+                                <Button
+                                  sx={{ minWidth: "2px" }}
+                                  onClick={() => {
+                                    myClick(item);
+                                    history.push("/recommandpage");
+                                    history.go(0);
+                                  }}
+                                >
+                                  <AssistantIcon />
+                                </Button>
+                              </Tooltip>
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              <Tooltip title="Editeaza eveniment">
+                                <Button
+                                  sx={{ minWidth: "2px" }}
+                                  onClick={() => {
+                                    myClick(item);
+                                    history.push("/editformpage");
+                                  }}
+                                >
+                                  <EditIcon />
+                                </Button>
+                              </Tooltip>
+                              <Tooltip title="Anulare eveniment">
+                                <Button
+                                  sx={{ minWidth: "2px" }}
+                                  onClick={() => {
+                                    myClick(item);
+                                    // setSure(false);
+                                    // setOpenDialogDelete(true);
+
+                                    // if (sure == true)
+                                    DeleteEvent(item);
+                                  }}
+                                >
+                                  <DeleteIcon />
+                                </Button>
+                              </Tooltip>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      //Evenimentul   e trecut
+                      else
+                        return (
+                          <TableRow
+                            sx={{
+                              backgroundColor: "#fdfff5",
+                            }}
+                          >
+                            <TableCell padding="checkbox"></TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                              onClick={() => myClick(item)}
+                            >
+                              {item.TipEveniment}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                              onClick={() => myClick(item)}
+                            >
+                              {item.RowKey}
+                            </TableCell>
+
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              <Tooltip title="Vezi invitații">
+                                <Button
+                                  sx={{ minWidth: "2px" }}
+                                  onClick={() => {
+                                    myClick(item);
+                                    history.push("/sendinvitationspage");
+                                  }}
+                                >
+                                  <PeopleIcon />
+                                </Button>
+                              </Tooltip>
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              {" "}
+                              <Tooltip title="Vizualizeaza rezultate chestionar">
+                                <Button
+                                  sx={{ minWidth: "2px" }}
+                                  onClick={() => {
+                                    myClick(item);
+                                    history.push("/resultpage");
+                                    history.go(0);
+                                  }}
+                                >
+                                  <RecommendIcon />
+                                </Button>
+                              </Tooltip>
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              <Tooltip title="Vezi recomandări">
+                                <Button
+                                  disabled
+                                  sx={{ minWidth: "2px" }}
+                                  onClick={() => {
+                                    myClick(item);
+                                    history.push("/recommandpage");
+                                    history.go(0);
+                                  }}
+                                >
+                                  <AssistantIcon />
+                                </Button>
+                              </Tooltip>
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              <Tooltip title="Editeaza eveniment">
+                                <Button
+                                  disabled
+                                  sx={{ minWidth: "2px" }}
+                                  onClick={() => {
+                                    myClick(item);
+                                    history.push("/editformpage");
+                                  }}
+                                >
+                                  <EditIcon />
+                                </Button>
+                              </Tooltip>
+                              <Tooltip title="Anulare eveniment">
+                                <Button
+                                  disabled
+                                  sx={{ minWidth: "2px" }}
+                                  onClick={() => {
+                                    myClick(item);
+                                    // setSure(false);
+                                    // setOpenDialogDelete(true);
+
+                                    // if (sure == true)
+                                    DeleteEvent(item);
+                                  }}
+                                >
+                                  <DeleteIcon />
+                                </Button>
+                              </Tooltip>
+                              {!item.Opinie && (
+                                <Tooltip title="Spune-ți opinia">
+                                  <Button
+                                    sx={{ minWidth: "2px" }}
+                                    onClick={() => {
+                                      myClick(item);
+                                      setOpenDialog(true);
+                                    }}
+                                  >
+                                    <RateReviewIcon />
+                                  </Button>
+                                </Tooltip>
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        );
+                    })}
+                  </TableBody>
+                </Table>
+              </Grid>
+            )}
+            {!load && (
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  marginTop: "5vh",
                 }}
               >
-                Adaugă un eveniment
-              </Button>
-            </Grid>
-          )}
-          {box && !loader && (
-            <Grid item xs={12}>
-              <Box sx={{ border: 2 }}>
-                <label> Alții au ales ... </label>
-                <Grid
-                  container
-                  sx={{ justifyContent: "center", marginBottom: "2vh" }}
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    history.push("/registerevent");
+                    history.go(0);
+                  }}
                 >
-                  {noRecomandations && (
-                    <h6>
-                      Nu există recomandări pentru evenimentul dumneavoastră..
-                    </h6>
-                  )}
-
-                  {locationsRecomanded.map((location) => {
-                    if (location !== "")
-                      return (
-                        <Card
-                          style={{
-                            backgroundColor: "#F5F4F2",
-                            color: "black",
-                            minHeight: "10vh",
-                            minWidth: "10vw",
-                            marginRight: "2vw",
-                          }}
-                        >
-                          <CardContent>
-                            <Typography
-                              sx={{
-                                color: "black",
-                              }}
-                            >
-                              {location}
-                            </Typography>
-                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                              județul {judet}
-                            </Typography>
-                          </CardContent>
-                          <CardActions
-                            sx={{
-                              justifyContent: "center",
-                              alignItems: "center",
-                            }}
-                          >
-                            <LoadingButton
-                              loading={loading}
-                              onClick={() => {
-                                window.localStorage.setItem(
-                                  "locatie",
-                                  location
-                                );
-                                UpdateForm();
-                              }}
-                              style={{
-                                color: "white",
-                                backgroundColor: "purple",
-                                height: "5vh",
-                                width: "5vw",
-                              }}
-                            >
-                              Alege
-                            </LoadingButton>
-                          </CardActions>
-                        </Card>
-                      );
-                  })}
-
-                  {openInputText && (
-                    <Grid
-                      container
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        marginTop: "2vh",
-                      }}
-                    >
-                      <Card
-                        style={{
-                          backgroundColor: "#F5F4F2",
-                          color: "black",
-                          minHeight: "10vh",
-                          minWidth: "10vw",
-                          marginLeft: "3vw",
-                        }}
-                      >
-                        <CardContent>
-                          <TextField
-                            variant="outlined"
-                            label="Altă opțiune"
-                            size="small"
-                            value={restaurant}
-                            onChange={(e) => setRestaurant(e.target.value)}
-                          ></TextField>
-                        </CardContent>
-                        <CardActions
-                          sx={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
-                          <LoadingButton
-                            loading={loading}
-                            onClick={() => {
-                              window.localStorage.setItem(
-                                "locatie",
-                                restaurant
-                              );
-                              UpdateForm();
-                            }}
-                            style={{
-                              color: "white",
-                              backgroundColor: "purple",
-                              height: "5vh",
-                              width: "5vw",
-                            }}
-                          >
-                            Alege
-                          </LoadingButton>
-                        </CardActions>
-                      </Card>
-                    </Grid>
-                  )}
-                  <Grid
-                    container
-                    sx={{
-                      marginTop: "3vh",
-                    }}
-                  >
-                    <Grid item xs={3}>
-                      Vezi și..
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Button
-                        variant="outlined"
-                        onClick={() => {
-                          setLoader(true);
-                          setBox(true);
-                          GetRecomandation("Muzica");
-                        }}
-                      >
-                        Vezi recomandări pentru muzică
-                      </Button>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Button
-                        variant="outlined"
-                        onClick={() => {
-                          setLoader(true);
-                          setBox(true);
-                          GetRecomandation("Fotograf");
-                        }}
-                      >
-                        {" "}
-                        Vezi recomandări pentru fotograf
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Box>
-            </Grid>
-          )}
-        </Grid>
-      </Box>
+                  Adaugă un eveniment
+                </Button>
+              </Grid>
+            )}
+          </Grid>
+        </Box>
+      )}
 
       {loader && <OverlayLoader />}
 
