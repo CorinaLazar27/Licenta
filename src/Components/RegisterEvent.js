@@ -241,6 +241,10 @@ function RegisterEventPage() {
         sx={{
           backgroundColor: "white",
           maxWidth: "80vw",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
         }}
       >
         <Formik

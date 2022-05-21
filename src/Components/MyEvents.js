@@ -71,8 +71,12 @@ function MyEventPage() {
   const [ratingRestaurant, setRatingRestaurant] = useState(0);
   const [ratingMuzica, setRatingMuzica] = useState(0);
   const [ratingFotograf, setRatingFotograf] = useState(0);
+
+  const [loadingOpinii, setLoadingOpinii] = useState(false);
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+
   const handleToClose = () => {
     setOpenDialog(false);
   };
@@ -81,54 +85,54 @@ function MyEventPage() {
     GetMyEvents();
   }, []);
 
-  function GetRecomandation(type) {
-    setNoRecomandations(false);
-    axios({
-      method: "POST",
-      url: "/getRecomandations",
-      data: {
-        email: email,
-        event: event,
-        judet: judet,
-        date: date,
-        type: type,
-      },
-    })
-      .then((response) => {
-        setLoader(false);
-        console.log(response.data);
+  // function GetRecomandation(type) {
+  //   setNoRecomandations(false);
+  //   axios({
+  //     method: "POST",
+  //     url: "/getRecomandations",
+  //     data: {
+  //       email: email,
+  //       event: event,
+  //       judet: judet,
+  //       date: date,
+  //       type: type,
+  //     },
+  //   })
+  //     .then((response) => {
+  //       setLoader(false);
+  //       console.log(response.data);
 
-        if (Object.values(response.data).length != 0)
-          setLocationsRecomanded(Object.values(response.data));
-        else {
-          setNoRecomandations(true);
-          console.log("NU SUNT LOCATII");
-          setLocationsRecomanded([]);
-        }
-        if (
-          response.data[0] === "" &&
-          response.data[1] === "" &&
-          response.data[2] === ""
-        )
-          setNoRecomandations(true);
-        if (
-          locationsRecomanded[0] === "" &&
-          locationsRecomanded[1] === "" &&
-          locationsRecomanded[2] === ""
-        )
-          setNoRecomandations(true);
-        console.log("locationRecomanded", locationsRecomanded);
-      })
-      .catch((error) => {
-        if (error.response) {
-          setLoader(false);
-          setNoRecomandations(true);
-          console.log(error.response);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        }
-      });
-  }
+  //       if (Object.values(response.data).length != 0)
+  //         setLocationsRecomanded(Object.values(response.data));
+  //       else {
+  //         setNoRecomandations(true);
+  //         console.log("NU SUNT LOCATII");
+  //         setLocationsRecomanded([]);
+  //       }
+  //       if (
+  //         response.data[0] === "" &&
+  //         response.data[1] === "" &&
+  //         response.data[2] === ""
+  //       )
+  //         setNoRecomandations(true);
+  //       if (
+  //         locationsRecomanded[0] === "" &&
+  //         locationsRecomanded[1] === "" &&
+  //         locationsRecomanded[2] === ""
+  //       )
+  //         setNoRecomandations(true);
+  //       console.log("locationRecomanded", locationsRecomanded);
+  //     })
+  //     .catch((error) => {
+  //       if (error.response) {
+  //         setLoader(false);
+  //         setNoRecomandations(true);
+  //         console.log(error.response);
+  //         console.log(error.response.status);
+  //         console.log(error.response.headers);
+  //       }
+  //     });
+  // }
 
   function GetMyEvents() {
     axios({
@@ -187,19 +191,20 @@ function MyEventPage() {
       });
   };
 
-  function chooseLocation() {
-    setLoader(true);
-    setBox(true);
-    GetRecomandation("Fotograf");
-  }
+  // function chooseLocation() {
+  //   setLoader(true);
+  //   setBox(true);
+  //   GetRecomandation("Fotograf");
+  // }
 
   const [loading, setLoading] = useState(false);
   const [openSuccesLocation, setOpenSuccesLocation] = useState(false);
   const [openErrorLocation, setOpenErrorLocation] = useState(false);
 
-  function UpdateForm() {
+  async function UpdateForm() {
+    console.log("GATA!");
     setLoading(true);
-    axios({
+    await axios({
       method: "POST",
       url: "/updateform",
       data: {
@@ -212,7 +217,7 @@ function MyEventPage() {
         budget: window.localStorage.getItem("buget"),
         liveband: window.localStorage.getItem("liveband"),
         photographer: window.localStorage.getItem("fotograf"),
-        opinie: window.localStorage.getItem("opinie"),
+        opinie: true,
       },
     })
       .then((response) => {
@@ -239,7 +244,7 @@ function MyEventPage() {
   }
 
   function PostOpinii() {
-    // setLoading(true);
+    setLoadingOpinii(true);
     axios({
       method: "POST",
       url: "/postOpinii",
@@ -264,14 +269,9 @@ function MyEventPage() {
       .then((response) => {
         const res = response.data;
         console.log(res);
-        window.localStorage.setItem("opinie", "true");
 
-        setTimeout(UpdateForm(), 1500);
-        //setOpenSuccesLocation(true);
-        // setTimeout(() => {
-        //   history.push("/myeventpage");
-        //   history.go(0);
-        // }, 2000);
+        UpdateForm();
+
         if (res == "Done") {
           console.log("dONE");
         }
@@ -283,8 +283,8 @@ function MyEventPage() {
           console.log(error.response.status);
           console.log(error.response.headers);
         }
-      });
-    // .finally(() => setLoading(false));
+      })
+      .finally(() => setLoadingOpinii(false));
   }
 
   function myClick(event) {
@@ -323,7 +323,7 @@ function MyEventPage() {
         minHeight: "100vh",
         justifyContent: "center",
         alignItems: "center",
-        textAlign: "center",
+
         backgroundImage: `url("${background}")`,
       }}
     >
@@ -490,9 +490,10 @@ function MyEventPage() {
                     />
                   </Grid>
                   <LoadingButton
-                    autoFocus
+                    loading={loadingOpinii}
                     type="submit"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.preventDefault();
                       console.log(opiniiRestaurant);
                       console.log(opiniiMuzica);
                       console.log(opiniiFotograf);
@@ -595,7 +596,7 @@ function MyEventPage() {
                         splitDate[0]
                       );
 
-                      if (dataEveniment > today)
+                      if (dataEveniment >= today)
                         //Evenimentul  nu e trecut
                         return (
                           <TableRow>
@@ -828,6 +829,7 @@ function MyEventPage() {
                                       setOpenDialog(true);
                                     }}
                                   >
+                                    {item.Opinie}
                                     <RateReviewIcon />
                                   </Button>
                                 </Tooltip>

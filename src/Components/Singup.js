@@ -110,19 +110,15 @@ function SingUp() {
 
   return (
     <Container
+      maxWidth={false}
       sx={{
         display: "flex",
         minHeight: "100vh",
         justifyContent: "center",
         alignItems: "center",
-        textAlign: "center",
+
         backgroundImage: `url("${login1}")`,
         backgroundSize: "cover",
-        display: "flex",
-        minHeight: "100vh",
-        minWidth: "100vw",
-        justifyContent: "center",
-        alignItems: "center",
       }}
     >
       <FirstHeader />

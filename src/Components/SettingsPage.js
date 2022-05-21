@@ -132,7 +132,7 @@ function SettingsPage() {
         minHeight: "100vh",
         alignItems: "flex-start",
         justifyContent: "center",
-        textAlign: "center",
+
         backgroundImage: `url("${background}")`,
       }}
     >
@@ -194,22 +194,52 @@ function SettingsPage() {
           padding: "2%",
           marginTop: "15vh",
           backgroundColor: "white",
+          textAlign: "center",
         }}
       >
-        <Grid container rowSpacing={"10vh"}>
-          <Grid item xs={12}>
+        <Grid
+          container
+          rowSpacing={"10vh"}
+          sx={{
+            display: "flex",
+            textAlign: "center",
+          }}
+        >
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <h3>Setări</h3>
           </Grid>
-          <Grid item xs={12}>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              textAlign: "center",
+            }}
+          >
             <Accordion
               style={{
                 minHeight: "8vh",
                 // width: "100vw",
                 backgroundColor: "#F5F4F2",
                 color: "black",
+                textAlign: "center",
               }}
             >
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                sx={{
+                  display: "flex",
+                  textAlign: "center",
+                }}
+              >
                 <Typography>Schimbă parola</Typography>
               </AccordionSummary>
               <AccordionDetails>
@@ -278,8 +308,8 @@ function SettingsPage() {
                 >
                   <h3>Contactează-ne</h3>
                   <h7>
-                    Ai întrebări? Te rugăm nu ezita să ne contactezi! Echipa
-                    noastră îți va raspunde cât de repede poate.
+                    Ai întrebări? Te rugăm nu ezita să ne contactezi! Vei primi
+                    un răspuns cât de repede cu putință.
                   </h7>
                   <form onSubmit={sendEmail}>
                     <Grid container rowSpacing={3}>

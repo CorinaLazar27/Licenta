@@ -156,35 +156,8 @@ function RecommendPage() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          margin: "1vh",
         }}
       >
-        <Grid
-          item
-          xs={12}
-          sx={{
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "left",
-            marginLeft: "9vw",
-            marginBottom: "2vh",
-          }}
-        >
-          <Button
-            style={{
-              color: "white",
-              backgroundColor: "#9575cd",
-            }}
-            startIcon={<ArrowBackIcon />}
-            variant="contained"
-            onClick={() => {
-              history.push("/myeventpage");
-              history.go(0);
-            }}
-          >
-            Înapoi
-          </Button>
-        </Grid>
         <Box
           sx={{
             background: "rgb(255, 255, 255,1)",
@@ -195,6 +168,32 @@ function RecommendPage() {
             minWidth: "80vw",
           }}
         >
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "left",
+              marginBottom: "1vh",
+            }}
+          >
+            <Button
+              style={{
+                color: "white",
+                backgroundColor: "#9575cd",
+                marginBottom: "1vh",
+              }}
+              startIcon={<ArrowBackIcon />}
+              variant="contained"
+              onClick={() => {
+                history.push("/myeventpage");
+                history.go(0);
+              }}
+            >
+              Înapoi
+            </Button>
+          </Grid>
           <Grid item xs={12}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">

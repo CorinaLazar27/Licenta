@@ -150,6 +150,8 @@ function EditFormPage() {
       <Box
         sx={{
           minWidth: "90vw",
+          backgroundColor: "white",
+          textAlign: "center",
         }}
       >
         <Grid

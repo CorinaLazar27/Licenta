@@ -326,7 +326,6 @@ function SendInvitationsPage() {
         minHeight: "100vh",
         alignItems: "center",
         justifyContent: "center",
-        textAlign: "center",
         backgroundImage: `url("${background}")`,
       }}
     >

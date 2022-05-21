@@ -135,6 +135,7 @@ function ResultPage() {
           minHeigth: "100vh",
           justifyContent: "center",
           alignSelf: "center",
+          backgroundColor: "white",
         }}
       >
         <Grid
@@ -145,6 +146,7 @@ function ResultPage() {
             alignItems: "flex-start",
             justifyContent: "left",
             marginBottom: "5vh",
+            margin: "1vh",
           }}
         >
           {!load && (
