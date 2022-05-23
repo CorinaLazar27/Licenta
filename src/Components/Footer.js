@@ -6,7 +6,7 @@ function Footer() {
     <Box
       sx={{
         boxShadow: 3,
-        backgroundColor: "#9575cd",
+        backgroundColor: "#2C5E1A",
         position: "absolute",
         bottom: "0",
         width: "100%",

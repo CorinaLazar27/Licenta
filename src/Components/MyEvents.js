@@ -328,7 +328,7 @@ function MyEventPage() {
       }}
     >
       <Header />
-      <Footer />
+      {/* <Footer /> */}
       {!load && (
         <Box
           sx={{

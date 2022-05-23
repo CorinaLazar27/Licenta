@@ -153,7 +153,7 @@ function ResultPage() {
             <Button
               style={{
                 color: "white",
-                backgroundColor: "#9575cd",
+                backgroundColor: "#2C5E1A",
               }}
               startIcon={<ArrowBackIcon />}
               variant="contained"

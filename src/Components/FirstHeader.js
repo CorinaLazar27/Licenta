@@ -74,9 +74,9 @@ const FirstHeader = (props) => {
       },
     },
     palette: {
-      type: "dark",
+      // type: "dark",
       primary: {
-        main: "#9575cd",
+        main: "#2C5E1A",
       },
       secondary: {
         main: orange[400],
@@ -90,10 +90,10 @@ const FirstHeader = (props) => {
           <Typography
             variant="h5"
             component="p"
-            color="textSecondary"
+            color="black"
             className={classes.title}
           >
-            Dream event
+            Dream Events
           </Typography>
         </Toolbar>
       </AppBar>

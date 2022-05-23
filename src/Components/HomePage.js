@@ -79,7 +79,7 @@ function HomePage() {
       }}
     >
       <Header />
-      <Footer />
+      {/* <Footer /> */}
       <Box
         sx={{
           background: "rgb(255, 255, 255,1)",
@@ -96,7 +96,7 @@ function HomePage() {
             <Button
               style={{
                 color: "white",
-                backgroundColor: "#9575cd",
+                backgroundColor: "#2C5E1A",
                 borderColor: "white",
               }}
               startIcon={<AddIcon />}
@@ -115,7 +115,7 @@ function HomePage() {
             <Button
               style={{
                 color: "white",
-                backgroundColor: "#9575cd",
+                backgroundColor: "#2C5E1A",
                 borderColor: "white",
               }}
               startIcon={<EventIcon />}

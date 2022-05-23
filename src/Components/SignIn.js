@@ -11,7 +11,9 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { LoadingButton } from "@mui/lab";
 
-import login1 from "../Image/abcd.png";
+// import login1 from "../Image/abcd.png";
+import login1 from "../Image/3.png";
+import logo from "../Image/logo.png";
 
 import { Container } from "@mui/material";
 import { Box } from "@mui/system";
@@ -147,6 +149,14 @@ function SingIn() {
           maxWidth: "70vh",
         }}
       >
+        <Grid
+          sx={{
+            minWidth: "2vw",
+            backgroundImage: `url("${logo}")`,
+            backgroundColor: "red",
+          }}
+        />
+
         <Typography style={{ fontSize: size }}>Intră în cont!</Typography>
         <br></br>
         <Formik

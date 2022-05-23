@@ -86,7 +86,7 @@ const Header = (props) => {
     palette: {
       // type: "dark",
       primary: {
-        main: "#9575cd",
+        main: "#2C5E1A",
       },
     },
   });

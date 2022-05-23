@@ -310,7 +310,7 @@ function RegisterEventPage() {
               <Grid item xs={columns}>
                 <FormikTextField
                   id="nrguests"
-                  label="Număr invitați*"
+                  label="Numărul aproximativ de invitați*"
                   name="nrguests"
                 />
               </Grid>
@@ -327,14 +327,14 @@ function RegisterEventPage() {
               <Grid item xs={columns}>
                 <FormikTextField
                   id="budget"
-                  label="Buget (LEI)*"
+                  label="Bugetul aproximativ alocat(LEI)*"
                   name="budget"
                 />
               </Grid>
               <Grid item xs={columns}>
                 <FormikTextField
                   id="location"
-                  label="Locație"
+                  label="Sala de evenimente"
                   name="location"
                 />
               </Grid>
@@ -570,7 +570,7 @@ function RegisterEventPage() {
                 <LoadingButton
                   style={{
                     color: "white",
-                    backgroundColor: "#9575cd",
+                    backgroundColor: "#2C5E1A",
                     borderColor: "white",
                   }}
                   loading={loading}

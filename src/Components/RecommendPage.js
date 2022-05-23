@@ -181,7 +181,7 @@ function RecommendPage() {
             <Button
               style={{
                 color: "white",
-                backgroundColor: "#9575cd",
+                backgroundColor: "#2C5E1A",
                 marginBottom: "1vh",
               }}
               startIcon={<ArrowBackIcon />}
@@ -216,7 +216,7 @@ function RecommendPage() {
             <Button
               style={{
                 color: "white",
-                backgroundColor: "#9575cd",
+                backgroundColor: "#2C5E1A",
               }}
               variant="contained"
               onClick={() => {
@@ -272,7 +272,7 @@ function RecommendPage() {
                         startIcon={<SearchIcon />}
                         style={{
                           color: "white",
-                          backgroundColor: "#9575cd",
+                          backgroundColor: "#2C5E1A",
                           height: "6vh",
                           width: "6vw",
                         }}
@@ -316,7 +316,7 @@ function RecommendPage() {
                         }}
                         style={{
                           color: "white",
-                          backgroundColor: "#9575cd",
+                          backgroundColor: "#2C5E1A",
                           height: "6vh",
                           width: "6vw",
                         }}
@@ -341,7 +341,7 @@ function RecommendPage() {
             <Button
               style={{
                 color: "white",
-                backgroundColor: "#9575cd",
+                backgroundColor: "#2C5E1A",
               }}
               startIcon={<ThumbsUpDownIcon />}
               variant="contained"
