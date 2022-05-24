@@ -73,6 +73,8 @@ function OpiniiPage() {
             padding: "4rem",
             textAlign: "center",
             minHeight: "70vh",
+            marginTop: "7vh",
+            marginBottom: "5vh",
           }}
         >
           <List sx={{ maxWidth: "80vw", bgcolor: "background.paper" }}>

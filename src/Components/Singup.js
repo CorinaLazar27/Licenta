@@ -199,7 +199,17 @@ function SingUp() {
                   <LoadingButton
                     loading={loading}
                     type="submit"
-                    variant="contained"
+                    style={{
+                      borderColor: "#2C5E1A",
+                      color: "#2C5E1A",
+                      hover: {
+                        "&:hover": {
+                          borderColor: "#2C5E1A",
+                          color: "#2C5E1A",
+                        },
+                      },
+                    }}
+                    variant="outlined"
                   >
                     Creează
                   </LoadingButton>

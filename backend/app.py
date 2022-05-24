@@ -363,7 +363,7 @@ def deleteevent():
     return "Done"
 
 
-countRating = 300
+countRating = 0
 
 
 @app.route('/ratingChestionar', methods=["POST"])

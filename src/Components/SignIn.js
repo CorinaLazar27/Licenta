@@ -196,6 +196,16 @@ function SingIn() {
                   loading={loading}
                   type="submit"
                   variant="outlined"
+                  style={{
+                    borderColor: "#2C5E1A",
+                    color: "#2C5E1A",
+                    hover: {
+                      "&:hover": {
+                        borderColor: "#2C5E1A",
+                        color: "#2C5E1A",
+                      },
+                    },
+                  }}
                 >
                   Conectare
                 </LoadingButton>
