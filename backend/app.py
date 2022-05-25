@@ -47,28 +47,6 @@ def elementsform():
     return jsonify(results=lst)
 
 
-# @app.route('/register', methods=["POST"])
-# def register():
-#     name = request.json.get("name", None)
-#     email = request.json.get("email", None)
-#     password = request.json.get("password", None)
-#    # current dateTime
-#     now = datetime.now()
-
-# # convert to date String
-#     date = now.strftime("%d/%m/%Y")
-#     print('Date String:', date)
-#     table_client = table_service.get_table_client(table_name="Login")
-#     print(email)
-#     print(name)
-#     print(password)
-#     print(date)
-#     task = {u'PartitionKey': email, u'RowKey': name,
-#             u'Password': password, u'Date': date}
-#     table_client.create_entity(entity=task)
-#     return "Done"
-
-
 @app.route('/register1', methods=["POST"])
 def register1():
     name = request.json.get("name", None)
@@ -363,14 +341,8 @@ def deleteevent():
     return "Done"
 
 
-countRating = 0
-
-
 @app.route('/ratingChestionar', methods=["POST"])
 def ratingChestionar():
-    global countRating
-
-    countRating += 1
 
     table_client_aperitiv = table_service.get_table_client(
         table_name="AperitivRating")
@@ -380,6 +352,9 @@ def ratingChestionar():
         table_name="Type2Rating")
     table_client_music = table_service.get_table_client(
         table_name="MusicRating")
+
+    entities = table_client_music.query_entities(query_filter='')
+    lst = list(entities)
 
     event = request.json.get("event", None)
     date = request.json.get("date", None)
@@ -409,6 +384,7 @@ def ratingChestionar():
     muzicaRockRating = request.json.get("muzicaRockRating", None)
     muzicaDePetrecereRating = request.json.get("muzicaDePetrecereRating", None)
 
+    countRating = len(lst)+1
     countString = str(countRating)
 
     task_aperitiv = {u'PartitionKey': emailOrganizer,
@@ -453,6 +429,7 @@ def ratingChestionar():
 
     countRating += 1
     countString = str(countRating)
+
     task_aperitiv = {u'PartitionKey': emailOrganizer,
                      u'RowKey': countString,
                      u'Event': event,
