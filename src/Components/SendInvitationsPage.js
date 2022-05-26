@@ -336,7 +336,7 @@ function SendInvitationsPage() {
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert onClose={handleClose} severity="error">
-          Eroare la trimiterea chestionarului!
+          Eroare!
         </Alert>
       </Snackbar>
       <Snackbar
