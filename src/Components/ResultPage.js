@@ -67,7 +67,7 @@ function ResultPage() {
   function GetMyResults() {
     axios({
       method: "POST",
-      url: "/highestRating",
+      url: "https://server-licenta.azurewebsites.net/highestRating",
       data: {
         email: email,
         event: event,

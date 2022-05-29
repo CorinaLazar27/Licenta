@@ -67,7 +67,7 @@ function SingIn() {
     console.log(data);
     axios({
       method: "POST",
-      url: "/login",
+      url: "https://server-licenta.azurewebsites.net/login",
       data: data,
     })
       .then((response) => {

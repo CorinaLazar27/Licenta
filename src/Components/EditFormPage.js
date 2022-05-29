@@ -101,7 +101,7 @@ function EditFormPage() {
     setLoader(true);
     axios({
       method: "POST",
-      url: "/updateform",
+      url: "https://server-licenta.azurewebsites.net/updateform",
       data: {
         email: email,
         event: event,

@@ -19,7 +19,7 @@ function HomePage() {
   function GetElements(event) {
     axios({
       method: "GET",
-      url: "/elements",
+      url: "https://server-licenta.azurewebsites.net/elements",
     })
       .then((response) => {
         //console.log(response.data.results);

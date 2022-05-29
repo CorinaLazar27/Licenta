@@ -137,7 +137,7 @@ function MyEventPage() {
   function GetMyEvents() {
     axios({
       method: "POST",
-      url: "/getmyevents",
+      url: "https://server-licenta.azurewebsites.net/getmyevents",
       data: {
         email: email,
       },
@@ -167,7 +167,7 @@ function MyEventPage() {
     setLoader(true);
     axios({
       method: "POST",
-      url: "/deleteevent",
+      url: "https://server-licenta.azurewebsites.net/deleteevent",
       data: {
         email: email,
         date: item.RowKey,
@@ -206,7 +206,7 @@ function MyEventPage() {
     setLoading(true);
     await axios({
       method: "POST",
-      url: "/updateform",
+      url: "https://server-licenta.azurewebsites.net/updateform",
       data: {
         email: email,
         event: event,
@@ -247,7 +247,7 @@ function MyEventPage() {
     setLoadingOpinii(true);
     axios({
       method: "POST",
-      url: "/postOpinii",
+      url: "https://server-licenta.azurewebsites.net/postOpinii",
       data: {
         email: email,
         event: event,

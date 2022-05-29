@@ -52,7 +52,7 @@ function SingUp() {
     console.log(data);
     axios({
       method: "POST",
-      url: "/register1",
+      url: "https://server-licenta.azurewebsites.net/register1",
       data: data,
     })
       .then((response) => {

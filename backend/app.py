@@ -26,6 +26,16 @@ table_service = TableServiceClient(
     endpoint="https://storagecorina.table.core.windows.net/", credential=credential)
 
 
+@app.route('/', methods=["GET"])
+def elementsss():
+
+    table_client = table_service.get_table_client(table_name="Login")
+    tasks = table_client.list_entities()
+    lst = list(tasks)
+    print(lst)
+    return jsonify(results=lst)
+
+
 @app.route('/elements', methods=["GET"])
 def elements():
 

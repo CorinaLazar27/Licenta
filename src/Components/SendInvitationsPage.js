@@ -159,7 +159,7 @@ function SendInvitationsPage() {
   async function GetInvitati() {
     await axios({
       method: "POST",
-      url: "/getInvitati",
+      url: "https://server-licenta.azurewebsites.net/getInvitati",
       data: {
         email: email,
         date: data,
@@ -193,7 +193,7 @@ function SendInvitationsPage() {
     setLoader(true);
     axios({
       method: "POST",
-      url: "/deleteinvitat",
+      url: "https://server-licenta.azurewebsites.net/deleteinvitat",
       data: {
         email: email,
         date: data,
@@ -231,7 +231,7 @@ function SendInvitationsPage() {
 
     await axios({
       method: "POST",
-      url: "/invitationList",
+      url: "https://server-licenta.azurewebsites.net/invitationList",
       data: {
         oldValues: invitatiSalvati,
         formValues: formVal,

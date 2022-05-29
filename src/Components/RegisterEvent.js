@@ -45,7 +45,7 @@ function RegisterEventPage() {
     setLoading(true);
     axios({
       method: "POST",
-      url: "/postform",
+      url: "https://server-licenta.azurewebsites.net/postform",
       data: {
         email: email,
         event: values.event,

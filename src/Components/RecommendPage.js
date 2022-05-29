@@ -48,7 +48,7 @@ function RecommendPage() {
     setNoRecomandations(false);
     axios({
       method: "POST",
-      url: "/getRecomandations",
+      url: "https://server-licenta.azurewebsites.net/getRecomandations",
       data: {
         email: email,
         event: event,
@@ -98,7 +98,7 @@ function RecommendPage() {
     setLoading(true);
     axios({
       method: "POST",
-      url: "/updateform",
+      url: "https://server-licenta.azurewebsites.net/updateform",
       data: {
         email: email,
         event: event,

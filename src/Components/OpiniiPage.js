@@ -40,7 +40,7 @@ function OpiniiPage() {
   async function GetOpinii() {
     await axios({
       method: "POST",
-      url: "/getOpinii",
+      url: "https://server-licenta.azurewebsites.net/getOpinii",
       data: {
         judet: window.localStorage.getItem("judet"),
       },

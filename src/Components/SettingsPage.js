@@ -70,7 +70,7 @@ function SettingsPage() {
     setLoading(true);
     axios({
       method: "POST",
-      url: "/changepassword",
+      url: "https://server-licenta.azurewebsites.net/changepassword",
       data: {
         email: email,
         name: name,
