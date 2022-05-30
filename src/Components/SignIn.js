@@ -52,6 +52,7 @@ function SingIn() {
     if (response.accessToken) {
       window.localStorage.setItem("nume", response.name);
       window.localStorage.setItem("email", response.email);
+      window.localStorage.setItem("facebook", true);
       history.push("/homepage");
     } else {
       setOpenError(true);

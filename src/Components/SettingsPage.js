@@ -110,6 +110,7 @@ function SettingsPage() {
   const [openDifferentPassword, setOpenDifferentPassword] = useState(false);
   const [openSuccesEmail, setOpenSuccesEmail] = useState(false);
   const [openErrorEmail, setOpenErrorEmail] = useState(false);
+  const facebookLogin = window.localStorage.getItem("facebook");
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
@@ -249,40 +250,61 @@ function SettingsPage() {
                   sx={{ backgroundColor: "white" }}
                   padding="1vh"
                 >
-                  <Grid item xs={12}>
-                    <TextField
-                      id="Parola curentă"
-                      name="Parola curentă"
-                      label="Parola curentă"
-                      type="password"
-                      onChange={(event) =>
-                        setCurrentPassword(event.target.value)
-                      }
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      id="Parola nouă"
-                      name="Parola nouă"
-                      label="Parola nouă"
-                      type="password"
-                      onChange={(event) => {
-                        setNewPassword(event.target.value);
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sx={{ marginBottom: "1vh" }}>
-                    <LoadingButton
-                      loading={loading}
-                      variant="contained"
-                      onClick={() => {
-                        if (currentPassword == password) UpdateProfile();
-                        else setOpenDifferentPassword(true);
+                  {!facebookLogin && (
+                    <>
+                      <Grid item xs={12}>
+                        <TextField
+                          id="Parola curentă"
+                          name="Parola curentă"
+                          label="Parola curentă"
+                          type="password"
+                          onChange={(event) =>
+                            setCurrentPassword(event.target.value)
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          id="Parola nouă"
+                          name="Parola nouă"
+                          label="Parola nouă"
+                          type="password"
+                          onChange={(event) => {
+                            setNewPassword(event.target.value);
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sx={{ marginBottom: "1vh" }}>
+                        <LoadingButton
+                          loading={loading}
+                          variant="contained"
+                          onClick={() => {
+                            if (currentPassword == password) UpdateProfile();
+                            else setOpenDifferentPassword(true);
+                          }}
+                        >
+                          Schimbă
+                        </LoadingButton>
+                      </Grid>
+                    </>
+                  )}
+                  {facebookLogin && (
+                    <Grid
+                      item
+                      xs={12}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
                       }}
                     >
-                      Schimbă
-                    </LoadingButton>
-                  </Grid>
+                      <Typography variant="h6">
+                        Această funcție nu este disponibilă la conectarea prin
+                        Facebook!
+                      </Typography>
+                    </Grid>
+                  )}
                 </Grid>
               </AccordionDetails>
             </Accordion>

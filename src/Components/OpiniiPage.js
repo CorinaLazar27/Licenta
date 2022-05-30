@@ -64,6 +64,7 @@ function OpiniiPage() {
   return (
     <div className="Container">
       <Header />
+
       {loader && <OverlayLoader />}
       {!loader && (
         <Box
@@ -77,6 +78,32 @@ function OpiniiPage() {
             marginBottom: "5vh",
           }}
         >
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "left",
+              marginBottom: "1vh",
+            }}
+          >
+            <Button
+              style={{
+                color: "white",
+                backgroundColor: "#2C5E1A",
+                marginBottom: "1vh",
+              }}
+              startIcon={<ArrowBackIcon />}
+              variant="contained"
+              onClick={() => {
+                history.push("/recommandpage");
+                history.go(0);
+              }}
+            >
+              Înapoi
+            </Button>
+          </Grid>
           <List sx={{ maxWidth: "80vw", bgcolor: "background.paper" }}>
             {data.map((opinie, index) => {
               if (index != 0)
