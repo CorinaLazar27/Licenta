@@ -107,7 +107,7 @@ const Header = (props) => {
               {isMobile ? (
                 <>
                   <IconButton
-                    color="textPrimary"
+                    color="inherit"
                     className={classes.menuButton}
                     edge="start"
                     aria-label="menu"

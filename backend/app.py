@@ -222,7 +222,7 @@ def invitationList():
     if(len(oldValues) != 0):
         for index in range(len(oldValues)):
             task = {u'PartitionKey': email+"-"+date,
-                    u'RowKey': oldValues[index]["RowKey"],
+                    u'RowKey': oldValues[index]["EmailInvitat"],
                     u'NumeInvitat': oldValues[index]["NumeInvitat"],
                     u'ConfirmarePrezenta': oldValues[index]["ConfirmarePrezenta"],
                     u'NumarPersoane': oldValues[index]["NumarPersoane"],
@@ -342,8 +342,12 @@ def updateform():
 @app.route('/deleteevent', methods=["POST"])
 def deleteevent():
     table_client_form = table_service.get_table_client(table_name="Form")
+
     email = request.json.get("email", None)
     date = request.json.get("date", None)
+    print(email)
+    print(date)
+
     print(email)
     print(date)
 

@@ -67,6 +67,8 @@ function SendInvitationsPage() {
     "\n" +
     "Mulțumesc foarte mult!";
   const [loading, setLoading] = useState(false);
+  const [errorName, setErrrorName] = useState(false);
+  const [errorEmail, setErrorEmail] = useState(false);
   const [loadingMail, setLoadingMail] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [formValues, setFormValues] = useState([
@@ -139,8 +141,8 @@ function SendInvitationsPage() {
   };
 
   const [checked, setChecked] = useState([]);
-  const [checkedList, setCheckedList] = useState([]);
-  const [mailChecked, setMailChecked] = useState([]);
+  // const [checkedList, setCheckedList] = useState([]);
+  // const [mailChecked, setMailChecked] = useState([]);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -220,7 +222,7 @@ function SendInvitationsPage() {
 
   const [open, setOpen] = useState(false);
 
-  async function SendInvitati() {
+  async function SendInvitati(e) {
     let formVal = formValues.slice(1);
 
     console.log("aaaA", formVal);
@@ -228,7 +230,6 @@ function SendInvitationsPage() {
     console.log("bbbb", invitatiSalvati);
 
     setLoading(true);
-
     await axios({
       method: "POST",
       url: "https://server-licenta.azurewebsites.net/invitationList",
@@ -251,12 +252,13 @@ function SendInvitationsPage() {
         if (error.response) {
           setOpenError(true);
           setLoading(false);
-          setTimeout(window.location.reload(false), 1000);
+          // setTimeout(window.location.reload(false), 1000);
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
         }
       });
+    e.preventDefault();
   }
   const [mail, setMail] = useState([]);
 
@@ -339,6 +341,27 @@ function SendInvitationsPage() {
           Eroare!
         </Alert>
       </Snackbar>
+
+      <Snackbar
+        open={errorEmail}
+        // autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="error">
+          Completează câmpul pentru email!
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={errorName}
+        // autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="error">
+          Completează câmpul pentru nume!
+        </Alert>
+      </Snackbar>
       <Snackbar
         open={openSucces}
         autoHideDuration={3000}
@@ -350,110 +373,110 @@ function SendInvitationsPage() {
         </Alert>
       </Snackbar>
       <Header />
-      <form>
-        <Box
+
+      <Box
+        sx={{
+          marginTop: "10vh",
+          marginBottom: "5vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "rgb(255, 255, 255,1)",
+          boxShadow: "2px 4px 6px rgba(0, 0, 0, 1)",
+          textAlign: "center",
+        }}
+      >
+        {loader && <OverlayLoader />}
+        <Dialog open={openDialog} onClose={handleToClose}>
+          <DialogTitle>
+            {"Alegeți invitații pentru acest eveniment"}
+            <Button onClick={handleToClose}>
+              <CloseIcon />
+            </Button>
+          </DialogTitle>
+          <DialogContent
+            sx={{
+              backgroundColor: "white",
+            }}
+          >
+            <List>
+              {invitatiSalvati.map((value, index) => {
+                const labelId = `checkbox-list-secondary-label-${index}`;
+
+                return (
+                  <ListItem
+                    key={index}
+                    secondaryAction={
+                      <Checkbox
+                        onChange={handleToggle(value)}
+                        checked={checked.indexOf(value) !== -1}
+                      />
+                    }
+                  >
+                    <ListItemButton>
+                      <ListItemText
+                        sx={{ color: "black" }}
+                        id={labelId}
+                        primary={value.NumeInvitat}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                );
+              })}
+            </List>
+          </DialogContent>
+          <DialogActions>
+            <LoadingButton
+              loading={loadingMail}
+              autoFocus
+              onClick={() => {
+                // handleToClose();
+                // console.log(checked);
+                sendEmail();
+                // checked.map((element) => {
+                //   console.log(element.NumeInvitat);
+                //   console.log(element.RowKey);
+                // });
+              }}
+            >
+              Trimite
+            </LoadingButton>
+          </DialogActions>
+        </Dialog>
+        <Grid
+          container
           sx={{
-            marginTop: "10vh",
-            marginBottom: "5vh",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            background: "rgb(255, 255, 255,1)",
-            boxShadow: "2px 4px 6px rgba(0, 0, 0, 1)",
-            textAlign: "center",
+            minHeight: "40vh",
           }}
         >
-          {loader && <OverlayLoader />}
-          <Dialog open={openDialog} onClose={handleToClose}>
-            <DialogTitle>
-              {"Alegeți invitații pentru acest eveniment"}
-              <Button onClick={handleToClose}>
-                <CloseIcon />
-              </Button>
-            </DialogTitle>
-            <DialogContent
-              sx={{
-                backgroundColor: "white",
-              }}
-            >
-              <List>
-                {invitatiSalvati.map((value, index) => {
-                  const labelId = `checkbox-list-secondary-label-${index}`;
-
-                  return (
-                    <ListItem
-                      key={index}
-                      secondaryAction={
-                        <Checkbox
-                          onChange={handleToggle(value)}
-                          checked={checked.indexOf(value) !== -1}
-                        />
-                      }
-                    >
-                      <ListItemButton>
-                        <ListItemText
-                          sx={{ color: "black" }}
-                          id={labelId}
-                          primary={value.NumeInvitat}
-                        />
-                      </ListItemButton>
-                    </ListItem>
-                  );
-                })}
-              </List>
-            </DialogContent>
-            <DialogActions>
-              <LoadingButton
-                loading={loadingMail}
-                autoFocus
-                onClick={() => {
-                  // handleToClose();
-                  // console.log(checked);
-                  sendEmail();
-                  // checked.map((element) => {
-                  //   console.log(element.NumeInvitat);
-                  //   console.log(element.RowKey);
-                  // });
-                }}
-              >
-                Trimite
-              </LoadingButton>
-            </DialogActions>
-          </Dialog>
           <Grid
-            container
+            item
+            xs={12}
             sx={{
               display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              minHeight: "40vh",
+              alignItems: "flex-start",
+              justifyContent: "left",
+              margin: "1rem",
             }}
           >
-            <Grid
-              item
-              xs={12}
+            <Button
               sx={{
-                display: "flex",
-                alignItems: "flex-start",
-                justifyContent: "left",
-                margin: "1rem",
+                fontSize: "2vw",
+              }}
+              startIcon={<ArrowBackIcon />}
+              variant="contained"
+              onClick={() => {
+                history.push("/myeventpage");
+                history.go(0);
               }}
             >
-              <Button
-                sx={{
-                  fontSize: "2vw",
-                }}
-                startIcon={<ArrowBackIcon />}
-                variant="contained"
-                onClick={() => {
-                  history.push("/myeventpage");
-                  history.go(0);
-                }}
-              >
-                Înapoi
-              </Button>
-            </Grid>
-
+              Înapoi
+            </Button>
+          </Grid>
+          <form onSubmit={(e) => SendInvitati(e)}>
             <Grid item xs={12} sx={{ padding: "2vh" }}>
               <Grid container rowSpacing={3}>
                 <Grid item xs={12}>
@@ -592,7 +615,6 @@ function SendInvitationsPage() {
                                     <TableCell>
                                       <TextField
                                         fullWidth
-                                        error={!element.NumeInvitat}
                                         name="NumeInvitat"
                                         value={element.NumeInvitat || ""}
                                         variant="standard"
@@ -886,7 +908,7 @@ function SendInvitationsPage() {
                     <LoadingButton
                       type="submit"
                       loading={loading}
-                      onClick={() => SendInvitati()}
+                      // onClick={() => SendInvitati()}
                       variant="contained"
                     >
                       Salvează lista
@@ -895,36 +917,34 @@ function SendInvitationsPage() {
                 </Grid>
               </Grid>
             </Grid>
-
-            <Grid
-              item
-              xs={12}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                margin: "1rem",
-              }}
-            >
-              {!past && (
-                <Button
-                  sx={{
-                    fontSize: "2vw",
-                  }}
-                  type="submit"
-                  variant="contained"
-                  onClick={() => {
-                    setOpenDialog(true);
-                  }}
-                >
-                  Trimite chestionar{" "}
-                </Button>
-              )}
-            </Grid>
-            <Grid item xs={12} sx={{ padding: "2vh" }}></Grid>
+          </form>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              margin: "1rem",
+            }}
+          >
+            {!past && (
+              <Button
+                sx={{
+                  fontSize: "2vw",
+                }}
+                variant="contained"
+                onClick={() => {
+                  setOpenDialog(true);
+                }}
+              >
+                Trimite chestionar{" "}
+              </Button>
+            )}
           </Grid>
-        </Box>
-      </form>
+          <Grid item xs={12} sx={{ padding: "2vh" }}></Grid>
+        </Grid>
+      </Box>
     </Container>
   );
 }
