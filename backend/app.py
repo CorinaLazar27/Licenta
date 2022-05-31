@@ -255,7 +255,6 @@ def deleteInvitat():
     print(email)
     print(date)
     print(emailInvitat)
-    print("aaa"+email+"-"+date+"aaa")
     table_client.delete_entity(email+"-"+date, emailInvitat)
 
     return "Done"
@@ -572,8 +571,6 @@ def ratingChestionar():
     return "Done"
 
 
-# table_service = TableService(
-#     connection_string='DefaultEndpointsProtocol=https;AccountName=storagecorina;AccountKey=Z6MCaQlKoDsfm6mFx3afBpKR3thzCvI0JimQVT0aXKUlMNb6z564Y6LZY66/PiqsjI6JZDHoUhjDs6dwDT7/Ng==;EndpointSuffix=core.windows.net')
 CONNECTION_STRING = "DefaultEndpointsProtocol=https;AccountName=storagecorina;AccountKey=Z6MCaQlKoDsfm6mFx3afBpKR3thzCvI0JimQVT0aXKUlMNb6z564Y6LZY66/PiqsjI6JZDHoUhjDs6dwDT7/Ng==;EndpointSuffix=core.windows.net"
 SOURCE_TABLE_APERITIVE = "AperitivRating"
 SOURCE_TABLE_TYPE1 = "Type1Rating"
@@ -646,11 +643,6 @@ def highestRating():
 
     table_music = get_dataframe_from_table_storage_table(
         table_service=ts_music, filter_query=fq)
-
-    # table_aperitive.head()
-    # table_type1.head()
-    # table_type2.head()
-    # table_music.head()
 
     table_aperitive['Rating'] = table_aperitive['Rating'].astype(float)
     table_type1['Rating'] = table_type1['Rating'].astype(float)

@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import "react-dropdown/style.css";
 import emailjs from "emailjs-com";
 import Header from "./Header";
-import { Container, Grid, Typography, Button, Box } from "@mui/material";
+import { Container, Grid, Button, Box } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -14,23 +14,14 @@ import MuiAlert from "@mui/material/Alert";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloseIcon from "@mui/icons-material/Close";
 import Dialog from "@material-ui/core/Dialog";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import InputLabel from "@mui/material/InputLabel";
-
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Checkbox from "@mui/material/Checkbox";
-import Avatar from "@mui/material/Avatar";
 import axios from "axios";
 import OverlayLoader from "./OverlayLoader";
 import Table from "@mui/material/Table";
@@ -40,7 +31,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
-
 import background from "../Image/homePage.png";
 
 function SendInvitationsPage() {
@@ -67,8 +57,7 @@ function SendInvitationsPage() {
     "\n" +
     "Mulțumesc foarte mult!";
   const [loading, setLoading] = useState(false);
-  const [errorName, setErrrorName] = useState(false);
-  const [errorEmail, setErrorEmail] = useState(false);
+
   const [loadingMail, setLoadingMail] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [formValues, setFormValues] = useState([
@@ -101,10 +90,7 @@ function SendInvitationsPage() {
     console.log("value", e.target.value);
     let newFormValues = [...invitatiSalvati];
     console.log("inainte", newFormValues);
-    // if (e.target.name == "EmailInvitat") {
-    //   newFormValues[i]["RowKey"] = e.target.value;
-    //   console.log("aaaa", e.target.name);
-    // }
+
     if (e.target.name == "ConfirmarePrezenta")
       newFormValues[i][e.target.name] = e.target.checked;
     else newFormValues[i][e.target.name] = e.target.value;
@@ -145,9 +131,6 @@ function SendInvitationsPage() {
   };
 
   const [checked, setChecked] = useState([]);
-  // const [checkedList, setCheckedList] = useState([]);
-  // const [mailChecked, setMailChecked] = useState([]);
-
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -175,14 +158,9 @@ function SendInvitationsPage() {
         console.log(response.data.results);
         if (response.data.results.length == 0) setEmpty(true);
         else setInvitatiSalvati(response.data.results);
-
-        // console.log("invitatiSalvati", invitatiSalvati);
       })
       .catch((error) => {
         if (error.response) {
-          // setLoader(false);
-          // setLoad(false);
-          // setNoData(true);
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
@@ -296,7 +274,6 @@ function SendInvitationsPage() {
           "user_K0LHWwDahklB8kPrwKB2k"
         )
         .then((res) => {
-          // document.getElementById("inputinv").value = "";
           setLoadingMail(false);
           setOpenSucces(true);
           console.log(res);
@@ -323,7 +300,6 @@ function SendInvitationsPage() {
       splitDate[1] - 1,
       splitDate[0]
     );
-    // dataEveniment.setHours(0, 0, 0, 0);
     if (dataEveniment < today) setPast(true);
   }, []);
 
@@ -381,6 +357,7 @@ function SendInvitationsPage() {
           background: "rgb(255, 255, 255,1)",
           boxShadow: "2px 4px 6px rgba(0, 0, 0, 1)",
           textAlign: "center",
+          maxWidth: "90vw",
         }}
       >
         {loader && <OverlayLoader />}
@@ -427,13 +404,7 @@ function SendInvitationsPage() {
               loading={loadingMail}
               autoFocus
               onClick={() => {
-                // handleToClose();
-                // console.log(checked);
                 sendEmail();
-                // checked.map((element) => {
-                //   console.log(element.NumeInvitat);
-                //   console.log(element.RowKey);
-                // });
               }}
             >
               Trimite
@@ -460,11 +431,13 @@ function SendInvitationsPage() {
             }}
           >
             <Button
-              sx={{
-                fontSize: "2vw",
-              }}
               startIcon={<ArrowBackIcon />}
               variant="contained"
+              style={{
+                backgroundColor: "#2C5E1A",
+                color: "white",
+                padding: "0.5vh",
+              }}
               onClick={() => {
                 history.push("/myeventpage");
                 history.go(0);
@@ -475,12 +448,18 @@ function SendInvitationsPage() {
           </Grid>
           <form onSubmit={(e) => SendInvitati(e)}>
             <Grid item xs={12} sx={{ padding: "2vh" }}>
-              <Grid container rowSpacing={3}>
+              <Grid
+                container
+                rowSpacing={3}
+                sx={{
+                  maxWidth: "85vw",
+                }}
+              >
                 <Grid item xs={12}>
                   {/*Evenimentul nu e trecut*/}
                   {!empty && !past ? (
                     <TableContainer component={Paper}>
-                      <Table>
+                      <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                           <TableRow>
                             <TableCell padding="checkbox"></TableCell>
@@ -521,7 +500,6 @@ function SendInvitationsPage() {
                         </TableHead>
                         <TableBody>
                           {invitatiSalvati.map((element, index) => {
-                            // console.log(element);
                             return (
                               <>
                                 {element.NumeInvitat != "" ? (
@@ -721,7 +699,6 @@ function SendInvitationsPage() {
                         </TableHead>
                         <TableBody>
                           {invitatiSalvati.map((element, index) => {
-                            // console.log(element);
                             return (
                               <>
                                 {element.NumeInvitat != "" ? (
@@ -853,14 +830,6 @@ function SendInvitationsPage() {
                                       />
                                     </TableCell>
                                     <TableCell>
-                                      {/* <Checkbox
-                              sx={{
-                                alignSelf: "center",
-                                justifyContent: "center",
-                              }}
-                              defaultChecked={"false"}
-                            /> */}
-
                                       <Button
                                         startIcon={<DeleteOutlineIcon />}
                                         onClick={() => removeFormFields(index)}
@@ -905,6 +874,11 @@ function SendInvitationsPage() {
                     <LoadingButton
                       type="submit"
                       loading={loading}
+                      style={{
+                        backgroundColor: "#2C5E1A",
+                        color: "white",
+                        padding: "0.5vh",
+                      }}
                       // onClick={() => SendInvitati()}
                       variant="contained"
                     >
@@ -927,10 +901,12 @@ function SendInvitationsPage() {
           >
             {!past && (
               <Button
-                sx={{
-                  fontSize: "2vw",
-                }}
                 variant="contained"
+                style={{
+                  backgroundColor: "#2C5E1A",
+                  color: "white",
+                  padding: "0.5vh",
+                }}
                 onClick={() => {
                   setOpenDialog(true);
                 }}

@@ -17,27 +17,17 @@ import {
 import { useTheme, makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@material-ui/core/styles";
-import { Paper, Container } from "@material-ui/core";
-import { green, orange } from "@material-ui/core/colors";
 
 // IMPORTING ICONS
 import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
 import AddIcon from "@material-ui/icons/Add";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import SettingsIcon from "@material-ui/icons/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import EventIcon from "@mui/icons-material/Event";
 import { useHistory } from "react-router-dom";
-// LOCAL-STYLING
 
 const useStyles = makeStyles((theme) => ({
-  // root: {
-  //   backgroundColor: theme.palette.error.light,
-  // },
-  // menuButton: {
-  //   marginRight: theme.spacing(1),
-  // },
   title: {
     flexGrow: 1,
   },
@@ -84,8 +74,10 @@ const Header = (props) => {
     },
 
     palette: {
-      // type: "dark",
       primary: {
+        main: "#2C5E1A",
+      },
+      secondary: {
         main: "#2C5E1A",
       },
     },
@@ -107,7 +99,6 @@ const Header = (props) => {
               {isMobile ? (
                 <>
                   <IconButton
-                    color="inherit"
                     className={classes.menuButton}
                     edge="start"
                     aria-label="menu"
@@ -165,19 +156,7 @@ const Header = (props) => {
                       </ListItemIcon>
                       <Typography variant="h6">Evenimentele mele</Typography>
                     </MenuItem>
-                    {/* <MenuItem
-                      onClick={() => {
-                        setAnchor(null);
-                        history.push("/invitatipage");
-                        history.go(0);
-                      }}
-                      component={Link}
-                    >
-                      <ListItemIcon>
-                        <AccountCircleIcon />
-                      </ListItemIcon>
-                      <Typography variant="h6"> Contacte</Typography>
-                    </MenuItem> */}
+
                     <MenuItem
                       onClick={() => setAnchor(null)}
                       component={Link}
@@ -232,30 +211,16 @@ const Header = (props) => {
                       history.push("/myeventpage");
                       history.go(0);
                     }}
-                    color="default"
                     style={{ color: "white" }}
                   >
                     <EventIcon />
                     Evenimentele mele
                   </Button>
-                  {/* <Button
-                    variant="text"
-                    component={Link}
-                    onClick={() => {
-                      history.push("/invitatipage");
-                      history.go(0);
-                    }}
-                    color="default"
-                  >
-                    <AccountCircleIcon />
-                    Contacte
-                  </Button> */}
 
                   <Button
                     variant="text"
                     component={Link}
                     to="/settingspage"
-                    color="default"
                     style={{ color: "white" }}
                   >
                     <SettingsIcon />
@@ -266,7 +231,6 @@ const Header = (props) => {
                     variant="text"
                     component={Link}
                     to="/sign-in"
-                    color="default"
                     style={{ color: "white" }}
                     onClick={() => window.localStorage.clear()}
                   >

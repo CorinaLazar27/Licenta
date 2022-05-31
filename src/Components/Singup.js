@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-
 import { Form, Formik } from "formik";
 import { Grid, Typography } from "@material-ui/core";
 import { FormikTextField } from "./FormikComponents/FormikTextField";
@@ -9,31 +8,24 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { LoadingButton } from "@mui/lab";
 import Tooltip from "@mui/material/Tooltip";
-
-// import login1 from "../Image/abcd.png";
 import login1 from "../Image/3.png";
 import { Container } from "@mui/material";
 import { Box } from "@mui/system";
 import * as Yup from "yup";
 import FirstHeader from "./FirstHeader";
-import Footer from "./Footer";
+
 function SingUp() {
   const CryptoJS = require("crypto-js");
-
   const encrypt = (text) => {
     return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(text));
   };
-
   const history = useHistory();
-
   const [openSucces, setOpenSucces] = useState(false);
   const [openError, setOpenError] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
-
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -41,7 +33,6 @@ function SingUp() {
     setOpenSucces(false);
     setOpenError(false);
   };
-
   const logMeIn = (values) => {
     setLoading(true);
     const data = {
@@ -73,7 +64,6 @@ function SingUp() {
         }
       });
   };
-
   const ValidationsForm = Yup.object().shape({
     email: Yup.string()
       .email("Email invalid!")
@@ -116,13 +106,11 @@ function SingUp() {
         minHeight: "100vh",
         justifyContent: "center",
         alignItems: "center",
-
         backgroundImage: `url("${login1}")`,
         backgroundSize: "cover",
       }}
     >
       <FirstHeader />
-
       <Box
         sx={{
           background: "rgb(255, 255, 255)",
@@ -130,6 +118,7 @@ function SingUp() {
           padding: "4rem",
           textAlign: "center",
           maxWidth: "70vh",
+          marginTop: 6,
         }}
       >
         <Snackbar

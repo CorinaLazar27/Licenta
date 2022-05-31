@@ -1,10 +1,5 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-
-import { useHistory } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { NavLink } from "react-router-dom";
-import Dropdown from "react-dropdown";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -12,17 +7,16 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import "react-dropdown/style.css";
 import axios from "axios";
-
 import emailjs from "emailjs-com";
 import Header from "./Header";
-import { Container, Grid, Box, Button, TextField } from "@mui/material";
+import { Container, Grid, Box, TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import background from "../Image/homePage.png";
+
 function SettingsPage() {
   const CryptoJS = require("crypto-js");
-
   const encrypt = (text) => {
     return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(text));
   };
@@ -65,7 +59,6 @@ function SettingsPage() {
         console.log(err);
       });
   }
-
   function UpdateProfile() {
     setLoading(true);
     axios({
@@ -87,7 +80,6 @@ function SettingsPage() {
         setLoading(false);
         setOpenSuccesPassword(true);
         setTimeout(window.location.reload(false), 3000);
-        // if (response.data == "Done") notificare();
       })
       .catch((error) => {
         if (error.response) {
@@ -95,16 +87,12 @@ function SettingsPage() {
           setLoading(false);
           setOpenErrorPassword(true);
           setTimeout(window.location.reload(false), 3000);
-          // console.log(error.response)
-          // console.log(error.response.status)
-          // console.log(error.response.headers)
         }
       })
       .finally(() => {
         setLoading(false);
       });
   }
-
   const [openSuccesPassword, setOpenSuccesPassword] = useState(false);
   const [openErrorPassword, setOpenErrorPassword] = useState(false);
   const [openDifferentPassword, setOpenDifferentPassword] = useState(false);
@@ -114,7 +102,6 @@ function SettingsPage() {
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
-
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -125,6 +112,7 @@ function SettingsPage() {
     setOpenSuccesEmail(false);
     setOpenErrorEmail(false);
   };
+
   return (
     <Container
       maxWidth={false}
@@ -188,7 +176,6 @@ function SettingsPage() {
         </Alert>
       </Snackbar>
       <Header />
-
       <Box
         sx={{
           width: "100vw",
@@ -228,7 +215,6 @@ function SettingsPage() {
             <Accordion
               style={{
                 minHeight: "8vh",
-                // width: "100vw",
                 backgroundColor: "#F5F4F2",
                 color: "black",
                 textAlign: "center",
@@ -277,6 +263,11 @@ function SettingsPage() {
 
                       <Grid item xs={12} sx={{ marginBottom: "1vh" }}>
                         <LoadingButton
+                          style={{
+                            backgroundColor: "#2C5E1A",
+                            color: "white",
+                            padding: "0.5vh",
+                          }}
                           loading={loading}
                           variant="contained"
                           onClick={() => {
@@ -382,6 +373,11 @@ function SettingsPage() {
                           loading={loading}
                           type="submit"
                           variant="contained"
+                          style={{
+                            backgroundColor: "#2C5E1A",
+                            color: "white",
+                            padding: "0.5vh",
+                          }}
                         >
                           Trimite{" "}
                         </LoadingButton>

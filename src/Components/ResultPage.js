@@ -4,14 +4,7 @@ import { useHistory } from "react-router-dom";
 import Header from "./Header";
 import OverlayLoader from "./OverlayLoader";
 import axios from "axios";
-import {
-  Grid,
-  Input,
-  InputLabel,
-  Typography,
-  Container,
-  Button,
-} from "@mui/material";
+import { Grid, Input, InputLabel, Typography, Button } from "@mui/material";
 
 import Paper from "@material-ui/core/Paper";
 import {
@@ -21,7 +14,6 @@ import {
   BarSeries,
 } from "@devexpress/dx-react-chart-material-ui";
 import { Box } from "@mui/system";
-import background from "../Image/homePage.png";
 
 function ResultPage() {
   const history = useHistory();

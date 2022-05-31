@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-
 import { useHistory } from "react-router-dom";
 import Header from "./Header";
-import Footer from "./Footer";
-import axios from "axios";
 import { Container, Box, Grid, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import AddIcon from "@material-ui/icons/Add";
@@ -12,32 +9,9 @@ import background from "../Image/homePage.png";
 
 function HomePage() {
   const history = useHistory();
-  const email = window.localStorage.getItem("email");
+
   const nume = window.localStorage.getItem("nume");
 
-  const [data, setData] = useState("");
-  function GetElements(event) {
-    axios({
-      method: "GET",
-      url: "https://server-licenta.azurewebsites.net/elements",
-    })
-      .then((response) => {
-        //console.log(response.data.results);
-        setData(response.data.results);
-        console.log(response);
-      })
-      .catch((error) => {
-        if (error.response) {
-          console.log(error.response);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        }
-      });
-
-    event.preventDefault();
-  }
-
-  window.onload = GetElements;
   const breakpoints = {
     xs: 0,
     sm: 600,
@@ -70,8 +44,6 @@ function HomePage() {
       maxWidth={false}
       sx={{
         backgroundImage: `url("${background}")`,
-
-        // backgroundSize: "cover",
         display: "flex",
         minHeight: "100vh",
         justifyContent: "center",
@@ -79,7 +51,6 @@ function HomePage() {
       }}
     >
       <Header />
-      {/* <Footer /> */}
       <Box
         sx={{
           background: "rgb(255, 255, 255,1)",
@@ -98,6 +69,7 @@ function HomePage() {
                 color: "white",
                 backgroundColor: "#2C5E1A",
                 borderColor: "white",
+                padding: "1vh",
               }}
               startIcon={<AddIcon />}
               sx={{ fontSize: size - 15 }}
@@ -117,6 +89,7 @@ function HomePage() {
                 color: "white",
                 backgroundColor: "#2C5E1A",
                 borderColor: "white",
+                padding: "1vh",
               }}
               startIcon={<EventIcon />}
               variant="outlined"

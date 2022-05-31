@@ -5,8 +5,7 @@ import { useHistory } from "react-router-dom";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
-import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
+
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -19,28 +18,28 @@ import axios from "axios";
 import Snackbar from "@mui/material/Snackbar";
 
 import Dialog from "@material-ui/core/Dialog";
-import DialogContentText from "@material-ui/core/DialogContentText";
+
 import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogActions from "@material-ui/core/DialogActions";
+
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import { Container, Box, Grid, Typography, TextField } from "@mui/material";
+
+import { Container, Box, Grid, TextField } from "@mui/material";
 import Header from "./Header";
 import { Tooltip } from "@material-ui/core";
 import MuiAlert from "@mui/material/Alert";
 import { LoadingButton } from "@mui/lab";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+
 import background from "../Image/homePage.png";
-import Footer from "./Footer";
+
 import AssistantIcon from "@mui/icons-material/Assistant";
 import RecommendIcon from "@mui/icons-material/Recommend";
 import PeopleIcon from "@mui/icons-material/People";
 import RateReviewIcon from "@mui/icons-material/RateReview";
 import Rating from "@mui/material/Rating";
-import { getOverlappingDaysInIntervals } from "date-fns";
+import TableContainer from "@mui/material/TableContainer";
+
+import Paper from "@material-ui/core/Paper";
 
 function MyEventPage() {
   const history = useHistory();
@@ -50,28 +49,18 @@ function MyEventPage() {
   const [dateForDelete, setDateForDelete] = useState("");
   const email = window.localStorage.getItem("email");
   const event = window.localStorage.getItem("eveniment");
-  const date = window.localStorage.getItem("dataeveniment");
-  const judet = window.localStorage.getItem("judet");
+
   const [loader, setLoader] = useState(true);
-  const [box, setBox] = useState(false);
   const [noData, setNoData] = useState(false);
   const [load, setLoad] = useState(true);
 
-  const [openDialogDelete, setOpenDialogDelete] = useState(false);
-  const [sure, setSure] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-  const [locationsRecomanded, setLocationsRecomanded] = useState([]);
-  const [openInputText, setOpenInputText] = useState(false);
-  const [noRecomandations, setNoRecomandations] = useState(false);
-
   const [opiniiRestaurant, setOpiniiRestaurant] = useState("");
   const [opiniiFotograf, setOpiniiFotograf] = useState("");
   const [opiniiMuzica, setOpiniiMuzica] = useState("");
-
   const [ratingRestaurant, setRatingRestaurant] = useState(0);
   const [ratingMuzica, setRatingMuzica] = useState(0);
   const [ratingFotograf, setRatingFotograf] = useState(0);
-
   const [loadingOpinii, setLoadingOpinii] = useState(false);
 
   const today = new Date();
@@ -84,55 +73,6 @@ function MyEventPage() {
   useEffect(() => {
     GetMyEvents();
   }, []);
-
-  // function GetRecomandation(type) {
-  //   setNoRecomandations(false);
-  //   axios({
-  //     method: "POST",
-  //     url: "/getRecomandations",
-  //     data: {
-  //       email: email,
-  //       event: event,
-  //       judet: judet,
-  //       date: date,
-  //       type: type,
-  //     },
-  //   })
-  //     .then((response) => {
-  //       setLoader(false);
-  //       console.log(response.data);
-
-  //       if (Object.values(response.data).length != 0)
-  //         setLocationsRecomanded(Object.values(response.data));
-  //       else {
-  //         setNoRecomandations(true);
-  //         console.log("NU SUNT LOCATII");
-  //         setLocationsRecomanded([]);
-  //       }
-  //       if (
-  //         response.data[0] === "" &&
-  //         response.data[1] === "" &&
-  //         response.data[2] === ""
-  //       )
-  //         setNoRecomandations(true);
-  //       if (
-  //         locationsRecomanded[0] === "" &&
-  //         locationsRecomanded[1] === "" &&
-  //         locationsRecomanded[2] === ""
-  //       )
-  //         setNoRecomandations(true);
-  //       console.log("locationRecomanded", locationsRecomanded);
-  //     })
-  //     .catch((error) => {
-  //       if (error.response) {
-  //         setLoader(false);
-  //         setNoRecomandations(true);
-  //         console.log(error.response);
-  //         console.log(error.response.status);
-  //         console.log(error.response.headers);
-  //       }
-  //     });
-  // }
 
   function GetMyEvents() {
     axios({
@@ -191,19 +131,9 @@ function MyEventPage() {
       });
   };
 
-  // function chooseLocation() {
-  //   setLoader(true);
-  //   setBox(true);
-  //   GetRecomandation("Fotograf");
-  // }
-
-  const [loading, setLoading] = useState(false);
-  const [openSuccesLocation, setOpenSuccesLocation] = useState(false);
-  const [openErrorLocation, setOpenErrorLocation] = useState(false);
-
   async function UpdateForm() {
     console.log("GATA!");
-    setLoading(true);
+
     await axios({
       method: "POST",
       url: "https://server-licenta.azurewebsites.net/updateform",
@@ -223,7 +153,7 @@ function MyEventPage() {
       .then((response) => {
         const res = response.data;
         console.log(res);
-        //setOpenSuccesLocation(true);
+
         setTimeout(() => {
           history.push("/myeventpage");
           history.go(0);
@@ -234,13 +164,11 @@ function MyEventPage() {
       })
       .catch((error) => {
         if (error.response) {
-          setOpenErrorLocation(true);
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
         }
-      })
-      .finally(() => setLoading(false));
+      });
   }
 
   function PostOpinii() {
@@ -269,16 +197,10 @@ function MyEventPage() {
       .then((response) => {
         const res = response.data;
         console.log(res);
-
         UpdateForm();
-
-        if (res == "Done") {
-          console.log("dONE");
-        }
       })
       .catch((error) => {
         if (error.response) {
-          // setOpenErrorLocation(true);
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
@@ -290,15 +212,12 @@ function MyEventPage() {
   function myClick(event) {
     setDateForDelete(event.RowKey);
     console.log(dateForDelete);
-
     window.localStorage.setItem("eveniment", event.TipEveniment);
     window.localStorage.setItem("locatie", event.Restaurant);
     window.localStorage.setItem("judet", event.Judet);
     window.localStorage.setItem("invitati", event.NumarInvitati);
     window.localStorage.setItem("buget", event.Buget);
-    // window.localStorage.setItem("momentartistic", event.MomentArtistic);
     window.localStorage.setItem("fotograf", event.Fotograf);
-    // window.localStorage.setItem("video", event.InregistrareVideo);
     window.localStorage.setItem("dataeveniment", event.RowKey);
     window.localStorage.setItem("liveband", event.Muzica);
     window.localStorage.setItem("opinie", event.Opinie);
@@ -323,19 +242,19 @@ function MyEventPage() {
         minHeight: "100vh",
         justifyContent: "center",
         alignItems: "center",
-
         backgroundImage: `url("${background}")`,
       }}
     >
       <Header />
-      {/* <Footer /> */}
+
       {!load && (
         <Box
           sx={{
             background: "rgb(255, 255, 255,1)",
             boxShadow: "2px 4px 6px rgba(0, 0, 0, 1)",
-            padding: "4rem",
+            padding: "2vw",
             textAlign: "center",
+            maxWidth: "100vw",
           }}
         >
           <Dialog open={openDialog} onClose={handleToClose}>
@@ -507,7 +426,15 @@ function MyEventPage() {
             </DialogContent>
           </Dialog>
 
-          <Grid container rowSpacing={5}>
+          <Grid
+            container
+            rowSpacing={5}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             {!noData && !load && (
               <Grid item xs={12}>
                 <h3>Evenimentele mele</h3>
@@ -528,318 +455,310 @@ function MyEventPage() {
                   alignItems: "center",
                 }}
               >
-                <Table
-                  sx={{
-                    maxWidth: "70vw",
-                  }}
-                >
-                  <TableHead>
-                    <TableRow>
-                      <TableCell padding="checkbox"></TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        {" "}
-                        Tipul evenimentului{" "}
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        {" "}
-                        Data{" "}
-                      </TableCell>
+                <TableContainer component={Paper}>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell padding="checkbox"></TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          {" "}
+                          Tipul evenimentului{" "}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          {" "}
+                          Data{" "}
+                        </TableCell>
 
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        {" "}
-                        Invitați
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        {" "}
-                        Statistici
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        {" "}
-                        Recomandări
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        {" "}
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {data.map((item) => {
-                      const splitDate = item.RowKey.split(".");
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          {" "}
+                          Invitați
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          {" "}
+                          Statistici
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          {" "}
+                          Recomandări
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          {" "}
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {data.map((item) => {
+                        const splitDate = item.RowKey.split(".");
 
-                      const dataEveniment = new Date(
-                        splitDate[2],
-                        splitDate[1] - 1,
-                        splitDate[0]
-                      );
-
-                      if (dataEveniment >= today)
-                        //Evenimentul  nu e trecut
-                        return (
-                          <TableRow>
-                            <TableCell padding="checkbox"></TableCell>
-                            <TableCell
-                              sx={{
-                                textAlign: "center",
-                              }}
-                              onClick={() => myClick(item)}
-                            >
-                              {item.TipEveniment}
-                            </TableCell>
-                            <TableCell
-                              sx={{
-                                textAlign: "center",
-                              }}
-                              onClick={() => myClick(item)}
-                            >
-                              {item.RowKey}
-                            </TableCell>
-
-                            <TableCell
-                              sx={{
-                                textAlign: "center",
-                              }}
-                            >
-                              <Tooltip title="Vezi invitații">
-                                <Button
-                                  sx={{ minWidth: "2px" }}
-                                  onClick={() => {
-                                    myClick(item);
-                                    history.push("/sendinvitationspage");
-                                  }}
-                                >
-                                  <PeopleIcon />
-                                </Button>
-                              </Tooltip>
-                            </TableCell>
-                            <TableCell
-                              sx={{
-                                textAlign: "center",
-                              }}
-                            >
-                              {" "}
-                              <Tooltip title="Vizualizeaza rezultate chestionar">
-                                <Button
-                                  sx={{ minWidth: "2px" }}
-                                  onClick={() => {
-                                    myClick(item);
-                                    history.push("/resultpage");
-                                    history.go(0);
-                                  }}
-                                >
-                                  <RecommendIcon />
-                                </Button>
-                              </Tooltip>
-                            </TableCell>
-                            <TableCell
-                              sx={{
-                                textAlign: "center",
-                              }}
-                            >
-                              <Tooltip title="Vezi recomandări">
-                                <Button
-                                  sx={{ minWidth: "2px" }}
-                                  onClick={() => {
-                                    myClick(item);
-                                    history.push("/recommandpage");
-                                    history.go(0);
-                                  }}
-                                >
-                                  <AssistantIcon />
-                                </Button>
-                              </Tooltip>
-                            </TableCell>
-                            <TableCell
-                              sx={{
-                                textAlign: "center",
-                              }}
-                            >
-                              <Tooltip title="Editeaza eveniment">
-                                <Button
-                                  sx={{ minWidth: "2px" }}
-                                  onClick={() => {
-                                    myClick(item);
-                                    history.push("/editformpage");
-                                  }}
-                                >
-                                  <EditIcon />
-                                </Button>
-                              </Tooltip>
-                              <Tooltip title="Anulare eveniment">
-                                <Button
-                                  sx={{ minWidth: "2px" }}
-                                  onClick={() => {
-                                    myClick(item);
-                                    // setSure(false);
-                                    // setOpenDialogDelete(true);
-
-                                    // if (sure == true)
-                                    DeleteEvent(item);
-                                  }}
-                                >
-                                  <DeleteIcon />
-                                </Button>
-                              </Tooltip>
-                            </TableCell>
-                          </TableRow>
+                        const dataEveniment = new Date(
+                          splitDate[2],
+                          splitDate[1] - 1,
+                          splitDate[0]
                         );
-                      //Evenimentul   e trecut
-                      else
-                        return (
-                          <TableRow
-                            sx={{
-                              backgroundColor: "#fdfff5",
-                            }}
-                          >
-                            <TableCell padding="checkbox"></TableCell>
-                            <TableCell
-                              sx={{
-                                textAlign: "center",
-                              }}
-                              onClick={() => myClick(item)}
-                            >
-                              {item.TipEveniment}
-                            </TableCell>
-                            <TableCell
-                              sx={{
-                                textAlign: "center",
-                              }}
-                              onClick={() => myClick(item)}
-                            >
-                              {item.RowKey}
-                            </TableCell>
 
-                            <TableCell
-                              sx={{
-                                textAlign: "center",
-                              }}
-                            >
-                              <Tooltip title="Vezi invitații">
-                                <Button
-                                  sx={{ minWidth: "2px" }}
-                                  onClick={() => {
-                                    myClick(item);
-                                    history.push("/sendinvitationspage");
-                                  }}
-                                >
-                                  <PeopleIcon />
-                                </Button>
-                              </Tooltip>
-                            </TableCell>
-                            <TableCell
-                              sx={{
-                                textAlign: "center",
-                              }}
-                            >
-                              {" "}
-                              <Tooltip title="Vizualizeaza rezultate chestionar">
-                                <Button
-                                  sx={{ minWidth: "2px" }}
-                                  onClick={() => {
-                                    myClick(item);
-                                    history.push("/resultpage");
-                                    history.go(0);
-                                  }}
-                                >
-                                  <RecommendIcon />
-                                </Button>
-                              </Tooltip>
-                            </TableCell>
-                            <TableCell
-                              sx={{
-                                textAlign: "center",
-                              }}
-                            >
-                              <Tooltip title="Vezi recomandări">
-                                <Button
-                                  disabled
-                                  sx={{ minWidth: "2px" }}
-                                  onClick={() => {
-                                    myClick(item);
-                                    history.push("/recommandpage");
-                                    history.go(0);
-                                  }}
-                                >
-                                  <AssistantIcon />
-                                </Button>
-                              </Tooltip>
-                            </TableCell>
-                            <TableCell
-                              sx={{
-                                textAlign: "center",
-                              }}
-                            >
-                              <Tooltip title="Editeaza eveniment">
-                                <Button
-                                  disabled
-                                  sx={{ minWidth: "2px" }}
-                                  onClick={() => {
-                                    myClick(item);
-                                    history.push("/editformpage");
-                                  }}
-                                >
-                                  <EditIcon />
-                                </Button>
-                              </Tooltip>
-                              <Tooltip title="Anulare eveniment">
-                                <Button
-                                  disabled
-                                  sx={{ minWidth: "2px" }}
-                                  onClick={() => {
-                                    myClick(item);
-                                    // setSure(false);
-                                    // setOpenDialogDelete(true);
+                        if (dataEveniment >= today)
+                          //Evenimentul  nu e trecut
+                          return (
+                            <TableRow>
+                              <TableCell padding="checkbox"></TableCell>
+                              <TableCell
+                                sx={{
+                                  textAlign: "center",
+                                }}
+                                onClick={() => myClick(item)}
+                              >
+                                {item.TipEveniment}
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  textAlign: "center",
+                                }}
+                                onClick={() => myClick(item)}
+                              >
+                                {item.RowKey}
+                              </TableCell>
 
-                                    // if (sure == true)
-                                    DeleteEvent(item);
-                                  }}
-                                >
-                                  <DeleteIcon />
-                                </Button>
-                              </Tooltip>
-                              {!item.Opinie && (
-                                <Tooltip title="Spune-ți opinia">
+                              <TableCell
+                                sx={{
+                                  textAlign: "center",
+                                }}
+                              >
+                                <Tooltip title="Vezi invitații">
                                   <Button
                                     sx={{ minWidth: "2px" }}
                                     onClick={() => {
                                       myClick(item);
-                                      setOpenDialog(true);
+                                      history.push("/sendinvitationspage");
                                     }}
                                   >
-                                    {item.Opinie}
-                                    <RateReviewIcon />
+                                    <PeopleIcon />
                                   </Button>
                                 </Tooltip>
-                              )}
-                            </TableCell>
-                          </TableRow>
-                        );
-                    })}
-                  </TableBody>
-                </Table>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  textAlign: "center",
+                                }}
+                              >
+                                {" "}
+                                <Tooltip title="Vizualizeaza rezultate chestionar">
+                                  <Button
+                                    sx={{ minWidth: "2px" }}
+                                    onClick={() => {
+                                      myClick(item);
+                                      history.push("/resultpage");
+                                      history.go(0);
+                                    }}
+                                  >
+                                    <RecommendIcon />
+                                  </Button>
+                                </Tooltip>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  textAlign: "center",
+                                }}
+                              >
+                                <Tooltip title="Vezi recomandări">
+                                  <Button
+                                    sx={{ minWidth: "2px" }}
+                                    onClick={() => {
+                                      myClick(item);
+                                      history.push("/recommandpage");
+                                      history.go(0);
+                                    }}
+                                  >
+                                    <AssistantIcon />
+                                  </Button>
+                                </Tooltip>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  textAlign: "center",
+                                }}
+                              >
+                                <Tooltip title="Editeaza eveniment">
+                                  <Button
+                                    sx={{ minWidth: "2px" }}
+                                    onClick={() => {
+                                      myClick(item);
+                                      history.push("/editformpage");
+                                    }}
+                                  >
+                                    <EditIcon />
+                                  </Button>
+                                </Tooltip>
+                                <Tooltip title="Anulare eveniment">
+                                  <Button
+                                    sx={{ minWidth: "2px" }}
+                                    onClick={() => {
+                                      myClick(item);
+
+                                      DeleteEvent(item);
+                                    }}
+                                  >
+                                    <DeleteIcon />
+                                  </Button>
+                                </Tooltip>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        //Evenimentul   e trecut
+                        else
+                          return (
+                            <TableRow
+                              sx={{
+                                backgroundColor: "#fdfff5",
+                              }}
+                            >
+                              <TableCell padding="checkbox"></TableCell>
+                              <TableCell
+                                sx={{
+                                  textAlign: "center",
+                                }}
+                                onClick={() => myClick(item)}
+                              >
+                                {item.TipEveniment}
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  textAlign: "center",
+                                }}
+                                onClick={() => myClick(item)}
+                              >
+                                {item.RowKey}
+                              </TableCell>
+
+                              <TableCell
+                                sx={{
+                                  textAlign: "center",
+                                }}
+                              >
+                                <Tooltip title="Vezi invitații">
+                                  <Button
+                                    sx={{ minWidth: "2px" }}
+                                    onClick={() => {
+                                      myClick(item);
+                                      history.push("/sendinvitationspage");
+                                    }}
+                                  >
+                                    <PeopleIcon />
+                                  </Button>
+                                </Tooltip>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  textAlign: "center",
+                                }}
+                              >
+                                {" "}
+                                <Tooltip title="Vizualizeaza rezultate chestionar">
+                                  <Button
+                                    sx={{ minWidth: "2px" }}
+                                    onClick={() => {
+                                      myClick(item);
+                                      history.push("/resultpage");
+                                      history.go(0);
+                                    }}
+                                  >
+                                    <RecommendIcon />
+                                  </Button>
+                                </Tooltip>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  textAlign: "center",
+                                }}
+                              >
+                                <Tooltip title="Vezi recomandări">
+                                  <Button
+                                    disabled
+                                    sx={{ minWidth: "2px" }}
+                                    onClick={() => {
+                                      myClick(item);
+                                      history.push("/recommandpage");
+                                      history.go(0);
+                                    }}
+                                  >
+                                    <AssistantIcon />
+                                  </Button>
+                                </Tooltip>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  textAlign: "center",
+                                }}
+                              >
+                                <Tooltip title="Editeaza eveniment">
+                                  <Button
+                                    disabled
+                                    sx={{ minWidth: "2px" }}
+                                    onClick={() => {
+                                      myClick(item);
+                                      history.push("/editformpage");
+                                    }}
+                                  >
+                                    <EditIcon />
+                                  </Button>
+                                </Tooltip>
+                                <Tooltip title="Anulare eveniment">
+                                  <Button
+                                    disabled
+                                    sx={{ minWidth: "2px" }}
+                                    onClick={() => {
+                                      myClick(item);
+
+                                      DeleteEvent(item);
+                                    }}
+                                  >
+                                    <DeleteIcon />
+                                  </Button>
+                                </Tooltip>
+                                {!item.Opinie && (
+                                  <Tooltip title="Spune-ți opinia">
+                                    <Button
+                                      sx={{ minWidth: "2px" }}
+                                      onClick={() => {
+                                        myClick(item);
+                                        setOpenDialog(true);
+                                      }}
+                                    >
+                                      {item.Opinie}
+                                      <RateReviewIcon />
+                                    </Button>
+                                  </Tooltip>
+                                )}
+                              </TableCell>
+                            </TableRow>
+                          );
+                      })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               </Grid>
             )}
             {!load && (
@@ -855,6 +774,11 @@ function MyEventPage() {
                   onClick={() => {
                     history.push("/registerevent");
                     history.go(0);
+                  }}
+                  style={{
+                    backgroundColor: "#2C5E1A",
+                    color: "white",
+                    padding: "0.5vh",
                   }}
                 >
                   Adaugă un eveniment
@@ -879,28 +803,6 @@ function MyEventPage() {
       </Snackbar>
 
       <Snackbar
-        open={openErrorLocation}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert onClose={handleClose} severity="error">
-          Eroare la alegerea locației!
-        </Alert>
-      </Snackbar>
-
-      <Snackbar
-        open={openSuccesLocation}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert onClose={handleClose} severity="success">
-          Locatie aleasa cu succes!
-        </Alert>
-      </Snackbar>
-
-      <Snackbar
         open={openSucces}
         autoHideDuration={3000}
         onClose={handleClose}
@@ -910,40 +812,6 @@ function MyEventPage() {
           Eveniment sters cu succes!
         </Alert>
       </Snackbar>
-
-      <Dialog
-        open={openDialogDelete}
-        onClose={handleToClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle>
-          {"Sunteți sigur că vreți să stergeți evenimentul?"}
-        </DialogTitle>
-
-        <DialogActions>
-          <Button
-            color="primary"
-            autoFocus
-            onClick={() => {
-              setSure(true);
-              handleToClose();
-            }}
-          >
-            Da
-          </Button>
-          <Button
-            color="primary"
-            autoFocus
-            onClick={() => {
-              history.push("/myeventpage");
-              history.go(0);
-            }}
-          >
-            Nu
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Container>
   );
 }

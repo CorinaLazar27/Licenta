@@ -13,24 +13,12 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 
 import Header from "./Header";
-import { Container, Grid, Typography, Button, Box } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { TextField } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
+import { Grid, Typography, Button, Box } from "@mui/material";
 
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import { Tab } from "material-ui";
-import Checkbox from "@mui/material/Checkbox";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
 import OverlayLoader from "./OverlayLoader";
-import background from "../Image/homePage.png";
+
 import Rating from "@mui/material/Rating";
 function OpiniiPage() {
   const history = useHistory();
@@ -61,6 +49,36 @@ function OpiniiPage() {
   useEffect(() => {
     GetOpinii();
   }, []);
+
+  const breakpoints = {
+    xs: 0,
+    sm: 600,
+    md: 960,
+    lg: 1280,
+    xl: 1920,
+  };
+  const getColumns = (width) => {
+    if (width < breakpoints.sm) {
+      return 12;
+    } else if (width < breakpoints.md) {
+      return 12;
+    } else if (width < breakpoints.lg) {
+      return 6;
+    } else if (width < breakpoints.xl) {
+      return 6;
+    } else {
+      return 6;
+    }
+  };
+  const [columns, setColumns] = useState(getColumns(window.innerWidth));
+
+  const updateDimensions = () => {
+    setColumns(getColumns(window.innerWidth));
+  };
+  useEffect(() => {
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
   return (
     <div className="Container">
       <Header />
@@ -74,8 +92,9 @@ function OpiniiPage() {
             padding: "4rem",
             textAlign: "center",
             minHeight: "70vh",
-            marginTop: "7vh",
+            marginTop: 10,
             marginBottom: "5vh",
+            maxWidth: "95vw",
           }}
         >
           <Grid
@@ -84,8 +103,6 @@ function OpiniiPage() {
             sx={{
               display: "flex",
               alignItems: "flex-start",
-              justifyContent: "left",
-              marginBottom: "1vh",
             }}
           >
             <Button
@@ -104,118 +121,134 @@ function OpiniiPage() {
               Înapoi
             </Button>
           </Grid>
-          <List sx={{ maxWidth: "80vw", bgcolor: "background.paper" }}>
-            {data.map((opinie, index) => {
-              if (index != 0)
-                return (
-                  <>
-                    <ListItem alignItems="flex-start">
-                      <ListItemAvatar>
-                        <Avatar
-                          alt={opinie.Nume}
-                          src="/static/images/avatar/1.jpg"
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <List sx={{ bgcolor: "background.paper" }}>
+              {data.map((opinie, index) => {
+                if (index != 0)
+                  return (
+                    <>
+                      <ListItem
+                        alignItems="flex-start"
+                        sx={{ minWidth: "90vw" }}
+                      >
+                        <ListItemAvatar>
+                          <Avatar
+                            alt={opinie.Nume}
+                            src="/static/images/avatar/1.jpg"
+                          />
+                        </ListItemAvatar>
+                        <ListItemText
+                          key={index}
+                          primary={
+                            opinie.Nume +
+                            ", " +
+                            opinie.TipEveniment +
+                            " " +
+                            opinie.RowKey
+                          }
+                          secondary={
+                            <Grid container>
+                              <Grid
+                                item
+                                xs={6}
+                                sx={{
+                                  marginTop: "1vh",
+                                }}
+                              >
+                                <Typography variant="h6">
+                                  {opinie.Restaurant}
+                                </Typography>
+                              </Grid>
+                              <Grid
+                                item
+                                xs={columns}
+                                sx={{
+                                  marginTop: "1vh",
+                                }}
+                              >
+                                <Rating
+                                  value={opinie.RatingRestaurant}
+                                  readOnly
+                                />
+                              </Grid>
+                              <Grid item xs={12}>
+                                <Typography variant="subtitle">
+                                  {opinie.OpiniiRestaurant}
+                                </Typography>
+                              </Grid>
+
+                              <Grid
+                                item
+                                xs={columns}
+                                sx={{
+                                  marginTop: "1vh",
+                                }}
+                              >
+                                <Typography variant="h6">
+                                  Fotograful {opinie.Fotograf}
+                                </Typography>
+                              </Grid>
+                              <Grid
+                                item
+                                xs={columns}
+                                sx={{
+                                  marginTop: "1vh",
+                                }}
+                              >
+                                <Rating
+                                  value={opinie.RatingFotograf}
+                                  readOnly
+                                />
+                              </Grid>
+                              <Grid item xs={12}>
+                                <Typography variant="subtitle">
+                                  {opinie.OpiniiFotograf}
+                                </Typography>
+                              </Grid>
+
+                              <Grid
+                                item
+                                xs={columns}
+                                sx={{
+                                  marginTop: "1vh",
+                                }}
+                              >
+                                <Typography variant="h6">
+                                  Muzică: {opinie.Muzica}
+                                </Typography>
+                              </Grid>
+                              <Grid
+                                item
+                                xs={columns}
+                                sx={{
+                                  marginTop: "1vh",
+                                }}
+                              >
+                                <Rating value={opinie.RatingMuzica} readOnly />
+                              </Grid>
+                              <Grid item xs={12}>
+                                <Typography variant="subtitle">
+                                  {opinie.OpiniiMuzica}
+                                </Typography>
+                              </Grid>
+                            </Grid>
+                          }
                         />
-                      </ListItemAvatar>
-                      <ListItemText
-                        key={index}
-                        primary={
-                          opinie.Nume +
-                          ", " +
-                          opinie.TipEveniment +
-                          " " +
-                          opinie.RowKey
-                        }
-                        secondary={
-                          <Grid container>
-                            <Grid
-                              item
-                              xs={6}
-                              sx={{
-                                marginTop: "1vh",
-                              }}
-                            >
-                              <Typography variant="h6">
-                                {opinie.Restaurant}
-                              </Typography>
-                            </Grid>
-                            <Grid
-                              item
-                              xs={6}
-                              sx={{
-                                marginTop: "1vh",
-                              }}
-                            >
-                              <Rating
-                                value={opinie.RatingRestaurant}
-                                readOnly
-                              />
-                            </Grid>
-                            <Grid item xs={12}>
-                              <Typography variant="subtitle">
-                                {opinie.OpiniiRestaurant}
-                              </Typography>
-                            </Grid>
-
-                            <Grid
-                              item
-                              xs={6}
-                              sx={{
-                                marginTop: "1vh",
-                              }}
-                            >
-                              <Typography variant="h6">
-                                Fotograful {opinie.Fotograf}
-                              </Typography>
-                            </Grid>
-                            <Grid
-                              item
-                              xs={6}
-                              sx={{
-                                marginTop: "1vh",
-                              }}
-                            >
-                              <Rating value={opinie.RatingFotograf} readOnly />
-                            </Grid>
-                            <Grid item xs={12}>
-                              <Typography variant="subtitle">
-                                {opinie.OpiniiFotograf}
-                              </Typography>
-                            </Grid>
-
-                            <Grid
-                              item
-                              xs={6}
-                              sx={{
-                                marginTop: "1vh",
-                              }}
-                            >
-                              <Typography variant="h6">
-                                Muzică: {opinie.Muzica}
-                              </Typography>
-                            </Grid>
-                            <Grid
-                              item
-                              xs={6}
-                              sx={{
-                                marginTop: "1vh",
-                              }}
-                            >
-                              <Rating value={opinie.RatingMuzica} readOnly />
-                            </Grid>
-                            <Grid item xs={12}>
-                              <Typography variant="subtitle">
-                                {opinie.OpiniiMuzica}
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        }
-                      />
-                    </ListItem>
-                    <Divider variant="inset" component="li" />
-                  </>
-                );
-            })}
-          </List>
+                      </ListItem>
+                      <Divider variant="inset" component="li" />
+                    </>
+                  );
+              })}
+            </List>
+          </Grid>
         </Box>
       )}
     </div>

@@ -3,19 +3,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useHistory } from "react-router-dom";
 import "react-dropdown/style.css";
 import axios from "axios";
-import { Formik, Form, Field } from "formik";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
+import { Formik, Form } from "formik";
 import Header from "./Header";
 import { FormikTextField } from "./FormikComponents/FormikTextField";
 import { FormikSelectSimple } from "./FormikComponents/FormikSelectSimple";
 import { FormikDatePicker } from "./FormikComponents/FormikDatePicker";
 import { LoadingButton, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import FormLabel from "@mui/material/FormLabel";
-import RadioGroup from "@mui/material/RadioGroup";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { Box, Grid, Typography } from "@mui/material";
@@ -26,18 +20,8 @@ function RegisterEventPage() {
   const [openError, setOpenError] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleClickToOpen = () => {
-    setOpen(true);
-  };
-
-  const handleToClose = () => {
-    setOpen(false);
-  };
-
   const history = useHistory();
   const email = window.localStorage.getItem("email");
-
-  const [dialogBox, setDialogBox] = useState(Boolean);
 
   function FormOptions(values) {
     console.log(values.event);
@@ -75,11 +59,6 @@ function RegisterEventPage() {
 
         const res = response.data;
         console.log(res);
-        if (res == "Done") {
-          // handleClickToOpen();
-          // setDialogBox(true);
-          // console.log(dialogBox);
-        }
       })
       .catch((error) => {
         if (error.response) {
@@ -148,8 +127,6 @@ function RegisterEventPage() {
     "Vaslui",
     "Vrancea",
   ];
-  // const ringDanceSelectItems = ["Dominant", "Restrâns", "Fără"];
-  // const drinksSelectItems = ["Băuturi la masă", "Bartman"];
 
   const ValidationsForm = Yup.object().shape({
     event: Yup.string().required("Trebuie aleasă o opțiune!"),
@@ -240,7 +217,9 @@ function RegisterEventPage() {
       <Box
         sx={{
           backgroundColor: "white",
-          maxWidth: "80vw",
+          marginTop: columns,
+          marginBottom: columns - 6,
+          maxWidth: "85vw",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -259,10 +238,6 @@ function RegisterEventPage() {
             artisticMoment: "",
             photographer: "",
             videoRecording: "",
-            // candyBar: "",
-            // fruitsBar: "",
-            // drinks: "",
-            // ringDance: "",
           }}
           validationSchema={ValidationsForm}
           onSubmit={(values) => {
@@ -339,108 +314,10 @@ function RegisterEventPage() {
                 />
               </Grid>
 
-              {/* 
-            <Grid item xs={columns}>
-              <Box
-                sx={{
-                  border: "2px solid",
-                  borderColor: "#DCDCDC",
-                  borderRadius: 4,
-                }}
-              >
-                <FormLabel
-                  id="demo-row-radio-buttons-group-label"
-                  sx={{ marginTop: "1.5vh" }}
-                >
-                  Trupă live
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                  >
-                    <label>
-                      <Field type="radio" name="liveBand" value="Da" />
-                      Da
-                    </label>
-                    <label>
-                      <Field type="radio" name="liveBand" value="Nu" />
-                      Nu
-                    </label>
-                  </RadioGroup>
-                </FormLabel>
-              </Box>
-            </Grid> */}
               <Grid item xs={columns}>
                 <FormikTextField id="muzică" label="Muzică" name="liveBand" />
               </Grid>
-              {/* <Grid item xs={columns}>
-              <Box
-                sx={{
-                  border: "2px solid",
-                  borderColor: "#DCDCDC",
-                  borderRadius: 4,
-                }}
-              >
-                <FormLabel
-                  id="demo-row-radio-buttons-group-label"
-                  sx={{ marginTop: "1.5vh" }}
-                >
-                  Moment artistic
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                  >
-                    <label>
-                      <Field type="radio" name="artisticMoment" value="Da" />
-                      Da
-                    </label>
-                    <label>
-                      <Field type="radio" name="artisticMoment" value="Nu" />
-                      Nu
-                    </label>
-                  </RadioGroup>
-                </FormLabel>
-              </Box>
-            </Grid> */}
-              {/* <Grid item xs={columns}>
-              <FormikTextField
-                id="artisticMoment"
-                label="Moment artistic"
-                name="artisticMoment"
-              />
-            </Grid> */}
-              {/* 
-            <Grid item xs={columns}>
-              <Box
-                sx={{
-                  border: "2px solid",
-                  borderColor: "#DCDCDC",
-                  borderRadius: 4,
-                }}
-              >
-                <FormLabel
-                  id="demo-row-radio-buttons-group-label"
-                  sx={{ marginTop: "1.5vh" }}
-                >
-                  Fotograf
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                  >
-                    <label>
-                      <Field type="radio" name="photographer" value="Da" />
-                      Da
-                    </label>
-                    <label>
-                      <Field type="radio" name="photographer" value="Nu" />
-                      Nu
-                    </label>
-                  </RadioGroup>
-                </FormLabel>
-              </Box>
-            </Grid> */}
+
               <Grid item xs={columns}>
                 <FormikTextField
                   id="photographer"
@@ -448,123 +325,6 @@ function RegisterEventPage() {
                   name="photographer"
                 />
               </Grid>
-              {/* <Grid item xs={columns}>
-              <FormikTextField
-                id="videoRecording"
-                label="Înregistrare video"
-                name="videoRecording"
-              />
-            </Grid> */}
-              {/* 
-            <Grid item xs={columns}>
-              <Box
-                sx={{
-                  border: "2px solid",
-                  borderColor: "#DCDCDC",
-                  borderRadius: 4,
-                }}
-              >
-                <FormLabel
-                  id="demo-row-radio-buttons-group-label"
-                  sx={{ marginTop: "1.5vh" }}
-                >
-                  Înregistrare video
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                  >
-                    <label>
-                      <Field type="radio" name="videoRecording" value="Da" />
-                      Da
-                    </label>
-                    <label>
-                      <Field type="radio" name="videoRecording" value="Nu" />
-                      Nu
-                    </label>
-                  </RadioGroup>
-                </FormLabel>
-              </Box>
-            </Grid> */}
-              {/* 
-            <Grid item xs={columns}>
-              <Box
-                sx={{
-                  border: "2px solid",
-                  borderColor: "#DCDCDC",
-                  borderRadius: 4,
-                }}
-              >
-                <FormLabel
-                  id="demo-row-radio-buttons-group-label"
-                  sx={{ marginTop: "1.5vh" }}
-                >
-                  Candy bar
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                  >
-                    <label>
-                      <Field type="radio" name="candyBar" value="Da" />
-                      Da
-                    </label>
-                    <label>
-                      <Field type="radio" name="candyBar" value="Nu" />
-                      Nu
-                    </label>
-                  </RadioGroup>
-                </FormLabel>
-              </Box>
-            </Grid>
-
-            <Grid item xs={columns}>
-              <Box
-                sx={{
-                  border: "2px solid",
-                  borderColor: "#DCDCDC",
-                  borderRadius: 4,
-                }}
-              >
-                <FormLabel
-                  id="demo-row-radio-buttons-group-label"
-                  sx={{ marginTop: "1.5vh" }}
-                >
-                  Bar cu fructe
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                  >
-                    <label>
-                      <Field type="radio" name="fruitsBar" value="Da" />
-                      Da
-                    </label>
-                    <label>
-                      <Field type="radio" name="fruitsBar" value="Nu" />
-                      Nu
-                    </label>
-                  </RadioGroup>
-                </FormLabel>
-              </Box>
-            </Grid>
-            <Grid item xs={columns}>
-              <FormikSelectSimple
-                id="drinks"
-                name="drinks"
-                label="Servire băuturi"
-                items={drinksSelectItems}
-              />
-            </Grid>
-
-            <Grid item xs={columns}>
-              <FormikSelectSimple
-                id="ringDance"
-                name="ringDance"
-                label="Ring de dans"
-                items={ringDanceSelectItems}
-              />
-            </Grid> */}
 
               <Grid item xs={12}>
                 <LoadingButton
@@ -577,13 +337,6 @@ function RegisterEventPage() {
                   type="submit"
                   variant="contained"
                   sx={{
-                    // backgroundColor: "green",
-                    // hover: {
-                    //   "&:hover": {
-                    //     backgroundColor: "red",
-                    //   },
-                    // },
-
                     marginBottom: "3vh",
                   }}
                 >
@@ -594,29 +347,6 @@ function RegisterEventPage() {
           </Form>
         </Formik>
       </Box>
-      {/* <Dialog open={open} onClose={handleToClose}>
-        <DialogTitle>{"Vreti sa invitati oamenii acum?"}</DialogTitle>
-
-        <DialogActions>
-          <Button
-            onClick={() => history.push("/sendinvitationspage")}
-            color="primary"
-            autoFocus
-          >
-            Da
-          </Button>
-          <Button
-            onClick={() => {
-              history.push("/myeventpage");
-              history.go(0);
-            }}
-            color="primary"
-            autoFocus
-          >
-            Nu acum
-          </Button>
-        </DialogActions>
-      </Dialog> */}
     </div>
   );
 }

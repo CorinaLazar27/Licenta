@@ -1,44 +1,34 @@
 import React, { useState, useEffect } from "react";
-
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import FacebookLogin from "react-facebook-login";
 import { Form, Formik } from "formik";
-import { Button, Grid, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import { FormikTextField } from "./FormikComponents/FormikTextField";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { LoadingButton } from "@mui/lab";
-
-// import login1 from "../Image/abcd.png";
 import login1 from "../Image/3.png";
-
 import { Container } from "@mui/material";
 import { Box } from "@mui/system";
 import * as Yup from "yup";
-
 import FirstHeader from "./FirstHeader";
 
 function SingIn() {
   const CryptoJS = require("crypto-js");
-
   const encrypt = (text) => {
     return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(text));
   };
-
   const decrypt = (data) => {
     return CryptoJS.enc.Base64.parse(data).toString(CryptoJS.enc.Utf8);
   };
-
   const history = useHistory();
   const [openError, setOpenError] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
-
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -47,7 +37,6 @@ function SingIn() {
   };
   const responseFacebook = (response) => {
     console.log(response);
-
     if (response.accessToken) {
       window.localStorage.setItem("nume", response.name);
       window.localStorage.setItem("email", response.email);
@@ -85,7 +74,6 @@ function SingIn() {
           values.password = "";
           setOpenError(true);
           setLoading(false);
-
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
@@ -220,7 +208,6 @@ function SingIn() {
         >
           sau
         </Typography>
-
         <FacebookLogin
           appId="4917522175029919"
           autoLoad={false}
