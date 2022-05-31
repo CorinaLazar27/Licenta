@@ -130,6 +130,7 @@ function SingIn() {
     <Container
       sx={{
         backgroundImage: `url("${login1}")`,
+
         backgroundSize: "cover",
         display: "flex",
         minHeight: "100vh",
@@ -152,8 +153,6 @@ function SingIn() {
         <Grid
           sx={{
             minWidth: "2vw",
-
-            backgroundColor: "red",
           }}
         />
 
