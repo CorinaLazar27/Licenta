@@ -222,12 +222,11 @@ def invitationList():
     if(len(oldValues) != 0):
         for index in range(len(oldValues)):
             task = {u'PartitionKey': email+"-"+date,
-                    u'RowKey': oldValues[index]["EmailInvitat"],
+                    u'RowKey': oldValues[index]["RowKey"],
                     u'NumeInvitat': oldValues[index]["NumeInvitat"],
                     u'ConfirmarePrezenta': oldValues[index]["ConfirmarePrezenta"],
                     u'NumarPersoane': oldValues[index]["NumarPersoane"],
                     }
-            print("done")
             table_client.update_entity(task)
 
     return "Done"

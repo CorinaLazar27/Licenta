@@ -101,6 +101,10 @@ function SendInvitationsPage() {
     console.log("value", e.target.value);
     let newFormValues = [...invitatiSalvati];
     console.log("inainte", newFormValues);
+    // if (e.target.name == "EmailInvitat") {
+    //   newFormValues[i]["RowKey"] = e.target.value;
+    //   console.log("aaaa", e.target.name);
+    // }
     if (e.target.name == "ConfirmarePrezenta")
       newFormValues[i][e.target.name] = e.target.checked;
     else newFormValues[i][e.target.name] = e.target.value;
@@ -244,7 +248,10 @@ function SendInvitationsPage() {
         setLoading(false);
         console.log(response);
         setOpen(true);
-        setTimeout(window.location.reload(false), 4000);
+        setTimeout(() => {
+          history.push("/sendinvitationspage");
+          history.go(0);
+        }, 4000);
         const res = response.data;
         console.log(res);
       })
@@ -341,27 +348,17 @@ function SendInvitationsPage() {
           Eroare!
         </Alert>
       </Snackbar>
+      <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="success">
+          Listă actualizată cu succes!
+        </Alert>
+      </Snackbar>
 
-      <Snackbar
-        open={errorEmail}
-        // autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert onClose={handleClose} severity="error">
-          Completează câmpul pentru email!
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        open={errorName}
-        // autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert onClose={handleClose} severity="error">
-          Completează câmpul pentru nume!
-        </Alert>
-      </Snackbar>
       <Snackbar
         open={openSucces}
         autoHideDuration={3000}
@@ -552,12 +549,12 @@ function SendInvitationsPage() {
                                         fullWidth
                                         type="email"
                                         name="EmailInvitat"
+                                        disabled
                                         defaultValue={element.RowKey || ""}
                                         variant="standard"
                                         onChange={(e) =>
                                           handleChangeOld(index, e)
                                         }
-                                        required
                                       />
                                     </TableCell>
                                     <TableCell
