@@ -13,7 +13,6 @@ import { LoadingButton } from "@mui/lab";
 
 // import login1 from "../Image/abcd.png";
 import login1 from "../Image/3.png";
-import logo from "../Image/logo.png";
 
 import { Container } from "@mui/material";
 import { Box } from "@mui/system";
@@ -153,7 +152,7 @@ function SingIn() {
         <Grid
           sx={{
             minWidth: "2vw",
-            backgroundImage: `url("${logo}")`,
+
             backgroundColor: "red",
           }}
         />
