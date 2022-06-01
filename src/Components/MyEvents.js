@@ -16,22 +16,20 @@ import OverlayLoader from "./OverlayLoader";
 import "react-dropdown/style.css";
 import axios from "axios";
 import Snackbar from "@mui/material/Snackbar";
-
-import Dialog from "@material-ui/core/Dialog";
-
-import DialogTitle from "@material-ui/core/DialogTitle";
-
-import DialogContent from "@material-ui/core/DialogContent";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-
 import { Container, Box, Grid, TextField } from "@mui/material";
 import Header from "./Header";
 import { Tooltip } from "@material-ui/core";
 import MuiAlert from "@mui/material/Alert";
 import { LoadingButton } from "@mui/lab";
-
 import background from "../Image/homePage.png";
-
 import AssistantIcon from "@mui/icons-material/Assistant";
 import RecommendIcon from "@mui/icons-material/Recommend";
 import PeopleIcon from "@mui/icons-material/People";
@@ -49,6 +47,7 @@ function MyEventPage() {
   const [dateForDelete, setDateForDelete] = useState("");
   const email = window.localStorage.getItem("email");
   const event = window.localStorage.getItem("eveniment");
+  const dataeveniment = window.localStorage.getItem("dataeveniment");
 
   const [loader, setLoader] = useState(true);
   const [noData, setNoData] = useState(false);
@@ -62,7 +61,35 @@ function MyEventPage() {
   const [ratingMuzica, setRatingMuzica] = useState(0);
   const [ratingFotograf, setRatingFotograf] = useState(0);
   const [loadingOpinii, setLoadingOpinii] = useState(false);
+  const breakpoints = {
+    xs: 0,
+    sm: 600,
+    md: 960,
+    lg: 1280,
+    xl: 1920,
+  };
+  const getColumns = (width) => {
+    if (width < breakpoints.sm) {
+      return 12;
+    } else if (width < breakpoints.md) {
+      return 12;
+    } else if (width < breakpoints.lg) {
+      return 6;
+    } else if (width < breakpoints.xl) {
+      return 6;
+    } else {
+      return 6;
+    }
+  };
+  const [columns, setColumns] = useState(getColumns(window.innerWidth));
 
+  const updateDimensions = () => {
+    setColumns(getColumns(window.innerWidth));
+  };
+  useEffect(() => {
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -103,14 +130,15 @@ function MyEventPage() {
       });
   }
 
-  const DeleteEvent = (item) => {
+  const DeleteEvent = () => {
     setLoader(true);
+    setOpenDelete(false);
     axios({
       method: "POST",
       url: "https://server-licenta.azurewebsites.net/deleteevent",
       data: {
         email: email,
-        date: item.RowKey,
+        date: dataeveniment,
       },
     })
       .then((response) => {
@@ -234,6 +262,16 @@ function MyEventPage() {
     setOpenError(false);
   };
 
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const handleDialogClose = () => {
+    setOpenDeleteDialog(false);
+    setOpenDelete(true);
+  };
+  const [itemNew, setItemNew] = useState();
+
   return (
     <Container
       maxWidth={"100vw"}
@@ -257,8 +295,14 @@ function MyEventPage() {
             maxWidth: "100vw",
           }}
         >
-          <Dialog open={openDialog} onClose={handleToClose}>
+          <Dialog
+            fullScreen={fullScreen}
+            open={openDialog}
+            onClose={handleToClose}
+            aria-labelledby="responsive-dialog-title"
+          >
             <DialogTitle
+              id="responsive-dialog-title"
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -273,10 +317,10 @@ function MyEventPage() {
                   justifyContent: "center",
                 }}
               >
-                <Grid item xs={6}>
+                <Grid item xs={9}>
                   {"Ce părere ai avut despre ..."}
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={3}>
                   <Button
                     onClick={handleToClose}
                     sx={{
@@ -298,6 +342,7 @@ function MyEventPage() {
                 <Grid
                   container
                   rowSpacing={"2vh"}
+                  marginTop={"1vh"}
                   sx={{
                     display: "flex",
                     alignItems: "center",
@@ -306,7 +351,7 @@ function MyEventPage() {
                 >
                   <Grid
                     item
-                    xs={6}
+                    xs={columns}
                     sx={{
                       display: "flex",
                       alignItems: "center",
@@ -323,7 +368,7 @@ function MyEventPage() {
                   </Grid>
                   <Grid
                     item
-                    xs={6}
+                    xs={columns}
                     sx={{
                       display: "flex",
                       alignItems: "center",
@@ -341,7 +386,7 @@ function MyEventPage() {
 
                   <Grid
                     item
-                    xs={6}
+                    xs={columns}
                     sx={{
                       display: "flex",
 
@@ -376,7 +421,7 @@ function MyEventPage() {
                   </Grid>
                   <Grid
                     item
-                    xs={6}
+                    xs={columns}
                     sx={{
                       display: "flex",
                       alignItems: "center",
@@ -393,7 +438,7 @@ function MyEventPage() {
                   </Grid>
                   <Grid
                     item
-                    xs={6}
+                    xs={columns}
                     sx={{
                       display: "flex",
                       alignItems: "center",
@@ -549,6 +594,9 @@ function MyEventPage() {
                               >
                                 <Tooltip title="Vezi invitații">
                                   <Button
+                                    style={{
+                                      color: "#2C5E1A",
+                                    }}
                                     sx={{ minWidth: "2px" }}
                                     onClick={() => {
                                       myClick(item);
@@ -567,6 +615,9 @@ function MyEventPage() {
                                 {" "}
                                 <Tooltip title="Vizualizeaza rezultate chestionar">
                                   <Button
+                                    style={{
+                                      color: "#2C5E1A",
+                                    }}
                                     sx={{ minWidth: "2px" }}
                                     onClick={() => {
                                       myClick(item);
@@ -585,6 +636,9 @@ function MyEventPage() {
                               >
                                 <Tooltip title="Vezi recomandări">
                                   <Button
+                                    style={{
+                                      color: "#2C5E1A",
+                                    }}
                                     sx={{ minWidth: "2px" }}
                                     onClick={() => {
                                       myClick(item);
@@ -603,6 +657,9 @@ function MyEventPage() {
                               >
                                 <Tooltip title="Editeaza eveniment">
                                   <Button
+                                    style={{
+                                      color: "#2C5E1A",
+                                    }}
                                     sx={{ minWidth: "2px" }}
                                     onClick={() => {
                                       myClick(item);
@@ -614,11 +671,13 @@ function MyEventPage() {
                                 </Tooltip>
                                 <Tooltip title="Anulare eveniment">
                                   <Button
+                                    style={{
+                                      color: "#2C5E1A",
+                                    }}
                                     sx={{ minWidth: "2px" }}
                                     onClick={() => {
                                       myClick(item);
-
-                                      DeleteEvent(item);
+                                      setOpenDeleteDialog(true);
                                     }}
                                   >
                                     <DeleteIcon />
@@ -660,6 +719,9 @@ function MyEventPage() {
                               >
                                 <Tooltip title="Vezi invitații">
                                   <Button
+                                    style={{
+                                      color: "#2C5E1A",
+                                    }}
                                     sx={{ minWidth: "2px" }}
                                     onClick={() => {
                                       myClick(item);
@@ -678,6 +740,9 @@ function MyEventPage() {
                                 {" "}
                                 <Tooltip title="Vizualizeaza rezultate chestionar">
                                   <Button
+                                    style={{
+                                      color: "#2C5E1A",
+                                    }}
                                     sx={{ minWidth: "2px" }}
                                     onClick={() => {
                                       myClick(item);
@@ -731,8 +796,6 @@ function MyEventPage() {
                                     sx={{ minWidth: "2px" }}
                                     onClick={() => {
                                       myClick(item);
-
-                                      DeleteEvent(item);
                                     }}
                                   >
                                     <DeleteIcon />
@@ -741,6 +804,9 @@ function MyEventPage() {
                                 {!item.Opinie && (
                                   <Tooltip title="Spune-ți opinia">
                                     <Button
+                                      style={{
+                                        color: "#2C5E1A",
+                                      }}
                                       sx={{ minWidth: "2px" }}
                                       onClick={() => {
                                         myClick(item);
@@ -812,6 +878,62 @@ function MyEventPage() {
           Eveniment sters cu succes!
         </Alert>
       </Snackbar>
+      <Dialog
+        fullScreen={fullScreen}
+        open={openDeleteDialog}
+        onClose={handleDialogClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle
+          id="responsive-dialog-title"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Grid
+            container
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Grid item xs={9}>
+              {`Ești sigur că ștergi evenimentul din data de ${dataeveniment}?`}
+            </Grid>
+            <Grid item xs={3}>
+              <Button
+                onClick={handleDialogClose}
+                sx={{
+                  float: "right",
+                }}
+                float="right"
+              >
+                <CloseIcon />
+              </Button>
+            </Grid>
+          </Grid>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            După ce ștergi evenimentul acesta va fi șters din baza de date și nu
+            îi vei mai putea accesa datele!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setOpenDeleteDialog(false);
+              DeleteEvent();
+            }}
+            autoFocus
+          >
+            Da
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

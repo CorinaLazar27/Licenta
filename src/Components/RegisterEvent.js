@@ -55,7 +55,7 @@ function RegisterEventPage() {
         setTimeout(() => {
           history.push("/myeventpage");
           history.go(0);
-        }, 4000);
+        }, 2000);
 
         const res = response.data;
         console.log(res);

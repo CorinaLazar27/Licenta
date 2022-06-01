@@ -13,10 +13,13 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloseIcon from "@mui/icons-material/Close";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -168,6 +171,8 @@ function SendInvitationsPage() {
       })
       .finally(() => setLoader(false));
   }
+  const [indexDelete, setIndexDelete] = useState();
+
   function removeFormInv(i) {
     let newFormValues = [...invitatiSalvati];
     // newFormValues.splice(i, 1);
@@ -303,6 +308,14 @@ function SendInvitationsPage() {
     if (dataEveniment < today) setPast(true);
   }, []);
 
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+
+  const handleDialogClose = () => {
+    setOpenDeleteDialog(false);
+  };
+
   return (
     <Container
       maxWidth={false}
@@ -361,9 +374,22 @@ function SendInvitationsPage() {
         }}
       >
         {loader && <OverlayLoader />}
-        <Dialog open={openDialog} onClose={handleToClose}>
-          <DialogTitle>
-            {"Alegeți invitații pentru acest eveniment"}
+
+        <Dialog
+          fullScreen={fullScreen}
+          open={openDialog}
+          onClose={handleToClose}
+          aria-labelledby="responsive-dialog-title"
+        >
+          <DialogTitle
+            id="responsive-dialog-title"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {"Alegeți invitații la care trimiteți chestionarul"}
             <Button onClick={handleToClose}>
               <CloseIcon />
             </Button>
@@ -573,7 +599,11 @@ function SendInvitationsPage() {
                                     <TableCell>
                                       <Button
                                         startIcon={<DeleteOutlineIcon />}
-                                        onClick={() => removeFormInv(index)}
+                                        onClick={() => {
+                                          setIndexDelete(index);
+                                          setOpenDeleteDialog(true);
+                                          // removeFormInv(indexDelete);
+                                        }}
                                       ></Button>
                                     </TableCell>
                                   </TableRow>
@@ -918,6 +948,62 @@ function SendInvitationsPage() {
           <Grid item xs={12} sx={{ padding: "2vh" }}></Grid>
         </Grid>
       </Box>
+
+      <Dialog
+        fullScreen={fullScreen}
+        open={openDeleteDialog}
+        onClose={handleDialogClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle
+          id="responsive-dialog-title"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Grid
+            container
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Grid item xs={9}>
+              {`Ești sigur că ștergi invitatul din listă?`}
+            </Grid>
+            <Grid item xs={3}>
+              <Button
+                onClick={handleDialogClose}
+                sx={{
+                  float: "right",
+                }}
+                float="right"
+              >
+                <CloseIcon />
+              </Button>
+            </Grid>
+          </Grid>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            După ce ștergi invitatul, va fi șters definitiv din baza de date!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setOpenDeleteDialog(false);
+              removeFormInv(indexDelete);
+            }}
+            autoFocus
+          >
+            Da
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

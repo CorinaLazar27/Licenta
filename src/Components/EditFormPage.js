@@ -159,6 +159,11 @@ function EditFormPage() {
               history.push("/myeventpage");
               history.go(0);
             }}
+            style={{
+              backgroundColor: "#2C5E1A",
+              color: "white",
+              padding: "0.5vh",
+            }}
           >
             Înapoi
           </Button>
@@ -280,6 +285,11 @@ function EditFormPage() {
               variant="contained"
               onClick={() => {
                 UnblockInputs();
+              }}
+              style={{
+                backgroundColor: "#2C5E1A",
+                color: "white",
+                padding: "0.5vh",
               }}
             >
               Editează
