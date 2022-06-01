@@ -989,7 +989,7 @@ function SendInvitationsPage() {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            După ce ștergi invitatul, va fi șters definitiv din baza de date!
+            Dacă ce ștergi invitatul, va fi șters definitiv din baza de date!
           </DialogContentText>
         </DialogContent>
         <DialogActions>
