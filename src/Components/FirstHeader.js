@@ -1,22 +1,13 @@
 // IMPORTING APIS
 import React from "react";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  useScrollTrigger,
-  Slide,
-} from "@material-ui/core";
+import { AppBar, Toolbar, Typography } from "@material-ui/core";
 
-import { useTheme, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 import { ThemeProvider, createTheme } from "@material-ui/core/styles";
 
 import { orange } from "@material-ui/core/colors";
 
-// IMPORTING ICONS
-
-import { useHistory } from "react-router-dom";
 // LOCAL-STYLING
 
 const useStyles = makeStyles((theme) => ({
