@@ -209,7 +209,7 @@ function SendInvitationsPage() {
 
   const [open, setOpen] = useState(false);
 
-  async function SendInvitati(e) {
+  function SendInvitati(e) {
     let formVal = formValues.slice(1);
 
     console.log("aaaA", formVal);
@@ -217,7 +217,7 @@ function SendInvitationsPage() {
     console.log("bbbb", invitatiSalvati);
 
     setLoading(true);
-    await axios({
+    axios({
       method: "POST",
       url: "https://server-licenta.azurewebsites.net/invitationList",
       data: {
