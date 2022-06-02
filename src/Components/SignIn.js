@@ -94,6 +94,19 @@ function SingIn() {
     lg: 1280,
     xl: 1920,
   };
+
+  const getMobile = (width) => {
+    if (width < breakpoints.sm) {
+      return true;
+    } else if (width < breakpoints.md) {
+      return false;
+    } else if (width < breakpoints.lg) {
+      return false;
+    } else if (width < breakpoints.xl) {
+      return false;
+    } else return false;
+  };
+
   const getSize = (width) => {
     if (width < breakpoints.sm) {
       return "18px";
@@ -105,10 +118,18 @@ function SingIn() {
       return "35px";
     } else return "38px";
   };
+  const [mobile, setMobile] = useState(getMobile(window.innerWidth));
   const [size, setSize] = useState(getSize(window.innerWidth));
   const updateDimensions = () => {
     setSize(getSize(window.innerWidth));
   };
+  const updateMobile = () => {
+    setMobile(getMobile(window.innerWidth));
+  };
+  useEffect(() => {
+    window.addEventListener("resize", updateMobile);
+    return () => window.removeEventListener("resize", updateMobile);
+  }, []);
   useEffect(() => {
     window.addEventListener("resize", updateDimensions);
     return () => window.removeEventListener("resize", updateDimensions);
@@ -201,25 +222,29 @@ function SingIn() {
           </Form>
         </Formik>
 
-        <Typography
-          style={{
-            margin: "1vh",
-          }}
-        >
-          sau
-        </Typography>
-        <FacebookLogin
-          appId="4917522175029919"
-          autoLoad={false}
-          fields="name,email"
-          callback={responseFacebook}
-          buttonStyle={{ color: "blue" }}
-          cssClass="my-facebook-button-class"
-          icon={<FacebookIcon />}
-          language="RO"
-        >
-          Conectează-te cu Facebook
-        </FacebookLogin>
+        {!mobile && (
+          <>
+            <Typography
+              style={{
+                margin: "1vh",
+              }}
+            >
+              sau
+            </Typography>
+            <FacebookLogin
+              appId="4917522175029919"
+              autoLoad={false}
+              fields="name,email"
+              callback={responseFacebook}
+              buttonStyle={{ color: "blue" }}
+              cssClass="my-facebook-button-class"
+              icon={<FacebookIcon />}
+              language="RO"
+            >
+              Conectează-te cu Facebook
+            </FacebookLogin>
+          </>
+        )}
         <Typography
           style={{
             margin: "1vh",
