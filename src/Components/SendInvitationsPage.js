@@ -149,6 +149,7 @@ function SendInvitationsPage() {
   };
 
   async function GetInvitati() {
+    setLoader(true);
     await axios({
       method: "POST",
       url: "https://server-licenta.azurewebsites.net/getInvitati",
