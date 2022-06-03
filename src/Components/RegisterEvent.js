@@ -19,13 +19,15 @@ function RegisterEventPage() {
   const [open, setOpen] = useState(false);
   const [openError, setOpenError] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const [dataForm, setDataForm] = useState(new Date().toLocaleDateString());
   const history = useHistory();
   const email = window.localStorage.getItem("email");
 
   function FormOptions(values) {
     console.log(values.event);
-    console.log(values.date);
+    console.log(values.dataEveniment);
+    if (mobile) setDataForm(values.dataEvenimentMobile);
+    else setDataForm(values.dataEveniment);
     setLoading(true);
     axios({
       method: "POST",
@@ -33,7 +35,7 @@ function RegisterEventPage() {
       data: {
         email: email,
         event: values.event,
-        date: values.date,
+        date: dataForm,
         nrguests: values.nrguests,
         location: values.location,
         judet: values.judet,
@@ -137,7 +139,10 @@ function RegisterEventPage() {
       .typeError("Introdu doar cifre!")
       .required("Introdu bugetul aproximativ alocat evenimentului"),
     judet: Yup.string().required("Trebuie aleasă o opțiune!"),
-    date: Yup.date().required("Trebuie aleasă o data!"),
+    dataEvenimentMobile: Yup.string().matches(
+      /^[0-9]{2}\.[0-9]{2}\.[0-9]{4}$/,
+      "Trebuie aleasă o data de tipul zz.mm.zzzz!"
+    ),
   });
 
   const breakpoints = {
@@ -190,6 +195,33 @@ function RegisterEventPage() {
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
+  const getMobile = (width) => {
+    if (width < breakpoints.sm) {
+      return true;
+    } else if (width < breakpoints.md) {
+      return false;
+    } else if (width < breakpoints.lg) {
+      return false;
+    } else if (width < breakpoints.xl) {
+      return false;
+    } else return false;
+  };
+
+  const [mobile, setMobile] = useState(getMobile(window.innerWidth));
+
+  const updateMobile = () => {
+    setMobile(getMobile(window.innerWidth));
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", updateMobile);
+    return () => window.removeEventListener("resize", updateMobile);
+  }, []);
+
+  useEffect(() => {
+    console.log(dataForm);
+  }, dataForm);
+
   return (
     <div className="Container">
       <Header />
@@ -229,12 +261,13 @@ function RegisterEventPage() {
       >
         <Formik
           initialValues={{
-            event: "",
-            date: new Date(),
-            nrguests: "",
+            event: "Nuntă",
+            dataEveniment: new Date().toLocaleDateString(),
+            nrguests: "33",
+            dataEvenimentMobile: new Date().toLocaleDateString(),
             location: "",
-            judet: "",
-            budget: "",
+            judet: "Alba",
+            budget: "33",
             liveBand: "",
             artisticMoment: "",
             photographer: "",
@@ -242,7 +275,8 @@ function RegisterEventPage() {
           }}
           validationSchema={ValidationsForm}
           onSubmit={(values) => {
-            values.date = values.date.toLocaleDateString();
+            if (!mobile)
+              values.dataEveniment = values.dataEveniment.toLocaleDateString();
             FormOptions(values);
           }}
         >
@@ -291,13 +325,29 @@ function RegisterEventPage() {
                 />
               </Grid>
               <Grid item xs={columns}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <FormikDatePicker
-                    name="date"
-                    label="Data evenimentului*"
-                    variant="standard"
+                {!mobile && (
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <FormikDatePicker
+                      name="dataEveniment"
+                      label="Data evenimentului*"
+                      variant="standard"
+                      onChange={(value) => {
+                        console.log("schimbare");
+                        if (value != "") setDataForm(value);
+                      }}
+                    />
+                  </LocalizationProvider>
+                )}
+                {mobile && (
+                  <FormikTextField
+                    label="Data evenimentuluiii*"
+                    name="dataEvenimentMobile"
+                    onChange={(value) => {
+                      console.log(value);
+                      if (value != "") setDataForm(value.dataEveniment);
+                    }}
                   />
-                </LocalizationProvider>
+                )}
               </Grid>
 
               <Grid item xs={columns}>
