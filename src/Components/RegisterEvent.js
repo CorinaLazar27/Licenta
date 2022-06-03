@@ -24,13 +24,12 @@ function RegisterEventPage() {
   const emailLocalStorage = window.localStorage.getItem("email");
 
   function FormOptions(values) {
-    // console.log(values.event);
-    // console.log(values.dataEveniment);
-    // if (mobile) setDataForm(values.dataEvenimentMobile);
-    // else
-    setDataForm(values.dataEveniment);
+    console.log(values.event);
+    console.log(values.dataEveniment);
+    if (mobile) setDataForm(values.dataEvenimentMobile);
+    else setDataForm(values.dataEveniment);
     setLoading(true);
-    if (dataForm != "" || emailLocalStorage != "") {
+    if (dataForm != "" && emailLocalStorage != "") {
       axios({
         method: "POST",
         url: "https://server-licenta.azurewebsites.net/postform",
@@ -142,10 +141,12 @@ function RegisterEventPage() {
       .typeError("Introdu doar cifre!")
       .required("Introdu bugetul aproximativ alocat evenimentului"),
     judet: Yup.string().required("Trebuie aleasă o opțiune!"),
-    // dataEvenimentMobile: Yup.string().matches(
-    //   /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/,
-    //   "Trebuie aleasă o data de tipul zz mm zzzz!"
-    // ),
+    dataEvenimentMobile: Yup.string()
+      .required("Introdu data evenimentului")
+      .matches(
+        /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/,
+        "Trebuie aleasă o data de tipul zz mm zzzz!"
+      ),
   });
 
   const breakpoints = {
@@ -267,7 +268,7 @@ function RegisterEventPage() {
             event: "",
             dataEveniment: new Date().toLocaleDateString(),
             nrguests: "",
-            // dataEvenimentMobile: new Date().toLocaleDateString(),
+            dataEvenimentMobile: new Date().toLocaleDateString(),
             location: "",
             judet: "",
             budget: "",
@@ -278,8 +279,8 @@ function RegisterEventPage() {
           }}
           validationSchema={ValidationsForm}
           onSubmit={(values) => {
-            // if (!mobile)
-            values.dataEveniment = values.dataEveniment.toLocaleDateString();
+            if (!mobile)
+              values.dataEveniment = values.dataEveniment.toLocaleDateString();
             FormOptions(values);
           }}
         >
@@ -328,20 +329,19 @@ function RegisterEventPage() {
                 />
               </Grid>
               <Grid item xs={columns}>
-                {/* {!mobile && ( */}
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <FormikDatePicker
-                    name="dataEveniment"
-                    label="Data evenimentului*"
-                    variant="standard"
-                    onChange={(value) => {
-                      console.log("schimbare");
-                      if (value != "") setDataForm(value);
-                    }}
-                  />
-                </LocalizationProvider>
-                )
-                {/* }
+                {!mobile && (
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <FormikDatePicker
+                      name="dataEveniment"
+                      label="Data evenimentului*"
+                      variant="standard"
+                      onChange={(value) => {
+                        console.log("schimbare");
+                        if (value != "") setDataForm(value);
+                      }}
+                    />
+                  </LocalizationProvider>
+                )}
                 {mobile && (
                   <FormikTextField
                     label="Data evenimentuluiii*"
@@ -351,7 +351,7 @@ function RegisterEventPage() {
                       if (value != "") setDataForm(value.dataEveniment);
                     }}
                   />
-                )} */}
+                )}
               </Grid>
 
               <Grid item xs={columns}>
