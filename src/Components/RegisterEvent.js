@@ -137,6 +137,7 @@ function RegisterEventPage() {
       .typeError("Introdu doar cifre!")
       .required("Introdu bugetul aproximativ alocat evenimentului"),
     judet: Yup.string().required("Trebuie aleasă o opțiune!"),
+    date: Yup.date().required("Trebuie aleasă o data!"),
   });
 
   const breakpoints = {
