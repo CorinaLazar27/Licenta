@@ -145,7 +145,6 @@ function SendInvitationsPage() {
     }
 
     setChecked(newChecked);
-    console.log("CHEKED1111!", checked);
   };
 
   async function GetInvitati() {
@@ -194,7 +193,7 @@ function SendInvitationsPage() {
         setOpen(true);
         setLoader(false);
         if (response.data == "Done") {
-          setTimeout(window.location.reload(false), 4000);
+          setTimeout(window.location.reload(false), 2500);
         }
       })
       .catch((error) => {

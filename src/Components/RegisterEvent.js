@@ -24,18 +24,11 @@ function RegisterEventPage() {
   const [open, setOpen] = useState(false);
   const [openError, setOpenError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const dataForm = new Date().toLocaleDateString();
-  const [dataBackend, setDataBackend] = useState(new Date());
 
   const history = useHistory();
   const emailLocalStorage = window.localStorage.getItem("email");
   const [dateValue, setDateValue] = useState(new Date());
   function FormOptions(values) {
-    // console.log("AAa", dateValue.toLocaleDateString());
-    // alert(dateValue.toLocaleDateString());
-    // console.log("aaaa", values.dataEvenimentMobile);
-    // console.log("bbbb", values.dataEveniment);
-    // console.log(mobile);
     setLoading(true);
     if (mobile) {
       console.log(values.dataEveniment);
@@ -200,11 +193,7 @@ function RegisterEventPage() {
       .matches(
         /^(?:(?:31(\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/,
         "Trebuie aleasă o data de tipul zz.ll.zzzz!"
-      )
-      .when("mobile", {
-        is: true,
-        then: "Must enter email address",
-      }),
+      ),
   });
 
   const breakpoints = {
@@ -320,9 +309,9 @@ function RegisterEventPage() {
         <Formik
           initialValues={{
             event: "",
-            dataEveniment: "01.01.2022",
+            dataEveniment: "01.07.2022",
             nrguests: "",
-            // dataEvenimentMobile: new Date().toLocaleDateString(),
+
             location: "",
             judet: "",
             budget: "",
@@ -333,8 +322,6 @@ function RegisterEventPage() {
           }}
           validationSchema={ValidationsForm}
           onSubmit={(values) => {
-            // if (!mobile)
-            // values.dataEveniment = values.dataEveniment.toLocaleDateString();
             FormOptions(values);
           }}
         >
@@ -383,22 +370,10 @@ function RegisterEventPage() {
                 />
               </Grid>
               <Grid item xs={columns}>
-                {/* {!mobile && ( */}
-                {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <FormikDatePicker
-                    name="dataEveniment"
-                    label="Data evenimentului*"
-                    variant="standard"
-                  />
-                </LocalizationProvider> */}
-                {/* <FormikTextField
-                  type="date"
-                  label="Data evenimentului*"
-                  name="dataEveniment"
-                /> */}
                 {!mobile && (
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
+                      disablePast
                       label="Data evenimentului*"
                       openTo="year"
                       views={["year", "month", "day"]}
@@ -419,13 +394,6 @@ function RegisterEventPage() {
                     label="Data evenimentului*"
                   ></FormikTextField>
                 )}
-                {/* )} */}
-                {/* {mobile && (
-                  <FormikTextField
-                    label="Data evenimentuluiii*"
-                    name="dataEvenimentMobile"
-                  />
-                )} */}
               </Grid>
 
               <Grid item xs={columns}>
