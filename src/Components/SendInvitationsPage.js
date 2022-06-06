@@ -299,7 +299,7 @@ function SendInvitationsPage() {
   today.setHours(0, 0, 0, 0);
   useEffect(() => {
     GetInvitati();
-    const splitDate = data.split(".");
+    const splitDate = data.split("[-./]");
 
     const dataEveniment = new Date(
       splitDate[2],

@@ -557,7 +557,7 @@ function MyEventPage() {
                     </TableHead>
                     <TableBody>
                       {data.map((item) => {
-                        const splitDate = item.RowKey.split(".");
+                        const splitDate = item.RowKey.split("[-./]");
 
                         const dataEveniment = new Date(
                           splitDate[2],
