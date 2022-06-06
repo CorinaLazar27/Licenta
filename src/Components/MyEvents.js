@@ -557,14 +557,14 @@ function MyEventPage() {
                     </TableHead>
                     <TableBody>
                       {data.map((item) => {
-                        const splitDate = item.RowKey.split("[-./]");
+                        const splitDate = item.RowKey.split(/[.-/]+/);
 
                         const dataEveniment = new Date(
                           splitDate[2],
                           splitDate[1] - 1,
                           splitDate[0]
                         );
-
+                        console.log(splitDate[2]);
                         if (dataEveniment >= today)
                           //Evenimentul  nu e trecut
                           return (

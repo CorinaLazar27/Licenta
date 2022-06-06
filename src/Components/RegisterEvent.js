@@ -19,61 +19,64 @@ function RegisterEventPage() {
   const [open, setOpen] = useState(false);
   const [openError, setOpenError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [dataForm, setDataForm] = useState(new Date().toLocaleDateString());
+  const dataForm = new Date().toLocaleDateString();
+  const [dataBackend, setDataBackend] = useState(new Date());
   const history = useHistory();
   const emailLocalStorage = window.localStorage.getItem("email");
-  const [eroare, setEroare] = useState("");
-  function FormOptions(values) {
-    console.log(values.event);
-    console.log(values.dataEveniment);
-    if (mobile) setDataForm(values.dataEvenimentMobile);
-    else setDataForm(values.dataEveniment);
-    setLoading(true);
-    if (dataForm != "" && emailLocalStorage != "") {
-      axios({
-        method: "POST",
-        url: "https://server-licenta.azurewebsites.net/postform",
-        data: {
-          email: emailLocalStorage,
-          event: values.event,
-          date: dataForm,
-          nrguests: values.nrguests,
-          location: values.location,
-          judet: values.judet,
-          budget: values.budget,
-          liveband: values.liveBand,
-          artisticmoment: values.artisticMoment,
-          photographer: values.photographer,
-          videorecording: values.videoRecording,
-          candybar: values.candyBar,
-          fruitsbar: values.fruitsBar,
-          drinks: values.drinks,
-          ringdance: values.ringDance,
-          opinie: false,
-        },
-      })
-        .then((response) => {
-          setLoading(false);
-          setOpen(true);
-          setTimeout(() => {
-            history.push("/myeventpage");
-            history.go(0);
-          }, 2000);
 
-          const res = response.data;
-          console.log(res);
-        })
-        .catch((error) => {
-          if (error.response) {
-            setOpenError(true);
-            setLoading(false);
-            setEroare(error.response);
-            console.log(error.response);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          }
-        });
-    }
+  function FormOptions(values) {
+    // console.log("aaaa", values.dataEvenimentMobile);
+    console.log("bbbb", values.dataEveniment);
+    // console.log(mobile);
+    // if (mobile) setDataBackend(values.dataEvenimentMobile);
+    // else setDataBackend(values.dataEveniment);
+    // console.log(dataBackend);
+    console.log(emailLocalStorage);
+    setLoading(true);
+
+    axios({
+      method: "POST",
+      url: "https://server-licenta.azurewebsites.net/postform",
+      data: {
+        email: emailLocalStorage,
+        event: values.event,
+        date: values.dataEveniment,
+        nrguests: values.nrguests,
+        location: values.location,
+        judet: values.judet,
+        budget: values.budget,
+        liveband: values.liveBand,
+        artisticmoment: values.artisticMoment,
+        photographer: values.photographer,
+        videorecording: values.videoRecording,
+        candybar: values.candyBar,
+        fruitsbar: values.fruitsBar,
+        drinks: values.drinks,
+        ringdance: values.ringDance,
+        opinie: false,
+      },
+    })
+      .then((response) => {
+        setLoading(false);
+        setOpen(true);
+        setTimeout(() => {
+          history.push("/myeventpage");
+          history.go(0);
+        }, 2000);
+
+        const res = response.data;
+        console.log(res);
+      })
+      .catch((error) => {
+        if (error.response) {
+          setOpenError(true);
+          setLoading(false);
+
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        }
+      });
   }
 
   const Alert = React.forwardRef(function Alert(props, ref) {
@@ -141,12 +144,12 @@ function RegisterEventPage() {
       .typeError("Introdu doar cifre!")
       .required("Introdu bugetul aproximativ alocat evenimentului"),
     judet: Yup.string().required("Trebuie aleasă o opțiune!"),
-    dataEvenimentMobile: Yup.string()
-      .required("Introdu data evenimentului")
-      .matches(
-        /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/,
-        "Trebuie aleasă o data de tipul zz mm zzzz!"
-      ),
+    // dataEvenimentMobile: Yup.string()
+    //   .required("Introdu data evenimentului")
+    //   .matches(
+    //     /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/,
+    //     "Trebuie aleasă o data de tipul zz mm zzzz!"
+    //   ),
   });
 
   const breakpoints = {
@@ -222,10 +225,6 @@ function RegisterEventPage() {
     return () => window.removeEventListener("resize", updateMobile);
   }, []);
 
-  useEffect(() => {
-    console.log(dataForm);
-  }, dataForm);
-
   return (
     <div className="Container">
       <Header />
@@ -268,7 +267,7 @@ function RegisterEventPage() {
             event: "",
             dataEveniment: new Date().toLocaleDateString(),
             nrguests: "",
-            dataEvenimentMobile: new Date().toLocaleDateString(),
+            // dataEvenimentMobile: new Date().toLocaleDateString(),
             location: "",
             judet: "",
             budget: "",
@@ -279,8 +278,8 @@ function RegisterEventPage() {
           }}
           validationSchema={ValidationsForm}
           onSubmit={(values) => {
-            if (!mobile)
-              values.dataEveniment = values.dataEveniment.toLocaleDateString();
+            // if (!mobile)
+            values.dataEveniment = values.dataEveniment.toLocaleDateString();
             FormOptions(values);
           }}
         >
@@ -303,7 +302,7 @@ function RegisterEventPage() {
                 <Typography style={{ fontSize: size }}>
                   Creează un eveniment
                 </Typography>
-                <div>Eroare: {eroare}</div>
+                {/* <div>Eroare: {eroare}</div> */}
               </Grid>
               <Grid item xs={columns}>
                 <FormikSelectSimple
@@ -330,29 +329,21 @@ function RegisterEventPage() {
                 />
               </Grid>
               <Grid item xs={columns}>
-                {!mobile && (
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <FormikDatePicker
-                      name="dataEveniment"
-                      label="Data evenimentului*"
-                      variant="standard"
-                      onChange={(value) => {
-                        console.log("schimbare");
-                        if (value != "") setDataForm(value);
-                      }}
-                    />
-                  </LocalizationProvider>
-                )}
-                {mobile && (
+                {/* {!mobile && ( */}
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <FormikDatePicker
+                    name="dataEveniment"
+                    label="Data evenimentului*"
+                    variant="standard"
+                  />
+                </LocalizationProvider>
+                {/* )} */}
+                {/* {mobile && (
                   <FormikTextField
                     label="Data evenimentuluiii*"
                     name="dataEvenimentMobile"
-                    onChange={(value) => {
-                      console.log(value);
-                      if (value != "") setDataForm(value.dataEveniment);
-                    }}
                   />
-                )}
+                )} */}
               </Grid>
 
               <Grid item xs={columns}>
