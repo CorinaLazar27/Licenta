@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import "react-dropdown/style.css";
 import emailjs from "emailjs-com";
 import Header from "./Header";
-import { Container, Grid, Button, Box } from "@mui/material";
+import { Container, Grid, Button, Box, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -874,6 +874,22 @@ function SendInvitationsPage() {
                       </Table>
                     </TableContainer>
                   ) : null}
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      marginBottom: "2vh",
+                    }}
+                  >
+                    {invitatiSalvati.length == 0 && (
+                      <Typography>
+                        Nu există invitați la acest eveniment!
+                      </Typography>
+                    )}
+                  </Grid>
                   <Grid
                     item
                     xs={12}

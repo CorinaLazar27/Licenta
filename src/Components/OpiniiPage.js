@@ -128,9 +128,18 @@ function OpiniiPage() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              minWidth: "75vw",
             }}
           >
             <List sx={{ bgcolor: "background.paper" }}>
+              {(data.length == 0 || data.length == 1) && (
+                <>
+                  <Typography>
+                    Nu există recenzii în județul dumneavoastră!
+                  </Typography>
+                </>
+              )}
+
               {data.map((opinie, index) => {
                 if (index != 0)
                   return (
