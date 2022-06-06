@@ -12,11 +12,6 @@ export const FormikTextField = (props) => {
       label={props.label}
       type={props.type ? props.type : "text"}
       fullWidth
-      defaultValue={
-        field.defaultValue ??
-        props.defaultValue ??
-        new Date().toLocaleDateString()
-      }
       value={field.value ?? props.value ?? ""}
       rows={props.rows}
       multiline={props.multiline ?? false}

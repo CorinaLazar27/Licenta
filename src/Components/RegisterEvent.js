@@ -152,12 +152,12 @@ function RegisterEventPage() {
       .typeError("Introdu doar cifre!")
       .required("Introdu bugetul aproximativ alocat evenimentului"),
     judet: Yup.string().required("Trebuie aleasă o opțiune!"),
-    // dataEvenimentMobile: Yup.string()
-    //   .required("Introdu data evenimentului")
-    //   .matches(
-    //     /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/,
-    //     "Trebuie aleasă o data de tipul zz mm zzzz!"
-    //   ),
+    dataEveniment: Yup.string()
+      .required("Introdu data evenimentului")
+      .matches(
+        /^(?:(?:31(\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/,
+        "Trebuie aleasă o data de tipul zz mm zzzz!"
+      ),
   });
 
   const breakpoints = {
@@ -273,7 +273,7 @@ function RegisterEventPage() {
         <Formik
           initialValues={{
             event: "",
-            // dataEveniment: new Date().toLocaleDateString(),
+            dataEveniment: "zz.mm.aaaa",
             nrguests: "",
             // dataEvenimentMobile: new Date().toLocaleDateString(),
             location: "",
@@ -349,21 +349,28 @@ function RegisterEventPage() {
                   label="Data evenimentului*"
                   name="dataEveniment"
                 /> */}
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
+                {!mobile && (
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                      label="Data evenimentului*"
+                      openTo="year"
+                      views={["year", "month", "day"]}
+                      value={dateValue}
+                      onChange={(newValue) => {
+                        setDateValue(newValue);
+                      }}
+                      renderInput={(params) => (
+                        <TextField fullWidth {...params} />
+                      )}
+                    />
+                  </LocalizationProvider>
+                )}
+                {mobile && (
+                  <FormikTextField
+                    name="dataEveniment"
                     label="Data evenimentului*"
-                    openTo="year"
-                    views={["year", "month", "day"]}
-                    value={dateValue}
-                    onChange={(newValue) => {
-                      setDateValue(newValue);
-                      console.log(dateValue.toLocaleDateString());
-                    }}
-                    renderInput={(params) => (
-                      <TextField fullWidth {...params} />
-                    )}
-                  />
-                </LocalizationProvider>
+                  ></FormikTextField>
+                )}
                 {/* )} */}
                 {/* {mobile && (
                   <FormikTextField
