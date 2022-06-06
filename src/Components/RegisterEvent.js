@@ -8,11 +8,16 @@ import Header from "./Header";
 import { FormikTextField } from "./FormikComponents/FormikTextField";
 import { FormikSelectSimple } from "./FormikComponents/FormikSelectSimple";
 import { FormikDatePicker } from "./FormikComponents/FormikDatePicker";
-import { LoadingButton, LocalizationProvider } from "@mui/lab";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import { LoadingButton } from "@mui/lab";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography, TextField } from "@mui/material";
 import * as Yup from "yup";
 
 function RegisterEventPage() {
@@ -21,63 +26,65 @@ function RegisterEventPage() {
   const [loading, setLoading] = useState(false);
   const dataForm = new Date().toLocaleDateString();
   const [dataBackend, setDataBackend] = useState(new Date());
+
   const history = useHistory();
   const emailLocalStorage = window.localStorage.getItem("email");
-
+  const [dateValue, setDateValue] = useState(new Date());
   function FormOptions(values) {
-    alert(values.dataEveniment);
+    // console.log("AAa", dateValue.toLocaleDateString());
+    // alert(dateValue.toLocaleDateString());
     // console.log("aaaa", values.dataEvenimentMobile);
-    console.log("bbbb", values.dataEveniment);
+    // console.log("bbbb", values.dataEveniment);
     // console.log(mobile);
     // if (mobile) setDataBackend(values.dataEvenimentMobile);
     // else setDataBackend(values.dataEveniment);
     // console.log(dataBackend);
-    console.log(emailLocalStorage);
+    // console.log(emailLocalStorage);
     setLoading(true);
 
-    // axios({
-    //   method: "POST",
-    //   url: "https://server-licenta.azurewebsites.net/postform",
-    //   data: {
-    //     email: emailLocalStorage,
-    //     event: values.event,
-    //     date: values.dataEveniment,
-    //     nrguests: values.nrguests,
-    //     location: values.location,
-    //     judet: values.judet,
-    //     budget: values.budget,
-    //     liveband: values.liveBand,
-    //     artisticmoment: values.artisticMoment,
-    //     photographer: values.photographer,
-    //     videorecording: values.videoRecording,
-    //     candybar: values.candyBar,
-    //     fruitsbar: values.fruitsBar,
-    //     drinks: values.drinks,
-    //     ringdance: values.ringDance,
-    //     opinie: false,
-    //   },
-    // })
-    //   .then((response) => {
-    //     setLoading(false);
-    //     setOpen(true);
-    //     setTimeout(() => {
-    //       history.push("/myeventpage");
-    //       history.go(0);
-    //     }, 2000);
+    axios({
+      method: "POST",
+      url: "https://server-licenta.azurewebsites.net/postform",
+      data: {
+        email: emailLocalStorage,
+        event: values.event,
+        date: dateValue.toLocaleDateString(),
+        nrguests: values.nrguests,
+        location: values.location,
+        judet: values.judet,
+        budget: values.budget,
+        liveband: values.liveBand,
+        artisticmoment: values.artisticMoment,
+        photographer: values.photographer,
+        videorecording: values.videoRecording,
+        candybar: values.candyBar,
+        fruitsbar: values.fruitsBar,
+        drinks: values.drinks,
+        ringdance: values.ringDance,
+        opinie: false,
+      },
+    })
+      .then((response) => {
+        setLoading(false);
+        setOpen(true);
+        setTimeout(() => {
+          history.push("/myeventpage");
+          history.go(0);
+        }, 2000);
 
-    //     const res = response.data;
-    //     console.log(res);
-    //   })
-    //   .catch((error) => {
-    //     if (error.response) {
-    //       setOpenError(true);
-    //       setLoading(false);
+        const res = response.data;
+        console.log(res);
+      })
+      .catch((error) => {
+        if (error.response) {
+          setOpenError(true);
+          setLoading(false);
 
-    //       console.log(error.response);
-    //       console.log(error.response.status);
-    //       console.log(error.response.headers);
-    //     }
-    //   });
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        }
+      });
   }
 
   const Alert = React.forwardRef(function Alert(props, ref) {
@@ -266,7 +273,7 @@ function RegisterEventPage() {
         <Formik
           initialValues={{
             event: "",
-            dataEveniment: new Date().toLocaleDateString(),
+            // dataEveniment: new Date().toLocaleDateString(),
             nrguests: "",
             // dataEvenimentMobile: new Date().toLocaleDateString(),
             location: "",
@@ -280,7 +287,7 @@ function RegisterEventPage() {
           validationSchema={ValidationsForm}
           onSubmit={(values) => {
             // if (!mobile)
-            values.dataEveniment = values.dataEveniment.toLocaleDateString();
+            // values.dataEveniment = values.dataEveniment.toLocaleDateString();
             FormOptions(values);
           }}
         >
@@ -303,7 +310,6 @@ function RegisterEventPage() {
                 <Typography style={{ fontSize: size }}>
                   Creează un eveniment
                 </Typography>
-                {/* <div>Eroare: {eroare}</div> */}
               </Grid>
               <Grid item xs={columns}>
                 <FormikSelectSimple
@@ -331,11 +337,31 @@ function RegisterEventPage() {
               </Grid>
               <Grid item xs={columns}>
                 {/* {!mobile && ( */}
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <FormikDatePicker
                     name="dataEveniment"
                     label="Data evenimentului*"
                     variant="standard"
+                  />
+                </LocalizationProvider> */}
+                {/* <FormikTextField
+                  type="date"
+                  label="Data evenimentului*"
+                  name="dataEveniment"
+                /> */}
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DatePicker
+                    label="Data evenimentului*"
+                    openTo="year"
+                    views={["year", "month", "day"]}
+                    value={dateValue}
+                    onChange={(newValue) => {
+                      setDateValue(newValue);
+                      console.log(dateValue.toLocaleDateString());
+                    }}
+                    renderInput={(params) => (
+                      <TextField fullWidth {...params} />
+                    )}
                   />
                 </LocalizationProvider>
                 {/* )} */}

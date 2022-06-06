@@ -4,6 +4,7 @@
   "private": true,
   "proxy": "https://server-licenta.azurewebsites.net/",
   "dependencies": {
+    "@date-io/date-fns": "^2.14.0",
     "@devexpress/dx-react-chart": "^3.0.2",
     "@devexpress/dx-react-chart-material-ui": "^3.0.2",
     "@devexpress/dx-react-core": "^3.0.2",
@@ -15,6 +16,7 @@
     "@mui/lab": "^5.0.0-alpha.74",
     "@mui/material": "^5.5.1",
     "@mui/styles": "^5.5.1",
+    "@mui/x-date-pickers": "^5.0.0-alpha.5",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",

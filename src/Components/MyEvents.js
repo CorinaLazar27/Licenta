@@ -41,6 +41,7 @@ import Paper from "@material-ui/core/Paper";
 
 function MyEventPage() {
   const history = useHistory();
+
   const [openError, setOpenError] = useState(false);
   const [openSucces, setOpenSucces] = useState(false);
   const [data, setData] = useState([]);
