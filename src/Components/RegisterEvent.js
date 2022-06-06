@@ -22,7 +22,7 @@ function RegisterEventPage() {
   const [dataForm, setDataForm] = useState(new Date().toLocaleDateString());
   const history = useHistory();
   const emailLocalStorage = window.localStorage.getItem("email");
-
+  const [eroare, setEroare] = useState("");
   function FormOptions(values) {
     console.log(values.event);
     console.log(values.dataEveniment);
@@ -67,7 +67,7 @@ function RegisterEventPage() {
           if (error.response) {
             setOpenError(true);
             setLoading(false);
-
+            setEroare(error.response);
             console.log(error.response);
             console.log(error.response.status);
             console.log(error.response.headers);
@@ -303,6 +303,7 @@ function RegisterEventPage() {
                 <Typography style={{ fontSize: size }}>
                   Creează un eveniment
                 </Typography>
+                <div>Eroare: {eroare}</div>
               </Grid>
               <Grid item xs={columns}>
                 <FormikSelectSimple
