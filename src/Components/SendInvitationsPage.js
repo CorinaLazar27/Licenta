@@ -193,7 +193,7 @@ function SendInvitationsPage() {
         setOpen(true);
         setLoader(false);
         if (response.data == "Done") {
-          setTimeout(window.location.reload(false), 2500);
+          setTimeout(window.location.reload(false), 2000);
         }
       })
       .catch((error) => {
@@ -234,7 +234,7 @@ function SendInvitationsPage() {
         setTimeout(() => {
           history.push("/sendinvitationspage");
           history.go(0);
-        }, 4000);
+        }, 2000);
         const res = response.data;
         console.log(res);
       })

@@ -233,12 +233,28 @@ function SettingsPage() {
                 <Grid
                   container
                   rowSpacing={2}
-                  sx={{ backgroundColor: "white" }}
+                  sx={{
+                    backgroundColor: "white",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                   padding="1vh"
                 >
                   {!facebookLogin && (
-                    <>
-                      <Grid item xs={12}>
+                    <form
+                      onSubmit={() => {
+                        if (currentPassword == password) UpdateProfile();
+                        else setOpenDifferentPassword(true);
+                      }}
+                    >
+                      <Grid
+                        item
+                        xs={12}
+                        sx={{
+                          marginBottom: "1vh",
+                        }}
+                      >
                         <TextField
                           id="Parola curentă"
                           name="Parola curentă"
@@ -247,14 +263,22 @@ function SettingsPage() {
                           onChange={(event) =>
                             setCurrentPassword(event.target.value)
                           }
+                          required
                         />
                       </Grid>
-                      <Grid item xs={12}>
+                      <Grid
+                        item
+                        xs={12}
+                        sx={{
+                          marginBottom: "1vh",
+                        }}
+                      >
                         <TextField
                           id="Parola nouă"
                           name="Parola nouă"
                           label="Parola nouă"
                           type="password"
+                          required
                           onChange={(event) => {
                             setNewPassword(event.target.value);
                           }}
@@ -263,6 +287,7 @@ function SettingsPage() {
 
                       <Grid item xs={12} sx={{ marginBottom: "1vh" }}>
                         <LoadingButton
+                          type="submit"
                           style={{
                             backgroundColor: "#2C5E1A",
                             color: "white",
@@ -270,15 +295,11 @@ function SettingsPage() {
                           }}
                           loading={loading}
                           variant="contained"
-                          onClick={() => {
-                            if (currentPassword == password) UpdateProfile();
-                            else setOpenDifferentPassword(true);
-                          }}
                         >
                           Schimbă
                         </LoadingButton>
                       </Grid>
-                    </>
+                    </form>
                   )}
                   {facebookLogin && (
                     <Grid
