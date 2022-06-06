@@ -25,6 +25,7 @@ function RegisterEventPage() {
   const emailLocalStorage = window.localStorage.getItem("email");
 
   function FormOptions(values) {
+    alert(values.dataEveniment);
     // console.log("aaaa", values.dataEvenimentMobile);
     console.log("bbbb", values.dataEveniment);
     // console.log(mobile);
@@ -34,49 +35,49 @@ function RegisterEventPage() {
     console.log(emailLocalStorage);
     setLoading(true);
 
-    axios({
-      method: "POST",
-      url: "https://server-licenta.azurewebsites.net/postform",
-      data: {
-        email: emailLocalStorage,
-        event: values.event,
-        date: values.dataEveniment,
-        nrguests: values.nrguests,
-        location: values.location,
-        judet: values.judet,
-        budget: values.budget,
-        liveband: values.liveBand,
-        artisticmoment: values.artisticMoment,
-        photographer: values.photographer,
-        videorecording: values.videoRecording,
-        candybar: values.candyBar,
-        fruitsbar: values.fruitsBar,
-        drinks: values.drinks,
-        ringdance: values.ringDance,
-        opinie: false,
-      },
-    })
-      .then((response) => {
-        setLoading(false);
-        setOpen(true);
-        setTimeout(() => {
-          history.push("/myeventpage");
-          history.go(0);
-        }, 2000);
+    // axios({
+    //   method: "POST",
+    //   url: "https://server-licenta.azurewebsites.net/postform",
+    //   data: {
+    //     email: emailLocalStorage,
+    //     event: values.event,
+    //     date: values.dataEveniment,
+    //     nrguests: values.nrguests,
+    //     location: values.location,
+    //     judet: values.judet,
+    //     budget: values.budget,
+    //     liveband: values.liveBand,
+    //     artisticmoment: values.artisticMoment,
+    //     photographer: values.photographer,
+    //     videorecording: values.videoRecording,
+    //     candybar: values.candyBar,
+    //     fruitsbar: values.fruitsBar,
+    //     drinks: values.drinks,
+    //     ringdance: values.ringDance,
+    //     opinie: false,
+    //   },
+    // })
+    //   .then((response) => {
+    //     setLoading(false);
+    //     setOpen(true);
+    //     setTimeout(() => {
+    //       history.push("/myeventpage");
+    //       history.go(0);
+    //     }, 2000);
 
-        const res = response.data;
-        console.log(res);
-      })
-      .catch((error) => {
-        if (error.response) {
-          setOpenError(true);
-          setLoading(false);
+    //     const res = response.data;
+    //     console.log(res);
+    //   })
+    //   .catch((error) => {
+    //     if (error.response) {
+    //       setOpenError(true);
+    //       setLoading(false);
 
-          console.log(error.response);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        }
-      });
+    //       console.log(error.response);
+    //       console.log(error.response.status);
+    //       console.log(error.response.headers);
+    //     }
+    //   });
   }
 
   const Alert = React.forwardRef(function Alert(props, ref) {
