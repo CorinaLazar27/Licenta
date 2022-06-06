@@ -14,6 +14,7 @@ export const FormikTextField = (props) => {
       fullWidth
       value={field.value ?? props.value ?? ""}
       rows={props.rows}
+      placeholder={field.placeholder ?? props.placeholder ?? ""}
       multiline={props.multiline ?? false}
       onChange={field.onChange}
       error={(meta.touched && Boolean(meta.error)) || Boolean(props.apiError)}

@@ -36,55 +36,97 @@ function RegisterEventPage() {
     // console.log("aaaa", values.dataEvenimentMobile);
     // console.log("bbbb", values.dataEveniment);
     // console.log(mobile);
-    // if (mobile) setDataBackend(values.dataEvenimentMobile);
-    // else setDataBackend(values.dataEveniment);
-    // console.log(dataBackend);
-    // console.log(emailLocalStorage);
     setLoading(true);
-
-    axios({
-      method: "POST",
-      url: "https://server-licenta.azurewebsites.net/postform",
-      data: {
-        email: emailLocalStorage,
-        event: values.event,
-        date: dateValue.toLocaleDateString(),
-        nrguests: values.nrguests,
-        location: values.location,
-        judet: values.judet,
-        budget: values.budget,
-        liveband: values.liveBand,
-        artisticmoment: values.artisticMoment,
-        photographer: values.photographer,
-        videorecording: values.videoRecording,
-        candybar: values.candyBar,
-        fruitsbar: values.fruitsBar,
-        drinks: values.drinks,
-        ringdance: values.ringDance,
-        opinie: false,
-      },
-    })
-      .then((response) => {
-        setLoading(false);
-        setOpen(true);
-        setTimeout(() => {
-          history.push("/myeventpage");
-          history.go(0);
-        }, 2000);
-
-        const res = response.data;
-        console.log(res);
+    if (mobile) {
+      console.log(values.dataEveniment);
+      axios({
+        method: "POST",
+        url: "https://server-licenta.azurewebsites.net/postform",
+        data: {
+          email: emailLocalStorage,
+          event: values.event,
+          date: values.dataEveniment,
+          nrguests: values.nrguests,
+          location: values.location,
+          judet: values.judet,
+          budget: values.budget,
+          liveband: values.liveBand,
+          artisticmoment: values.artisticMoment,
+          photographer: values.photographer,
+          videorecording: values.videoRecording,
+          candybar: values.candyBar,
+          fruitsbar: values.fruitsBar,
+          drinks: values.drinks,
+          ringdance: values.ringDance,
+          opinie: false,
+        },
       })
-      .catch((error) => {
-        if (error.response) {
-          setOpenError(true);
+        .then((response) => {
           setLoading(false);
+          setOpen(true);
+          setTimeout(() => {
+            history.push("/myeventpage");
+            history.go(0);
+          }, 2000);
 
-          console.log(error.response);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        }
-      });
+          const res = response.data;
+          console.log(res);
+        })
+        .catch((error) => {
+          if (error.response) {
+            setOpenError(true);
+            setLoading(false);
+
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          }
+        });
+    } else {
+      axios({
+        method: "POST",
+        url: "https://server-licenta.azurewebsites.net/postform",
+        data: {
+          email: emailLocalStorage,
+          event: values.event,
+          date: dateValue.toLocaleDateString(),
+          nrguests: values.nrguests,
+          location: values.location,
+          judet: values.judet,
+          budget: values.budget,
+          liveband: values.liveBand,
+          artisticmoment: values.artisticMoment,
+          photographer: values.photographer,
+          videorecording: values.videoRecording,
+          candybar: values.candyBar,
+          fruitsbar: values.fruitsBar,
+          drinks: values.drinks,
+          ringdance: values.ringDance,
+          opinie: false,
+        },
+      })
+        .then((response) => {
+          setLoading(false);
+          setOpen(true);
+          setTimeout(() => {
+            history.push("/myeventpage");
+            history.go(0);
+          }, 2000);
+
+          const res = response.data;
+          console.log(res);
+        })
+        .catch((error) => {
+          if (error.response) {
+            setOpenError(true);
+            setLoading(false);
+
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          }
+        });
+    }
   }
 
   const Alert = React.forwardRef(function Alert(props, ref) {
@@ -152,12 +194,17 @@ function RegisterEventPage() {
       .typeError("Introdu doar cifre!")
       .required("Introdu bugetul aproximativ alocat evenimentului"),
     judet: Yup.string().required("Trebuie aleasă o opțiune!"),
+
     dataEveniment: Yup.string()
       .required("Introdu data evenimentului")
       .matches(
         /^(?:(?:31(\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/,
-        "Trebuie aleasă o data de tipul zz mm zzzz!"
-      ),
+        "Trebuie aleasă o data de tipul zz.ll.zzzz!"
+      )
+      .when("mobile", {
+        is: true,
+        then: "Must enter email address",
+      }),
   });
 
   const breakpoints = {
@@ -273,7 +320,7 @@ function RegisterEventPage() {
         <Formik
           initialValues={{
             event: "",
-            dataEveniment: "zz.mm.aaaa",
+            dataEveniment: "01.01.2022",
             nrguests: "",
             // dataEvenimentMobile: new Date().toLocaleDateString(),
             location: "",
@@ -368,6 +415,7 @@ function RegisterEventPage() {
                 {mobile && (
                   <FormikTextField
                     name="dataEveniment"
+                    placeholder="zz.ll.aaaa"
                     label="Data evenimentului*"
                   ></FormikTextField>
                 )}
