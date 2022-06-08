@@ -64,7 +64,7 @@ function SingIn() {
         console.log(response);
         setLoading(false);
         window.localStorage.setItem("nume", res.Nume);
-        window.localStorage.setItem("parola", decrypt(res.Parola));
+        window.localStorage.setItem("parola", res.Parola);
         window.localStorage.setItem("email", res.PartitionKey);
         history.push("/homepage");
       })

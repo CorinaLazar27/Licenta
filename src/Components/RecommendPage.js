@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import { useHistory } from "react-router-dom";
@@ -38,44 +38,53 @@ function RecommendPage() {
   const judet = window.localStorage.getItem("judet");
   const [loader, setLoader] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorRecommand, setErrorRecommand] = useState(false);
+
+  useEffect(() => {
+    if (recommandOption != "") setErrorRecommand(false);
+  }, [recommandOption]);
 
   function GetRecommandations(type) {
-    setLoader(true);
     setNoRecomandations(false);
-    axios({
-      method: "POST",
-      url: "https://server-licenta.azurewebsites.net/getRecomandations",
-      data: {
-        email: email,
-        event: event,
-        judet: judet,
-        date: date,
-        type: type,
-      },
-    })
-      .then((response) => {
-        setLoader(false);
-        console.log(response.data);
-
-        if (Object.values(response.data).length != 0)
-          setLocationsRecomanded(Object.values(response.data));
-        else {
-          setNoRecomandations(true);
-          console.log("NU SUNT LOCATII");
-          setLocationsRecomanded([]);
-        }
-
-        console.log("locationRecomanded", locationsRecomanded);
+    if (type != "") {
+      setLoader(true);
+      axios({
+        method: "POST",
+        url: "https://server-licenta.azurewebsites.net/getRecomandations",
+        data: {
+          email: email,
+          event: event,
+          judet: judet,
+          date: date,
+          type: type,
+        },
       })
-      .catch((error) => {
-        if (error.response) {
+        .then((response) => {
           setLoader(false);
-          setNoRecomandations(true);
-          console.log(error.response);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        }
-      });
+          console.log(response.data);
+
+          if (Object.values(response.data).length != 0)
+            setLocationsRecomanded(Object.values(response.data));
+          else {
+            setNoRecomandations(true);
+            console.log("NU SUNT LOCATII");
+            setLocationsRecomanded([]);
+          }
+
+          console.log("locationRecomanded", locationsRecomanded);
+        })
+        .catch((error) => {
+          if (error.response) {
+            setLoader(false);
+            setNoRecomandations(true);
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          }
+        });
+    } else {
+      setErrorRecommand(true);
+    }
   }
 
   function UpdateForm() {
@@ -172,6 +181,7 @@ function RecommendPage() {
                 Vezi recomandări despre..
               </InputLabel>
               <Select
+                error={errorRecommand}
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={recommandOption}

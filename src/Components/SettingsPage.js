@@ -75,8 +75,8 @@ function SettingsPage() {
     })
       .then((response) => {
         console.log(response.data);
-        console.log(decrypt(encrypt(newpassword)));
-        window.localStorage.setItem("parola", decrypt(encrypt(newpassword)));
+
+        window.localStorage.setItem("parola", encrypt(newpassword));
         setLoading(false);
         setOpenSuccesPassword(true);
         setTimeout(window.location.reload(false), 3000);
@@ -178,7 +178,7 @@ function SettingsPage() {
       <Header />
       <Box
         sx={{
-          width: "100vw",
+          minWidth: "100vw",
           padding: "2%",
           marginTop: "15vh",
           backgroundColor: "white",
@@ -244,7 +244,8 @@ function SettingsPage() {
                   {!facebookLogin && (
                     <form
                       onSubmit={() => {
-                        if (currentPassword == password) UpdateProfile();
+                        if (encrypt(currentPassword) == password)
+                          UpdateProfile();
                         else setOpenDifferentPassword(true);
                       }}
                     >

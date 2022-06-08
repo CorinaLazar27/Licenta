@@ -72,7 +72,7 @@ function SendInvitationsPage() {
     },
   ]);
   const [empty, setEmpty] = useState(false);
-  const [invitatiSalvati, setInvitatiSalvati] = useState([]);
+
   const [loader, setLoader] = useState(false);
 
   const handleToClose = () => {
@@ -146,6 +146,7 @@ function SendInvitationsPage() {
 
     setChecked(newChecked);
   };
+  const [invitatiSalvati, setInvitatiSalvati] = useState([]);
 
   async function GetInvitati() {
     setLoader(true);

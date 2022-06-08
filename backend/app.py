@@ -26,16 +26,6 @@ table_service = TableServiceClient(
     endpoint="https://storagecorina.table.core.windows.net/", credential=credential)
 
 
-@app.route('/', methods=["GET"])
-def elementsss():
-
-    table_client = table_service.get_table_client(table_name="Login")
-    tasks = table_client.list_entities()
-    lst = list(tasks)
-    print(lst)
-    return jsonify(results=lst)
-
-
 @app.route('/elements', methods=["GET"])
 def elements():
 
@@ -260,26 +250,6 @@ def deleteInvitat():
     return "Done"
 
 
-@app.route('/updateinvitat', methods=["POST"])
-def updateInvitat():
-
-    email = request.json.get("email", None)
-    date = request.json.get("date", None)
-    formValues = request.json.get("formValues", None)
-    table_client = table_service.get_table_client(table_name="Invitati")
-    print(formValues)
-    for index in range(len(formValues)):
-        task = {u'PartitionKey': email+"-"+date,
-                u'RowKey': formValues[index]["emailInvitat"],
-                u'NumeInvitat': formValues[index]["numeInvitat"],
-                u'ConfirmarePrezenta': formValues[index]["confirmarePrezenta"],
-                }
-
-    table_client.update_entity(task)
-
-    return "Done"
-
-
 @app.route('/changepassword', methods=["POST"])
 def changepassword():
     table_client = table_service.get_table_client(table_name="Login")
@@ -343,8 +313,13 @@ def deleteevent():
 
     email = request.json.get("email", None)
     date = request.json.get("date", None)
-    print(email)
-    print(date)
+    table_client_invitati = table_service.get_table_client(
+        table_name="Invitati")
+    tasks = table_client_invitati.query_entities(
+        query_filter='PartitionKey eq \'' + email+"-"+date + '\'')
+    lst = list(tasks)
+    for inv in lst:
+        table_client_invitati.delete_entity(email+"-"+date, inv["RowKey"])
 
     print(email)
     print(date)
@@ -576,41 +551,60 @@ SOURCE_TABLE_APERITIVE = "AperitivRating"
 SOURCE_TABLE_TYPE1 = "Type1Rating"
 SOURCE_TABLE_TYPE2 = "Type2Rating"
 SOURCE_TABLE_MUSIC = "MusicRating"
-SOURCE_TABLE = "Form"
+SOURCE_TABLE_FORM = "Form"
 
 
 def set_table_service():
     return TableService(connection_string=CONNECTION_STRING)
 
 
-def get_dataframe_from_table_storage_table(table_service, filter_query):
+def get_dataframe_from_table_storage_table_aperitive(table_service, filter_query):
 
-    return pd.DataFrame(get_data_from_table_storage_table(table_service,
-                                                          filter_query))
+    return pd.DataFrame(get_data_from_table_storage_table_aperitive(table_service,
+                                                                    filter_query))
 
 
-def get_data_from_table_storage_table(table_service, filter_query):
+def get_data_from_table_storage_table_aperitive(table_service, filter_query):
 
     for record in table_service.query_entities(SOURCE_TABLE_APERITIVE, filter_query):
         yield record
 
+
+def get_dataframe_from_table_storage_table_type1(table_service, filter_query):
+
+    return pd.DataFrame(get_data_from_table_storage_table_type1(table_service,
+                                                                filter_query))
+
+
+def get_data_from_table_storage_table_type1(table_service, filter_query):
     for record in table_service.query_entities(
         SOURCE_TABLE_TYPE1, filter_query
     ):
         yield record
 
+
+def get_dataframe_from_table_storage_table_type2(table_service, filter_query):
+
+    return pd.DataFrame(get_data_from_table_storage_table_type2(table_service,
+                                                                filter_query))
+
+
+def get_data_from_table_storage_table_type2(table_service, filter_query):
     for record in table_service.query_entities(
         SOURCE_TABLE_TYPE2, filter_query
     ):
         yield record
 
+
+def get_dataframe_from_table_storage_table_music(table_service, filter_query):
+
+    return pd.DataFrame(get_data_from_table_storage_table_music(table_service,
+                                                                filter_query))
+
+
+def get_data_from_table_storage_table_music(table_service, filter_query):
     for record in table_service.query_entities(
         SOURCE_TABLE_MUSIC, filter_query
-    ):
-        yield record
-
-    for record in table_service.query_entities(
-        SOURCE_TABLE, filter_query
     ):
         yield record
 
@@ -627,21 +621,22 @@ def highestRating():
 
     fq = 'PartitionKey eq \'' + email + '\' and Event eq  \'' + \
         event + '\' and Data eq \'' + date + '\''
+
     ts_aperitive = set_table_service()
     ts_type1 = set_table_service()
     ts_type2 = set_table_service()
     ts_music = set_table_service()
 
-    table_aperitive = get_dataframe_from_table_storage_table(
+    table_aperitive = get_dataframe_from_table_storage_table_aperitive(
         table_service=ts_aperitive, filter_query=fq)
 
-    table_type1 = get_dataframe_from_table_storage_table(
+    table_type1 = get_dataframe_from_table_storage_table_type1(
         table_service=ts_type1, filter_query=fq)
 
-    table_type2 = get_dataframe_from_table_storage_table(
+    table_type2 = get_dataframe_from_table_storage_table_type2(
         table_service=ts_type2, filter_query=fq)
 
-    table_music = get_dataframe_from_table_storage_table(
+    table_music = get_dataframe_from_table_storage_table_music(
         table_service=ts_music, filter_query=fq)
 
     table_aperitive['Rating'] = table_aperitive['Rating'].astype(float)
@@ -649,29 +644,21 @@ def highestRating():
     table_type2['Rating'] = table_type2['Rating'].astype(float)
     table_music['Rating'] = table_music['Rating'].astype(float)
 
-    # Reccomandation for apperitive
-
     # Highest rated apperitive
     mean_rating_aperitive = table_aperitive.groupby('Aperitiv')[
         ['Rating']].mean()
 
     highest_rated_aperitive = mean_rating_aperitive['Rating'].idxmax()
-    print("aperitive")
-    # Reccomandation for type 1
 
     # Highest rated type1
     mean_rating_type1 = table_type1.groupby('Type1')[['Rating']].mean()
 
     highest_rated_type1 = mean_rating_type1['Rating'].idxmax()
 
-    # Reccomandation for type 2
-
     # Highest rated type 2
     mean_rating_type2 = table_type2.groupby('Type2')[['Rating']].mean()
 
     highest_rated_type2 = mean_rating_type2['Rating'].idxmax()
-
-    # Reccomandation for music
 
     # Highest rated music
     mean_rating_music = table_music.groupby('Music')[['Rating']].mean()
@@ -709,6 +696,21 @@ def highestRating():
     return data_set
 
 
+def get_dataframe_from_table_storage_table_recommander(table_service, filter_query):
+
+    return pd.DataFrame(get_data_from_table_storage_table_recommander(table_service,
+                                                                      filter_query))
+
+
+def get_data_from_table_storage_table_recommander(table_service, filter_query):
+
+    for record in table_service.query_entities(
+        SOURCE_TABLE_FORM, filter_query
+    ):
+        print("form")
+        yield record
+
+
 def clean_data(x):
     if isinstance(x, list):
         return [str.lower(i.replace(" ", "")) for i in x]
@@ -726,18 +728,18 @@ def create_all(x):
 
 
 def get_recommendations(email, date, type, indices, cosine_sim2, table):
-    # Get the index of the user that matches the title
+    # Get the index of the user that matches the email and date
     idx = indices[email, date]
-    # Get the pairwsie similarity scores of all locations with that user
+    # Get the pairwsie similarity scores of all locations, artists or photographers with that user
     sim_scores = list(enumerate(cosine_sim2[idx]))
     # Sort the locations based on the similarity scores
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-    # Get the scores of the 10 most similar locations
+    # Get the scores of the 5 most similar locations
     sim_scores = sim_scores[1:6]
-    # Get the movie indices
+    # Get the users indices
     email_indices = [i[0] for i in sim_scores]
 
-    # Return the top 3 most similar locations
+    # Return the top 5 most similar locations,artists or photographers
     return table[type].iloc[email_indices].unique()
 
 
@@ -755,7 +757,7 @@ def getRecomandations():
     print(judet)
     fq = 'TipEveniment eq \'' + event + '\' and Judet eq \'' + judet + '\' '
     ts = set_table_service()
-    table_form = get_dataframe_from_table_storage_table(
+    table_form = get_dataframe_from_table_storage_table_recommander(
         table_service=ts, filter_query=fq)
     features = ['NumarInvitati', 'Buget']
     print(table_form[features])

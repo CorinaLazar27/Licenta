@@ -134,9 +134,11 @@ function MyEventPage() {
   const DeleteEvent = () => {
     setLoader(true);
     setOpenDelete(false);
+
     axios({
       method: "POST",
-      url: "https://server-licenta.azurewebsites.net/deleteevent",
+
+      url: "http://127.0.0.1:5000/deleteevent",
       data: {
         email: email,
         date: dataeveniment,
@@ -146,7 +148,7 @@ function MyEventPage() {
         setOpenSucces(true);
         setLoader(false);
         if (response.data == "Done") {
-          setTimeout(window.location.reload(false), 4000);
+          setTimeout(window.location.reload(false), 2500);
         }
       })
       .catch((error) => {
@@ -271,7 +273,6 @@ function MyEventPage() {
     setOpenDeleteDialog(false);
     setOpenDelete(true);
   };
-  const [itemNew, setItemNew] = useState();
 
   return (
     <Container
@@ -294,6 +295,7 @@ function MyEventPage() {
             padding: "2vw",
             textAlign: "center",
             maxWidth: "100vw",
+            marginTop: "5vh",
           }}
         >
           <Dialog
