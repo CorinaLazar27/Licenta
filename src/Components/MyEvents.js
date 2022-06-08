@@ -295,7 +295,7 @@ function MyEventPage() {
             padding: "2vw",
             textAlign: "center",
             maxWidth: "100vw",
-            marginTop: "5vh",
+            marginTop: 8,
           }}
         >
           <Dialog

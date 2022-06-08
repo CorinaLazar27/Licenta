@@ -20,9 +20,7 @@ function SettingsPage() {
   const encrypt = (text) => {
     return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(text));
   };
-  const decrypt = (data) => {
-    return CryptoJS.enc.Base64.parse(data).toString(CryptoJS.enc.Utf8);
-  };
+
   const email = window.localStorage.getItem("email");
   const name = window.localStorage.getItem("nume");
   const date = window.localStorage.getItem("data");
