@@ -14,15 +14,19 @@ import { Container } from "@mui/material";
 import { Box } from "@mui/system";
 import * as Yup from "yup";
 import FirstHeader from "./FirstHeader";
+import AES from "crypto-js/aes";
+import Utf8 from "crypto-js/enc-utf8";
 
 function SingIn() {
-  const CryptoJS = require("crypto-js");
-  const encrypt = (text) => {
-    return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(text));
+  const decryptWithAES = (ciphertext, passphrase) => {
+    const bytes = AES.decrypt(ciphertext, passphrase);
+    const originalText = bytes.toString(Utf8);
+    return originalText;
   };
-
   const history = useHistory();
   const [openError, setOpenError] = useState(false);
+  const [openErrorPassword, setOpenErrorPassword] = useState(false);
+  const [openErrorUser, setOpenErrorUser] = useState(false);
   const [loading, setLoading] = useState(false);
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -32,6 +36,8 @@ function SingIn() {
       return;
     }
     setOpenError(false);
+    setOpenErrorPassword(false);
+    setOpenErrorUser(false);
   };
   const responseFacebook = (response) => {
     console.log(response);
@@ -46,25 +52,41 @@ function SingIn() {
   };
 
   const MakeLogin = (values) => {
+    setOpenErrorPassword(false);
+    setOpenErrorUser(false);
+    setOpenError(false);
     setLoading(true);
     const data = {
       email: values.email,
-      password: encrypt(values.password),
     };
     console.log(data);
     axios({
       method: "POST",
-      url: "https://server-licenta.azurewebsites.net/login",
+      url: "https://server-licenta.azurewebsites.net/getUserAndPassword",
       data: data,
     })
       .then((response) => {
-        const res = response.data;
-        console.log(response);
+        console.log(response.data);
         setLoading(false);
-        window.localStorage.setItem("nume", res.Nume);
-        window.localStorage.setItem("parola", res.Parola);
-        window.localStorage.setItem("email", res.PartitionKey);
-        history.push("/homepage");
+        if (response.data.length == 0) {
+          values.email = "";
+          values.password = "";
+          setOpenErrorUser(true);
+        } else {
+          if (
+            decryptWithAES(response.data[0].Parola, "corinakey") ==
+            values.password
+          ) {
+            window.localStorage.setItem("nume", response.data[0].Nume);
+            window.localStorage.setItem("email", response.data[0].PartitionKey);
+            history.push("/homepage");
+          } else {
+            setOpenErrorPassword(true);
+
+            values.email = "";
+            values.password = "";
+          }
+        }
       })
       .catch((error) => {
         if (error.response) {
@@ -259,6 +281,27 @@ function SingIn() {
       >
         <Alert onClose={handleClose} severity="error">
           Eroare la conectare!
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={openErrorPassword}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="error">
+          Parola incorecta!{" "}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openErrorUser}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="error">
+          Contul nu exista!{" "}
         </Alert>
       </Snackbar>
     </Container>

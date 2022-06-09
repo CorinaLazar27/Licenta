@@ -14,6 +14,8 @@ import { LoadingButton } from "@mui/lab";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import background from "../Image/homePage.png";
+import AES from "crypto-js/aes";
+import Utf8 from "crypto-js/enc-utf8";
 
 function SettingsPage() {
   const CryptoJS = require("crypto-js");
@@ -24,12 +26,22 @@ function SettingsPage() {
   const email = window.localStorage.getItem("email");
   const name = window.localStorage.getItem("nume");
   const date = window.localStorage.getItem("data");
-  const password = window.localStorage.getItem("parola");
+
   const location = window.localStorage.getItem("locatie");
   const phonenumber = window.localStorage.getItem("numartelefon");
   const [loading, setLoading] = useState(false);
   const [newpassword, setNewPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
+
+  const decryptWithAES = (ciphertext, passphrase) => {
+    const bytes = AES.decrypt(ciphertext, passphrase);
+    const originalText = bytes.toString(Utf8);
+    return originalText;
+  };
+  const encryptWithAES = (text, passphrase) => {
+    return AES.encrypt(text, passphrase).toString();
+  };
+
   function sendEmail(e) {
     setLoading(true);
     e.preventDefault();
@@ -57,40 +69,71 @@ function SettingsPage() {
         console.log(err);
       });
   }
-  function UpdateProfile() {
-    setLoading(true);
+
+  function ChangePassword() {
+    console.log(email);
+    console.log(name);
+    console.log(newpassword);
     axios({
       method: "POST",
       url: "https://server-licenta.azurewebsites.net/changepassword",
       data: {
         email: email,
         name: name,
-        newpassword: encrypt(newpassword),
-        date: date,
-        location: location,
-        phonenumber: phonenumber,
+        newpassword: encryptWithAES(newpassword, "corinakey"),
       },
     })
       .then((response) => {
         console.log(response.data);
-
-        window.localStorage.setItem("parola", encrypt(newpassword));
         setLoading(false);
         setOpenSuccesPassword(true);
-        setTimeout(window.location.reload(false), 3000);
+        setTimeout(window.location.reload(false), 2000);
       })
       .catch((error) => {
         if (error.response) {
           console.log(error);
           setLoading(false);
           setOpenErrorPassword(true);
-          setTimeout(window.location.reload(false), 3000);
+          setTimeout(window.location.reload(false), 2000);
         }
-      })
-      .finally(() => {
-        setLoading(false);
       });
   }
+
+  function UpdateProfile(e) {
+    e.preventDefault();
+    setLoading(true);
+    const data = {
+      email: email,
+    };
+
+    axios({
+      method: "POST",
+      url: "https://server-licenta.azurewebsites.net/getUserAndPassword",
+      data: data,
+    })
+      .then((response) => {
+        console.log(response.data);
+        if (
+          decryptWithAES(response.data[0].Parola, "corinakey") ==
+          currentPassword
+        ) {
+          console.log("CORESPUNDE");
+          ChangePassword();
+        } else {
+          setOpenDifferentPassword(true);
+        }
+      })
+
+      .catch((error) => {
+        if (error.response) {
+          setLoading(false);
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        }
+      });
+  }
+
   const [openSuccesPassword, setOpenSuccesPassword] = useState(false);
   const [openErrorPassword, setOpenErrorPassword] = useState(false);
   const [openDifferentPassword, setOpenDifferentPassword] = useState(false);
@@ -241,10 +284,8 @@ function SettingsPage() {
                 >
                   {!facebookLogin && (
                     <form
-                      onSubmit={() => {
-                        if (encrypt(currentPassword) == password)
-                          UpdateProfile();
-                        else setOpenDifferentPassword(true);
+                      onSubmit={(e) => {
+                        UpdateProfile(e);
                       }}
                     >
                       <Grid

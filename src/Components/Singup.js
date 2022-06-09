@@ -13,12 +13,30 @@ import { Container } from "@mui/material";
 import { Box } from "@mui/system";
 import * as Yup from "yup";
 import FirstHeader from "./FirstHeader";
+import AES from "crypto-js/aes";
 
 function SingUp() {
-  const CryptoJS = require("crypto-js");
-  const encrypt = (text) => {
-    return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(text));
+  const encryptWithAES = (text, passphrase) => {
+    return AES.encrypt(text, passphrase).toString();
   };
+
+  useEffect(() => {
+    console.log("anamaxim:", encryptWithAES("anamaxim", "corinakey"));
+    console.log(
+      "andradasurpeteanu:",
+      encryptWithAES("andradasurpeteanu", "corinakey")
+    );
+    console.log("parola:", encryptWithAES("parola", "corinakey"));
+    console.log("parola:", encryptWithAES("parola", "corinakey"));
+    console.log("parola:", encryptWithAES("parola", "corinakey"));
+    console.log("parola1234:", encryptWithAES("parola1234", "corinakey"));
+    console.log("dacheadrian:", encryptWithAES("dacheadrian", "corinakey"));
+    console.log("itudenisa:", encryptWithAES("itudenisa", "corinakey"));
+    console.log("lazeaalex:", encryptWithAES("lazeaalex", "corinakey"));
+    console.log("pauladrogotel:", encryptWithAES("pauladrogotel", "corinakey"));
+    console.log("ralucailca:", encryptWithAES("ralucailca", "corinakey"));
+  }, []);
+
   const history = useHistory();
   const [openSucces, setOpenSucces] = useState(false);
   const [openError, setOpenError] = useState(false);
@@ -38,12 +56,12 @@ function SingUp() {
     const data = {
       name: values.name,
       email: values.email,
-      password: encrypt(values.password),
+      password: encryptWithAES(values.password, "corinakey"),
     };
     console.log(data);
     axios({
       method: "POST",
-      url: "https://server-licenta.azurewebsites.net/register1",
+      url: "https://server-licenta.azurewebsites.net//register",
       data: data,
     })
       .then((response) => {

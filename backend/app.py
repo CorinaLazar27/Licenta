@@ -26,16 +26,6 @@ table_service = TableServiceClient(
     endpoint="https://storagecorina.table.core.windows.net/", credential=credential)
 
 
-@app.route('/elements', methods=["GET"])
-def elements():
-
-    table_client = table_service.get_table_client(table_name="Login")
-    tasks = table_client.list_entities()
-    lst = list(tasks)
-    print(lst)
-    return jsonify(results=lst)
-
-
 @app.route('/getmyevents', methods=["POST"])
 def elementsform():
     email = request.json.get("email", None)
@@ -47,8 +37,8 @@ def elementsform():
     return jsonify(results=lst)
 
 
-@app.route('/register1', methods=["POST"])
-def register1():
+@app.route('/register', methods=["POST"])
+def register():
     name = request.json.get("name", None)
     email = request.json.get("email", None)
     password = request.json.get("password", None)
@@ -66,23 +56,14 @@ def register1():
     return "Done"
 
 
-@app.route('/login', methods=["POST"])
-def login():
+@app.route('/getUserAndPassword', methods=["POST"])
+def getUserAndPassword():
     table_client = table_service.get_table_client(table_name="Login")
     email = request.json.get("email", None)
-    password = request.json.get("password", None)
     print(email)
-    print(password)
     tasks = table_client.query_entities(
         query_filter='PartitionKey eq \'' + email + '\'')
-
-    print(tasks)
-
-    for task in tasks:
-        if task['Parola'] == password:
-            return jsonify(task)
-        else:
-            return 'Parola sau utilizator gresit', 401
+    return jsonify(list(tasks))
 
 
 @app.route('/postform', methods=["POST"])
@@ -246,7 +227,6 @@ def deleteInvitat():
     print(date)
     print(emailInvitat)
     table_client.delete_entity(email+"-"+date, emailInvitat)
-
     return "Done"
 
 
@@ -260,8 +240,8 @@ def changepassword():
     print(newpassword)
     task = {u'PartitionKey': email,
             u'RowKey': email,
-            u'Password': newpassword,
-            u'Name': name}
+            u'Parola': newpassword,
+            u'Nume': name}
     table_client.update_entity(task)
     return "Done"
 
