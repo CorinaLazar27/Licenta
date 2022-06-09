@@ -687,7 +687,7 @@ def get_data_from_table_storage_table_recommander(table_service, filter_query):
     for record in table_service.query_entities(
         SOURCE_TABLE_FORM, filter_query
     ):
-        print("form")
+     
         yield record
 
 

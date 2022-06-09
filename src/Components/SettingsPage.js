@@ -18,17 +18,9 @@ import AES from "crypto-js/aes";
 import Utf8 from "crypto-js/enc-utf8";
 
 function SettingsPage() {
-  const CryptoJS = require("crypto-js");
-  const encrypt = (text) => {
-    return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(text));
-  };
-
   const email = window.localStorage.getItem("email");
   const name = window.localStorage.getItem("nume");
-  const date = window.localStorage.getItem("data");
 
-  const location = window.localStorage.getItem("locatie");
-  const phonenumber = window.localStorage.getItem("numartelefon");
   const [loading, setLoading] = useState(false);
   const [newpassword, setNewPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
