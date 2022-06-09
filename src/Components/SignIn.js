@@ -242,29 +242,29 @@ function SingIn() {
           </Form>
         </Formik>
 
-        {!mobile && (
-          <>
-            <Typography
-              style={{
-                margin: "1vh",
-              }}
-            >
-              sau
-            </Typography>
-            <FacebookLogin
-              appId="4917522175029919"
-              autoLoad={false}
-              fields="name,email"
-              callback={responseFacebook}
-              buttonStyle={{ color: "blue" }}
-              cssClass="my-facebook-button-class"
-              icon={<FacebookIcon />}
-              language="RO"
-            >
-              Conectează-te cu Facebook
-            </FacebookLogin>
-          </>
-        )}
+        {/* {!mobile && ( */}
+        <>
+          <Typography
+            style={{
+              margin: "1vh",
+            }}
+          >
+            sau
+          </Typography>
+          <FacebookLogin
+            appId="4917522175029919"
+            autoLoad={false}
+            fields="name,email"
+            callback={responseFacebook}
+            buttonStyle={{ color: "blue" }}
+            cssClass="my-facebook-button-class"
+            icon={<FacebookIcon />}
+            language="RO"
+          >
+            Conectează-te cu Facebook
+          </FacebookLogin>
+        </>
+        {/* )} */}
         <Typography
           style={{
             margin: "1vh",
