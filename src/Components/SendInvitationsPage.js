@@ -254,7 +254,6 @@ function SendInvitationsPage() {
   const [mail, setMail] = useState([]);
 
   function sendEmail() {
-    console.log("====CHEKED===", checked);
     let newMail = [];
 
     checked.map((element, index) => {
@@ -264,7 +263,6 @@ function SendInvitationsPage() {
       console.log(element.RowKey);
     });
     setMail(newMail);
-    console.log("MAAAIL", mail);
     var templateParams = {
       EmailInvitat: mail,
       name: nume,

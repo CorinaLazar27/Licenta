@@ -54,7 +54,6 @@ function ResultPage() {
   ];
   window.onload = function exampleFunction() {
     GetMyResults();
-    //window.location.reload();
   };
   function GetMyResults() {
     axios({

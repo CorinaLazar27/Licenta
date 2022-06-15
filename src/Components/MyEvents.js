@@ -114,7 +114,7 @@ function MyEventPage() {
         setLoader(false);
         setLoad(false);
         setData(response.data.results);
-        console.log("ASTA VREAU", response.data.results);
+        console.log(response.data.results);
         console.log(response.data.results.length);
         console.log(response.data.results.location);
         if (response.data.results.length === 0) setNoData(true);
@@ -138,7 +138,7 @@ function MyEventPage() {
     axios({
       method: "POST",
 
-      url: "http://127.0.0.1:5000/deleteevent",
+      url: "https://server-licenta.azurewebsites.net/deleteevent",
       data: {
         email: email,
         date: dataeveniment,
@@ -148,7 +148,7 @@ function MyEventPage() {
         setOpenSucces(true);
         setLoader(false);
         if (response.data == "Done") {
-          setTimeout(window.location.reload(false), 2500);
+          setTimeout(window.location.reload(false), 1500);
         }
       })
       .catch((error) => {
@@ -241,8 +241,9 @@ function MyEventPage() {
   }
 
   function myClick(event) {
+    console.log("dataaa", event.RowKey);
     setDateForDelete(event.RowKey);
-    console.log(dateForDelete);
+    console.log("DATA", dateForDelete);
     window.localStorage.setItem("eveniment", event.TipEveniment);
     window.localStorage.setItem("locatie", event.Restaurant);
     window.localStorage.setItem("judet", event.Judet);
