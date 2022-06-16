@@ -162,10 +162,10 @@ function MyEventPage() {
       });
   };
 
-  async function UpdateForm() {
+  function UpdateForm() {
     console.log("GATA!");
 
-    await axios({
+    axios({
       method: "POST",
       url: "https://server-licenta.azurewebsites.net/updateform",
       data: {
@@ -184,17 +184,15 @@ function MyEventPage() {
       .then((response) => {
         const res = response.data;
         console.log(res);
-
+        setLoadingOpinii(false);
         setTimeout(() => {
           history.push("/myeventpage");
           history.go(0);
-        }, 2000);
-        if (res == "Done") {
-          console.log("dONE");
-        }
+        }, 1000);
       })
       .catch((error) => {
         if (error.response) {
+          setLoadingOpinii(false);
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
@@ -232,12 +230,12 @@ function MyEventPage() {
       })
       .catch((error) => {
         if (error.response) {
+          setLoadingOpinii(false);
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
         }
-      })
-      .finally(() => setLoadingOpinii(false));
+      });
   }
 
   function myClick(event) {
@@ -461,11 +459,17 @@ function MyEventPage() {
                     loading={loadingOpinii}
                     type="submit"
                     onClick={(e) => {
-                      e.preventDefault();
+                      // e.preventDefault();
+                      console.log(e);
                       console.log(opiniiRestaurant);
                       console.log(opiniiMuzica);
                       console.log(opiniiFotograf);
-                      PostOpinii();
+                      if (
+                        opiniiRestaurant !== "" &&
+                        opiniiMuzica !== "" &&
+                        opiniiFotograf !== ""
+                      )
+                        PostOpinii();
                     }}
                   >
                     Trimite
