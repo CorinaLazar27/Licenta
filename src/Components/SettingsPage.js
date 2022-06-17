@@ -112,6 +112,7 @@ function SettingsPage() {
           console.log("CORESPUNDE");
           ChangePassword();
         } else {
+          setLoading(false);
           setOpenDifferentPassword(true);
         }
       })
